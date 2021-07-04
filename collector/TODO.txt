@@ -1,0 +1,4 @@
+20200604: 2.0 - SNAPSHOT
+- paginacja na pobieraniu listy, zwrotów
+- przy pobieraniu zwrotu apka nie powinna się blokować
+- publikacja na Google Play

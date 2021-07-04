@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pl.estrix</groupId>
+    <artifactId>return-parcel</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <developers>
+        <developer>
+            <id>kmucik</id>
+            <name>Kamil Mucik</name>
+            <email>k.mucik@e-strix.pl</email>
+            <url>http://www.e-strix.pl</url>
+            <organization>e-Strix Kamil Mucik</organization>
+            <organizationUrl>http://e-strix.pl</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Warsaw</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+		<connection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</connection>
+		<developerConnection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</developerConnection>
+		<url>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>Public License 3.0</name>
+            <url>license.txt</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    </properties>
+
+    <modules>
+        <module>return-parcel-app</module>
+    </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${project.build.directory}" />
+                                <tstamp>
+                                    <format property="last.updated" pattern="yyyy.MM.dd HH:mm" />
+                                </tstamp>
+                                <echo file="${basedir}/target/classes/filter.properties" append="false" message="estrix.application.biuld-time=${last.updated}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="scm.commit=${buildNumber}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="scm.branch=${scmBranch}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="env.stage=${profile.stage}" />}" /&gt;
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="estrix.application.name=${project.name}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="estrix.application.version=${project.version}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="estrix.application.desc=${project.description}" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.shared</groupId>
+						<artifactId>maven-invoker</artifactId>
+						<version>2.2</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+        </plugins>
+
+
+        <filters>
+            <filter>${basedir}/target/classes/filter.properties</filter>
+        </filters>
+    </build>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.3.5.RELEASE</version>
+    </parent>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+<!--            <dependency>-->
+<!--                <groupId>com.lowagie</groupId>-->
+<!--                <artifactId>itext</artifactId>-->
+<!--                <version>2.1.7.js8</version>-->
+<!--            </dependency>-->
+            <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>2.1.7</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>corp1</id>
+            <name>Corporate Repository</name>
+            <url>file:///c:/Users/TEST/.m2</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+
+
+    </dependencies>
+
+</project>

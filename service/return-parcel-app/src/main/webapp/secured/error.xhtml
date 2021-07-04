@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+        <!DOCTYPE html>
+<ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:define name="content">
+    <h1>Wystąpił błąd</h1>
+    <div class="errorDetails">
+        Szczegóły: <br/>
+        #{flash.keep.errorDetails}
+    </div>
+</ui:define>
+</ui:composition>

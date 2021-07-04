@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h1>Użytkownicy</h1>
+
+        <h:form id="form">
+            <p:messages id="messages" showDetail="true" escape="false" />
+            <p:dataTable var="user"
+                         value="#{userLazyView.lazyModel}"
+                         paginator="true"
+                         rows="10"
+                         currentPageReportTemplate="{currentPage} z {totalPages}"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15"
+                         selection="#{userLazyView.selectedUser}"
+                         id="userTable"
+                         lazy="true"
+                         paginatorPosition="bottom"
+                         first="#{userLazyView.tablePageInx}"
+            >
+                <p:ajax event="page" listener="#{userLazyView.onPage}" />
+
+                <f:facet name="header">
+                    <h:link title="Dodaj" styleClass="tableAddButton" outcome="details">
+                        <h:graphicImage library="sh" name="img/new.png" />
+                        <f:param name="id" value="0" />
+                        <f:param name="table_page" value="#{userLazyView.tablePageInx}" />
+                    </h:link>
+
+                    <h:outputLabel styleClass="module-table-header"
+                                   value=" #{msg['admin.tile.list.heder']}" />
+                    <p:outputPanel id="tableSearch"
+                                   styleClass="tableSearch">
+                        <p:inputText id="globalFilter"
+                                     value="#{userLazyView.searchText}"
+                                     placeholder="Wyszukaj" />
+                        <p:commandButton actionListener="#{userLazyView.search}"
+                                         update="@([id$=userTable])"
+                                         id="searchButton"
+                                         icon="ui-icon-search"
+                                         title="Wyszukaj" />
+                    </p:outputPanel>
+                </f:facet>
+                <p:column headerText="e-mail">
+                    <h:outputText value="#{user.email}" />
+                </p:column>
+                <p:column headerText="Imię">
+                    <h:outputText value="#{user.userName}" />
+                </p:column>
+                <p:column headerText="Nazwisko">
+                    <h:outputText value="#{user.userLastname}" />
+                </p:column>
+                <p:column headerText="Aktywny" style="width:100px; text-align: center;">
+                    <h:graphicImage library="sh" name="img/#{user.enabled}.png"
+                                    style="width:24px; height:auto;" />
+                </p:column>
+                <p:column headerText="Zablokowany" style="width:100px; text-align: center;">
+                    <h:graphicImage library="sh" name="img/#{user.locked}.png"
+                                    style="width:24px; height:auto;" />
+                </p:column>
+
+                <p:column headerText="" style="width:100px; text-align: center;">
+                    <h:link title="Zmień hasło" outcome="password">
+                        <h:graphicImage library="sh" name="img/password.png" />
+                        <f:param name="id" value="#{user.id}" />
+                        <f:param name="table_page" value="#{userLazyView.tablePageInx}" />
+                    </h:link>
+                    <h:link title="Edycja" outcome="details">
+                        <h:graphicImage library="sh" name="img/edit.png" />
+                        <f:param name="id" value="#{user.id}" />
+                        <f:param name="table_page" value="#{userLazyView.tablePageInx}" />
+                    </h:link>
+                    <p:commandLink styleClass=""
+                                   title="Usuń"
+                                   action="#{userLazyView.edit(user.id)}"
+                                   update="@([id$=display])"
+                                   oncomplete="PF('deleteDialogW').show();">
+                        <h:graphicImage library="sh" name="img/delete.png" />
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="deleteDialog"
+                      widgetVar="deleteDialogW"
+                      header="Usuń"
+                      modal="true"
+                      resizable="false"
+                      minHeight="200"
+                      appendTo="@(body)"
+                      width="400">
+
+                    <h:panelGrid columns="3" id="display" columnClasses="alignTop,alignTop,alignTop"
+                                 style="display: block;width: 270px; border: 0px black solid;">
+                        <h:outputLabel value="Czy usunąć '" />
+                        <h:outputLabel value="#{userLazyView.selectedUser.email}" />
+                        <h:outputLabel value="'?" />
+                    </h:panelGrid>
+                <p:separator />
+                <p:commandButton value="OK"
+                                 actionListener="#{userLazyView.delete}"
+                                 partialSubmit="true"
+                                 ajax="true"
+                                 oncomplete="PF('deleteDialogW').hide();"
+                                 process="@this"
+                                 style="display: inline; margin: 0 auto 10px; width: 100px;"
+                                 update="@([id$=userTable])" />
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

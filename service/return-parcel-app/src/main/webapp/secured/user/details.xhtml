@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form style="overflow:none; padding-top: 10px !important;">
+            <h:link title="Powrót" outcome="cancel"  >
+                <f:param name="table_page" value="#{userEditView.tablePageInx}" />
+                <h:outputLabel value="Powrót" style="cursor: pointer !important;" />
+            </h:link>
+            <p:messages id="messages" showDetail="true" escape="false" />
+        </h:form>
+
+        <h1>Użytkownik</h1>
+
+        <h:form id="form1">
+            <h:inputHidden value="#{userEditView.selectedUser.id}" id="id" />
+            <p:panel id="panel" header="" style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top; max-width:720px;margin: 0 auto;">
+                <h:panelGrid columns="2" style="width: 100%; vertical-align:top; "  columnClasses="alignTop,alignCenterTop" >
+
+                    <h:outputLabel for="email"  value="Login: " />
+                    <p:inputText id="email"
+                                 style="width: 100%;"
+                                 required="true"
+                                 requiredMessage="Login: Pole jest wymagane."
+                                 value="#{userEditView.selectedUser.email}"
+                                 label="email">
+                        <p:ajax event="blur" update="emailMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="email" id="emailMsg" />
+
+                    <h:outputLabel for="userName"  value="Imię: " />
+                    <p:inputText id="userName"
+                                 style="width: 100%"
+                                 required="true"
+                                 requiredMessage="Imię: Pole jest wymagane."
+                                 value="#{userEditView.selectedUser.userName}"
+                                 label="userName">
+                        <p:ajax event="blur" update="userNameMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="userName" id="userNameMsg" />
+
+                    <h:outputLabel for="userLastname"  value="Nazwisko: " />
+                    <p:inputText id="userLastname"
+                                 style="width: 100%"
+                                 required="true"
+                                 requiredMessage="Nazwisko: Pole jest wymagane."
+                                 value="#{userEditView.selectedUser.userLastname}"
+                                 label="userLastname">
+                        <p:ajax event="blur" update="userLastnameMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="userLastname" id="userLastnameMsg" />
+
+                    <h:outputLabel for="active"  value="Aktywny: " />
+                    <p:selectBooleanButton id="active" value="#{userEditView.selectedUser.enabled}" onLabel="Tak" offLabel="Nie" style="width:60px" />
+                    <p:message for="active" id="activeMsg" />
+                    <h:outputText  />
+
+                    <h:outputLabel for="locked"  value="Zablokowany: " />
+                    <p:selectBooleanButton id="locked" value="#{userEditView.selectedUser.locked}" onLabel="Tak" offLabel="Nie" style="width:60px" />
+                    <h:outputText  />
+                    <p:message for="locked" id="lockedMsg" />
+
+                    <h:outputLabel for="role"  value="Rola: " />
+                    <p:selectOneMenu id="role" value="#{userEditView.selectedUser.role}" style="width: 250px">
+                        <f:selectItem itemLabel="Użytkownik" itemValue="ROLE_USER" />
+                        <f:selectItem itemLabel="Operator" itemValue="ROLE_OPERATOR" />
+                        <f:selectItem itemLabel="Super użytkownik" itemValue="ROLE_SUPERUSER" />
+                        <f:selectItem itemLabel="Administrator" itemValue="ROLE_ADMIN" />
+                    </p:selectOneMenu>
+                    <h:outputText  />
+                    <p:message for="role" id="roleMsg" />
+                </h:panelGrid>
+
+                <p:commandButton value="Zapisz"
+                                 actionListener="#{userEditView.saveDetail()}"
+                                 partialSubmit="true" ajax="false"
+                                 process="@this"
+                                 styleClass="appButton"
+                                 update=""/>
+                <h:link title="Anuluj" outcome="cancel"   >
+                    <f:param name="table_page" value="#{userEditView.tablePageInx}" />
+                    <h:outputLabel value="Anuluj" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only appButton fakeButton" style="" />
+                </h:link>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

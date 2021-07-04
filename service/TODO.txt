@@ -1,0 +1,13 @@
+
+
+Serwer: 4 godz.
+1. Poprawienie usuwania.
+2. Sortowanie listy zwrotów wg daty malejąco.
+3. Przygotowanie do komunikacji z nowym kolektorem.
+
+Kolektor: 8 godz.
+1. Ominięcie pobierania sklepów i produktów do bazy danych kolektora.
+2. Stworzenie nowej komunikacji z serwerem, która realizuje:
+- czytywanie zawartości pudełka po kodzie kreskowym,
+- sprawdzanie ilości produktów.
+3. Aktualizacja aplikacji poprzez sklep google play.

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="contentPane" prefHeight="404.0" prefWidth="341.0" styleClass="panel" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.estrix.zwrotpaczek.controller.scan.ScanController">
+   <children>
+      <AnchorPane prefHeight="60.0" style="-fx-background-color: #2098D1;" styleClass="panel" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="headLabel" alignment="CENTER" layoutX="70.0" layoutY="10.0" prefHeight="40.0" prefWidth="143.0" text="Skanowanie" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Hyperlink fx:id="closeLink" alignment="CENTER" layoutX="242.0" layoutY="19.0" onAction="#onSaveItemAction" prefHeight="52.0" prefWidth="82.0" text="Zakończ" textFill="WHITE" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+            </children>
+      </AnchorPane>
+      <AnchorPane layoutY="31.0" styleClass="panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <VBox fx:id="mainVBox" alignment="TOP_CENTER" styleClass="panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <AnchorPane>
+                     <children>
+                        <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" spacing="4.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="10.0">
+                                       <children>
+                                          <AnchorPane layoutX="10.0" layoutY="10.0" minWidth="120.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button fx:id="triStateButton" minWidth="120.0" mnemonicParsing="false" prefHeight="120.0" styleClass="custom-button" stylesheets="@../style.css" text="Dobre" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane minWidth="120.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button fx:id="multiplerButton" minWidth="120.0" mnemonicParsing="false" onAction="#onMultiplerWindowAction" prefHeight="120.0" styleClass="custom-button" stylesheets="@../style.css" text="0x" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="209.0" prefWidth="275.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <TextField fx:id="eanLabel" layoutX="51.0" layoutY="-6.0" prefHeight="40.0" prefWidth="180.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0" />
+                        <Hyperlink fx:id="eanFieldSematphorLink" onAction="#onFieldFocusAction" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="2.0">
+                           <graphic>
+                              <Ellipse fx:id="eanFieldSematphor" fill="#ff1f1f" radiusX="16.0" radiusY="16.0" stroke="#ff1f1f" strokeType="INSIDE" />
+                           </graphic>
+                        </Hyperlink>
+                        <GridPane layoutX="56.0" layoutY="27.0" maxWidth="1.7976931348623157E308" prefHeight="120.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="60.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="2.0" prefWidth="87.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="131.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label fx:id="selectedName" GridPane.columnIndex="1" />
+                              <Label fx:id="selectedEAN" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="selectedCntBroken" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="selectedCntCorrect" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="selectedCntAll" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="selectedStore" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label fx:id="text01" text="Nazwa" />
+                              <Label fx:id="text02" text="Kod" GridPane.rowIndex="1" />
+                              <Label fx:id="text03" text="Uszkodzonych" GridPane.rowIndex="3" />
+                              <Label fx:id="text04" text="Dobrych" GridPane.rowIndex="4" />
+                              <Label fx:id="text05" text="Wszystkie" GridPane.rowIndex="2" />
+                              <Label fx:id="text06" text="" GridPane.rowIndex="6" />
+                              <Label fx:id="text07" text="Artykuł" GridPane.rowIndex="7" />
+                              <Label fx:id="selectedArtNumber" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Label text="Z ceną" GridPane.rowIndex="5" />
+                              <Label fx:id="selectedCntLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label text="Log" GridPane.rowIndex="6" />
+                              <Label fx:id="selectedLogLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                           </children>
+                        </GridPane>
+                        <Label fx:id="label1" layoutX="14.0" layoutY="37.0" text="Informacje" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="44.0" />
+                        <ImageView fx:id="imageLoad" fitHeight="26.0" fitWidth="31.0" layoutX="151.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="174.0" AnchorPane.leftAnchor="151.0">
+                           <image>
+                              <Image url="@../images/chargement.gif" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="10.0" layoutY="410.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" style="-fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Hyperlink fx:id="scanedList" layoutX="329.0" onAction="#onScanedListWindowAction" prefHeight="58.0" prefWidth="58.0" styleClass="custom-button-save-storage" stylesheets="@../style.css" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="10.0">
+                           <graphic>
+                              <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/User-Interface-To-Do-icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Hyperlink>
+                        <Button fx:id="triStatePalletButton" layoutX="124.0" layoutY="9.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="58.0" styleClass="custom-button-small" stylesheets="@../style.css" text="Button" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="132.0" />
+                        <ToggleButton fx:id="printerToggle" layoutX="62.0" layoutY="4.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="58.0" styleClass="custom-button-save-storage" stylesheets="@../style.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="62.0">
+                           <graphic>
+                              <ImageView fitHeight="44.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/Computer-Hardware-Print-icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="toogleGroup1" />
+                           </toggleGroup>
+                        </ToggleButton>
+                        <ToggleButton fx:id="storageToggle" layoutX="249.0" layoutY="7.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="58.0" styleClass="custom-button-save-storage" stylesheets="@../style.css" toggleGroup="$toogleGroup1" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="80.0">
+                           <graphic>
+                              <ImageView fitHeight="44.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/Data-Database-Backup-icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                        <Text fx:id="info" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="10.0" />
+                        <Button fx:id="palletCounterButton" ellipsisString="" layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onAction="#onMultiplerPalletWindowAction" prefHeight="56.0" prefWidth="58.0" styleClass="custom-button-small" stylesheets="@../style.css" text="Pal" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="2.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </children></AnchorPane>
+   </children>
+</AnchorPane>
