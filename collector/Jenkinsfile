@@ -1,9 +1,18 @@
 pipeline {
     agent any
+    environment {
+        PATH = "$PATH"
+      }
     tools {
         gradle "Gradle_4.6"
     }
     stages {
+
+        stage ('Prepare') {
+          steps {
+            echo "PATH is: $PATH"
+          }
+        }
         stage('Build') {
             steps {
                 echo 'Building..'
