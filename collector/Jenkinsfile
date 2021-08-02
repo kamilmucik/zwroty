@@ -10,7 +10,7 @@ pipeline {
                 script {
                     try {
                         sh 'cd collector'
-                        sh 'gradle clean android'
+                        sh 'gradle android'
                     } finally { //Make checkstyle results available
                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
                     }
