@@ -1,3 +1,9 @@
+def runShell(String command){
+    def responseCode = sh returnStatus: true, script: "${command} &> tmp.txt"
+    def output =  readFile(file: "tmp.txt")
+    return (output != "")
+}
+
 pipeline {
     agent any
     environment {
@@ -8,8 +14,8 @@ pipeline {
       }
 
     parameters {
-        string(name: 'version_release', defaultValue: '2.0.0', description: 'Wersja publikacji')
-        string(name: 'version_snapshot', defaultValue: '2.0.1-RC', description: 'Wersja rozwojowa')
+        string(name: 'version_release', defaultValue: '2.0.1-RC', description: 'Wersja publikacji')
+        string(name: 'version_snapshot', defaultValue: '2.0.2', description: 'Wersja rozwojowa')
         string(name: 'YOUR_USERNAME', defaultValue: 'ubuntu')
         password(name: 'YOUR_PASSWORD', defaultValue: 'secret')
       }
@@ -21,20 +27,28 @@ pipeline {
         stage ('Prepare') {
           steps {
             echo 'Prepare..'
-//             cleanWs()
-//             checkout scm
+            cleanWs()
+            checkout scm
+
+            script {
+                if (runShell('grep \''+version_release+'\' collector/build.gradle')) {
+                    echo 'wersja bez zmian!'
+                } else {
+                    sh "sed 's/version=.*/version=\""+ version_release+"\"/g' collector/build.gradle > collector/build.gradle.tmp"
+                }
+            }
           }
         }
         stage('Build') {
             steps {
                 echo 'Building..'
-//                 script {
-//                     try {
-//                         sh 'gradle clean android -b collector/build.gradle'
-//                     } finally { //Make checkstyle results available
-//                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
-//                     }
-//                 }
+                script {
+                    try {
+                        sh 'gradle clean android -b collector/build.gradle'
+                    } finally { //Make checkstyle results available
+                        //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
+                    }
+                }
             }
         }
         stage('Test') {
