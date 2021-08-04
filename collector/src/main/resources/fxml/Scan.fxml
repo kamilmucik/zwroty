@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="contentPane" prefHeight="404.0" prefWidth="341.0" styleClass="panel" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.estrix.zwrotpaczek.controller.scan.ScanController">
+<AnchorPane fx:id="contentPane" prefHeight="404.0" prefWidth="341.0" styleClass="panel" xmlns="http://javafx.com/javafx/8.0.202" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.estrix.zwrotpaczek.controller.scan.ScanController">
    <children>
       <AnchorPane prefHeight="60.0" style="-fx-background-color: #2098D1;" styleClass="panel" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -61,7 +61,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="209.0" prefWidth="275.0" style="-fx-background-color: #ffffff;">
+                  <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="347.0" prefWidth="341.0" style="-fx-background-color: #ffffff;">
                      <children>
                         <TextField fx:id="eanLabel" layoutX="51.0" layoutY="-6.0" prefHeight="40.0" prefWidth="180.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0" />
                         <Hyperlink fx:id="eanFieldSematphorLink" onAction="#onFieldFocusAction" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="2.0">
@@ -69,7 +69,7 @@
                               <Ellipse fx:id="eanFieldSematphor" fill="#ff1f1f" radiusX="16.0" radiusY="16.0" stroke="#ff1f1f" strokeType="INSIDE" />
                            </graphic>
                         </Hyperlink>
-                        <GridPane layoutX="56.0" layoutY="27.0" maxWidth="1.7976931348623157E308" prefHeight="120.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="60.0">
+                        <GridPane layoutX="56.0" layoutY="27.0" maxWidth="1.7976931348623157E308" prefHeight="250.0" prefWidth="322.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="60.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="2.0" prefWidth="87.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="131.0" />
