@@ -44,7 +44,7 @@ pipeline {
                 echo 'Building..'
                 script {
                     try {
-                        sh 'gradle clean android -b collector/build.gradle'
+                        sh 'gradle clean android -b collector/build.gradle.tmp'
                     } finally { //Make checkstyle results available
                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
                     }
