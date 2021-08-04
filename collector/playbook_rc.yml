@@ -1,0 +1,9 @@
+---
+- name: This is a hello-world example
+  hosts: webserver
+  become: true
+  tasks:
+    - name: Copy APK to server
+      copy:
+        src: collector/build/javafxports/android/ZwrotPaczek.apk
+        dest: /var/www/e-strix.pl/public_html/megapack/ZwrotPaczek_{{ version }}.apk
