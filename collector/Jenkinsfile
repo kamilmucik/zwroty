@@ -43,15 +43,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'echo "e-strix.pl ansible_host=51.83.132.174 ansible_user=${YOUR_USERNAME} ansible_ssh_pass=${YOUR_PASSWORD} ansible_sudo_pass=${YOUR_PASSWORD}" >> hosts.yml'
+                sh 'echo "e-strix.pl ansible_host=51.83.132.174 ansible_user=${YOUR_USERNAME} ansible_ssh_pass=${YOUR_PASSWORD} ansible_sudo_pass=${YOUR_PASSWORD}" >> collector/hosts.yml'
 
-                sh 'ansible-playbook playbook_rc.yml -i hosts.yml --extra-vars "version=${version_snapshot}"'
+                sh 'ansible-playbook collector/playbook_rc.yml -i collector/hosts.yml --extra-vars "version=${version_snapshot}"'
 
-                sh 'rm -rf android/app/src/main/res/drawable-*'
-                sh 'echo "${version_release}" > version.properties'
-                sh 'git add version.properties'
-                sh 'git commit -m "Update version"'
-                sh 'git push origin HEAD:master'
+//                 sh 'rm -rf android/app/src/main/res/drawable-*'
+//                 sh 'echo "${version_release}" > version.properties'
+//                 sh 'git add version.properties'
+//                 sh 'git commit -m "Update version"'
+//                 sh 'git push origin HEAD:master'
             }
         }
     }
