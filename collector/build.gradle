@@ -79,25 +79,25 @@ jfxmobile {
 
 def generatedResources = "$buildDir/resources/android/"
 
-//sourceSets {
-//    main {
-//        //let's register an output folder on the main SourceSet:
-//        output.dir(generatedResources, builtBy: 'generateMyResources')
-//        //it is now a part of the 'main' classpath and will be a part of the jar
-//    }
-//}
-//
-//task generateMyResources {
-//    doLast {
-//        def generatedTmp = new File(generatedResources)
-//        if( !generatedTmp.exists() ) {
-//            generatedTmp.mkdirs()
-//        }
-//        def generated = new File(generatedResources, "filter.properties")
-//
-//        generated.text = "estrix.application.biuld-time=${buildTime()}\n" +
-//                "estrix.application.name=${project.name}\n" +
-//                "estrix.application.desc=${project.description}\n" +
-//                "estrix.application.versio2n=${project.version}"
-//    }
-//}
+sourceSets {
+    main {
+        //let's register an output folder on the main SourceSet:
+        output.dir(generatedResources, builtBy: 'generateMyResources')
+        //it is now a part of the 'main' classpath and will be a part of the jar
+    }
+}
+
+task generateMyResources {
+    doLast {
+        def generatedTmp = new File(generatedResources)
+        if( !generatedTmp.exists() ) {
+            generatedTmp.mkdirs()
+            def generated = new File(generatedResources, "filter.properties")
+
+            generated.text = "estrix.application.biuld-time=${buildTime()}\n" +
+                    "estrix.application.name=${project.name}\n" +
+                    "estrix.application.desc=${project.description}\n" +
+                    "estrix.application.versio2n=${project.version}"
+        }
+    }
+}
