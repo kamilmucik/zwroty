@@ -5,5 +5,5 @@
   tasks:
     - name: Copy APK to server
       copy:
-        src: collector/build/javafxports/android/ZwrotPaczek.apk
+        src: build/javafxports/android/ZwrotPaczek.apk
         dest: /var/www/e-strix.pl/public_html/megapack/ZwrotPaczek_{{ version }}.apk
