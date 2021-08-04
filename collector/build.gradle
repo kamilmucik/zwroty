@@ -97,7 +97,7 @@ task generateMyResources {
 
         generated.text = "estrix.application.biuld-time=${buildTime()}\n" +
                 "estrix.application.name=${project.name}\n" +
-                "estrix.application.version=${project.curr_version}\n" +
-                "estrix.application.desc=${project.description}"
+                "estrix.application.version=${project.curr_version}"
+                + "\nestrix.application.desc=${project.description}"
     }
 }
