@@ -20,6 +20,7 @@ pipeline {
 
         stage ('Prepare') {
           steps {
+            echo 'Prepare..'
 //             cleanWs()
 //             checkout scm
           }
