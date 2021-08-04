@@ -22,7 +22,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-version='2.0.0'
+version="2.0.1-RC"
 def buildTime() {
     new Date().format('yyyy.MM.dd HH:mm')
 }
@@ -97,7 +97,7 @@ task generateMyResources {
 
         generated.text = "estrix.application.biuld-time=${buildTime()}\n" +
                 "estrix.application.name=${project.name}\n" +
+                "estrix.application.desc=${project.description}\n" +
                 "estrix.application.versio2n=${project.version}"
-                + "\nestrix.application.desc=${project.description}"
     }
 }
