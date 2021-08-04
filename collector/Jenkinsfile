@@ -35,6 +35,7 @@ pipeline {
                     echo 'wersja bez zmian!'
                 } else {
                     sh "sed 's/version=.*/version=\""+ version_release+"\"/g' collector/build.gradle > collector/build.gradle.tmp"
+                    sh 'mv collector/build.gradle.tmp collector/build.gradle'
                 }
             }
           }
@@ -44,7 +45,7 @@ pipeline {
                 echo 'Building..'
                 script {
                     try {
-                        sh 'gradle clean android -b collector/build.gradle.tmp'
+                        sh 'gradle clean android -b collector/build.gradle'
                     } finally { //Make checkstyle results available
                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
                     }
