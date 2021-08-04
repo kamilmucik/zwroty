@@ -26,7 +26,7 @@ public class AboutController implements Initializable {
         setInstance(this);
 
         build.setText(SessionManager.properties.get("estrix.application.biuld-time"));
-        version.setText(SessionManager.properties.get("estrix.application.version"));
+        version.setText(SessionManager.properties.get("estrix.application.curr_version"));
     }
 
     public static synchronized AboutController getInstance() {
