@@ -4,6 +4,10 @@ def runShell(String command){
     return (output != "")
 }
 
+def buildTime() {
+    new Date().format('yyyy.MM.dd HH:mm')
+}
+
 pipeline {
     agent any
     environment {
@@ -45,6 +49,9 @@ pipeline {
                 echo 'Building..'
                 script {
                     try {
+                        sh 'mkdir -p collector/build/resources/android/'
+                        sh 'echo "estrix.application.biuld-time='buildTime()'" > collector/build/resources/android/filter.properties'
+                        sh 'echo "estrix.application.versio2n=${version_release}" >> collector/build/resources/android/filter.properties'
                         sh 'gradle clean android -b collector/build.gradle'
                     } finally { //Make checkstyle results available
                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
