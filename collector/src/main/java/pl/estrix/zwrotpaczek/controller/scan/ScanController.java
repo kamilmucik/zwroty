@@ -87,6 +87,8 @@ public class ScanController implements Initializable,Configurable {
     private Label selectedCntCorrect;
     @FXML
     private Label selectedCntLabel;
+    @FXML
+    private Label selectedProductLabel;
 
     @FXML
     private Label selectedCntAll;
@@ -109,9 +111,6 @@ public class ScanController implements Initializable,Configurable {
     private Button triStateButton;
     @FXML
     private Button triStatePalletButton;
-//
-//    @FXML
-//    private ToggleButton damagedButton;
 
     @FXML
     private ToggleButton storageToggle;
@@ -208,7 +207,10 @@ public class ScanController implements Initializable,Configurable {
                 triStatePalletButton.getStyleClass().add("custom-button-damage"+index);
             }
         });
-        triStateButton.setText(optionName[0]);
+        Platform.runLater(() -> {
+            triStateButton.setText(optionName[optionButtonIndex]);
+//            selectedProductLabel.setText(optionName[optionButtonIndex]);
+        });
         triStateButton.pressedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 optionButtonIndex++;
@@ -221,6 +223,7 @@ public class ScanController implements Initializable,Configurable {
                 triStateButton.getStyleClass().add("button");
                 triStateButton.getStyleClass().add("custom-button");
                 triStateButton.getStyleClass().add("custom-button-damage"+index);
+
             }
         });
 
@@ -353,6 +356,10 @@ public class ScanController implements Initializable,Configurable {
                             shipmentProductDto.setScanLabel((long)multipler);
 //                        shipmentProductDto.setScanLabel(shipmentProductDto.getScanLabel() + (multipler));
                         }
+
+                        Platform.runLater(() -> {
+                            selectedProductLabel.setText(optionName[optionButtonIndex]);
+                        });
                     }
                     if (shipmentProductDto != null && multipler > 0 ) {
                         shipmentProductDto = RestService.getInstance().updateProduct(
