@@ -50,7 +50,7 @@ pipeline {
                 script {
                     try {
                         sh 'mkdir -p collector/build/resources/android/'
-                        sh 'echo "estrix.application.biuld-time='buildTime()'" > collector/build/resources/android/filter.properties'
+                        sh 'echo "estrix.application.biuld-time=buildTime()" > collector/build/resources/android/filter.properties'
                         sh 'echo "estrix.application.versio2n=${version_release}" >> collector/build/resources/android/filter.properties'
                         sh 'gradle clean android -b collector/build.gradle'
                     } finally { //Make checkstyle results available
