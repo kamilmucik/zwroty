@@ -20,22 +20,20 @@ pipeline {
 
         stage ('Prepare') {
           steps {
-            echo "PATH is: $PATH"
+//             cleanWs()
+//             checkout scm
           }
         }
         stage('Build') {
             steps {
-                echo 'Prepare..'
-                cleanWs()
-                checkout scm
                 echo 'Building..'
-                script {
-                    try {
-                        sh 'gradle clean android -b collector/build.gradle'
-                    } finally { //Make checkstyle results available
-                        //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
-                    }
-                }
+//                 script {
+//                     try {
+//                         sh 'gradle clean android -b collector/build.gradle'
+//                     } finally { //Make checkstyle results available
+//                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
+//                     }
+//                 }
             }
         }
         stage('Test') {
@@ -45,12 +43,11 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'ansible -v'
                 echo 'Deploying....'
                 sh 'echo "[webserver]" > hosts.yml'
                 sh 'echo "e-strix.pl ansible_host=51.83.132.174 ansible_user=${YOUR_USERNAME} ansible_ssh_pass=${YOUR_PASSWORD} ansible_sudo_pass=${YOUR_PASSWORD}" >> hosts.yml'
 
-                sh 'ansible-playbook collector/playbook_rc.yml -i hosts.yml --extra-vars "version=${version_snapshot}"'
+//                 sh 'ansible-playbook collector/playbook_rc.yml -i hosts.yml --extra-vars "version=${version_snapshot}"'
 
 //                 sh 'rm -rf android/app/src/main/res/drawable-*'
 //                 sh 'echo "${version_release}" > version.properties'
