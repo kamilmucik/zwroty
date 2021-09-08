@@ -85,14 +85,17 @@
                 <p:column headerText="Ilość" visible="#{scanProductListController.list[6]}" style="width:90px; text-align: center;">
                     <h:outputText value="#{shipmentProduct.counter}" />
                 </p:column>
-                <p:column headerText="Dobre" visible="#{scanProductListController.list[7]}" style="width:90px; text-align: center;">
+                <p:column headerText="Dobre" visible="#{scanProductListController.list[7]}" style="width:60px; text-align: center;">
                     <h:outputText value="#{shipmentProduct.scanCorrect}" />
                 </p:column>
-                <p:column headerText="Uszkodzone" visible="#{scanProductListController.list[8]}" style="width:90px; text-align: center;">
+                <p:column headerText="Uszkodzone" visible="#{scanProductListController.list[8]}" style="width:60px; text-align: center;">
                     <h:outputText value="#{shipmentProduct.scanError}" />
                 </p:column>
-                <p:column headerText="Z ceną" visible="#{scanProductListController.list[9]}" style="width:90px; text-align: center;">
+                <p:column headerText="Z ceną" visible="#{scanProductListController.list[9]}" style="width:60px; text-align: center;">
                     <h:outputText value="#{shipmentProduct.scanLabel}" />
+                </p:column>
+                <p:column headerText="Utylizacja" visible="#{scanProductListController.list[10]}" style="width:60px; text-align: center;">
+                    <h:outputText value="#{shipmentProduct.scanUtilization}" />
                 </p:column>
 
                 <p:column headerText="" style="width:100px; text-align: center;">
@@ -159,6 +162,10 @@
 
                     <h:outputLabel value="Z ceną" />
                     <p:inputText  id="inputScanLabel" value="#{scanProductListController.selectedItem.scanLabel}"  />
+                    <h:outputLabel value="" />
+
+                    <h:outputLabel value="Utylizacja" />
+                    <p:inputText  id="inputScanUtilization" value="#{scanProductListController.selectedItem.scanUtilization}"  />
                     <h:outputLabel value="" />
 
                     <h:outputLabel value="Log" />

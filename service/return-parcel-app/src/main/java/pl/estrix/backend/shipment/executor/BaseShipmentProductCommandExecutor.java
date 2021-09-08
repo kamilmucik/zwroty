@@ -43,6 +43,7 @@ public class BaseShipmentProductCommandExecutor extends BaseCommandExecutor<Ship
         entity.setScanCorrect(dto.getScanCorrect());
         entity.setScanError(dto.getScanError());
         entity.setScanLabel(dto.getScanLabel());
+        entity.setScanUtilization(dto.getScanUtilization());
         entity.setLastUpdate(LocalDateTime.now());
         entity.setScanLog(dto.getScanLog());
         return entity;
@@ -63,6 +64,7 @@ public class BaseShipmentProductCommandExecutor extends BaseCommandExecutor<Ship
         dto.setScanCorrect(entity.getScanCorrect());
         dto.setScanError(entity.getScanError());
         dto.setScanLabel(entity.getScanLabel());
+        dto.setScanUtilization(entity.getScanUtilization());
         dto.setLastUpdate(entity.getLastUpdate());
         dto.setScanLog(entity.getScanLog());
 

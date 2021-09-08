@@ -30,6 +30,8 @@ public class ShipmentProductDto extends BaseEntityDto<Long>{
 
     private Long scanLabel;
 
+    private Long scanUtilization;
+
     private String store;
 
     private String scanLog;
@@ -50,7 +52,7 @@ public class ShipmentProductDto extends BaseEntityDto<Long>{
         super.setReturnCode(returnCode);
     }
 
-    public ShipmentProductDto(Long artNumber, String name, Long counter, String companyName, String artReturn, String ean, Double weight, Double artValume, Long shipmentId, Long scanCorrect, Long scanError, Long scanLabel, String store, Date update, Boolean sended, Long shopNr, Long shopCounter, List<ShipmentProductShopDto> shops) {
+    public ShipmentProductDto(Long artNumber, String name, Long counter, String companyName, String artReturn, String ean, Double weight, Double artValume, Long shipmentId, Long scanCorrect, Long scanError, Long scanLabel, Long scanUtilization, String store, Date update, Boolean sended, Long shopNr, Long shopCounter, List<ShipmentProductShopDto> shops) {
         this.artNumber = artNumber;
         this.name = name;
         this.counter = counter;
@@ -63,6 +65,7 @@ public class ShipmentProductDto extends BaseEntityDto<Long>{
         this.scanCorrect = scanCorrect;
         this.scanError = scanError;
         this.scanLabel = scanLabel;
+        this.scanUtilization = scanUtilization;
         this.store = store;
         this.update = update;
         this.sended = sended;
@@ -82,6 +85,7 @@ public class ShipmentProductDto extends BaseEntityDto<Long>{
                               Long shipmentId,
                               Long scanCorrect,
                               Long scanError,
+                              Long scanUtilization,
                               String store,
                               Boolean sended
     ) {
@@ -96,6 +100,7 @@ public class ShipmentProductDto extends BaseEntityDto<Long>{
         this.shipmentId = shipmentId;
         this.scanCorrect = scanCorrect;
         this.scanError = scanError;
+        this.scanUtilization = scanUtilization;
         this.store = store;
         this.update = new Date();
         this.sended = sended;
@@ -274,6 +279,14 @@ public class ShipmentProductDto extends BaseEntityDto<Long>{
 
     public void setScanLabel(Long scanLabel) {
         this.scanLabel = scanLabel;
+    }
+
+    public Long getScanUtilization() {
+        return scanUtilization;
+    }
+
+    public void setScanUtilization(Long scanUtilization) {
+        this.scanUtilization = scanUtilization;
     }
 
     public String getStore() {

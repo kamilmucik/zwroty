@@ -57,7 +57,8 @@ public class ShipmentProductRestController {
             @RequestParam(value = "ean", required = true, defaultValue = "0") String ean,
             @RequestParam(value = "scanCorrect", required = true, defaultValue = "0") Long scanCorrect,
             @RequestParam(value = "scanError", required = true, defaultValue = "0") Long scanError,
-            @RequestParam(value = "scanLabel", required = true, defaultValue = "0") Long scanLabel
+            @RequestParam(value = "scanLabel", required = true, defaultValue = "0") Long scanLabel,
+            @RequestParam(value = "scanUtilization", required = true, defaultValue = "0") Long scanUtilization
     ) {
 
         System.out.println("retNumber: " +retNumber);
@@ -65,6 +66,7 @@ public class ShipmentProductRestController {
         System.out.println("scanCorrect: " +scanCorrect);
         System.out.println("scanError: " +scanError);
         System.out.println("scanLabel: " +scanLabel);
+        System.out.println("scanUtilization: " +scanUtilization);
 
 
         DeferredResult<ShipmentProductDto> deferredResult = new DeferredResult<>();
@@ -87,13 +89,15 @@ public class ShipmentProductRestController {
                 if (scanLabel > 0){
                     sb.append(scanLabel);
                 }
+                if (scanUtilization > 0){
+                    sb.append(scanUtilization);
+                }
                 res.setScanLog(sb.toString());
 
                 res.setScanCorrect(res.getScanCorrect()+scanCorrect);
                 res.setScanError(res.getScanError()+scanError);
                 res.setScanLabel(res.getScanLabel()+scanLabel);
-
-
+                res.setScanUtilization(res.getScanUtilization()+scanUtilization);
 
                 ShipmentProductDto tmp = shipmentService.saveOrUpdate(res);
                 deferredResult.setResult(tmp);

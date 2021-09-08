@@ -39,13 +39,13 @@ services:
     container_name: tomcat-mock
     build: ./docker/tomcat-mock
     volumes:
-      - ./war/tomcat-mock/:/opt/tomcat-mock/webapp/
-      - ./logs/tomcat-mock/:/opt/tomcat-mock/logs/
+      - ./war/tomcat/:/opt/tomcat/webapps/
+      - ./logs/tomcat/:/opt/tomcat/logs/
     environment:
       - TOMCAT_USER=root
       - TOMCAT_PASSWORD=password
     ports:
-      - 8080:8080
+      - 8082:8080
       - 8443:8443
     networks:
       app_net4:

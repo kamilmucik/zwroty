@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<f:view>
+    <h:head>
+        <title>Zwroty</title>
+        <h:outputStylesheet library="sh" name="css/shCore.css"/>
+    </h:head>
+    <h:body>
+        <h:outputScript library="sh" name="js/shCore.js" target="head" />
+
+        <b:container >
+            <h:form id="loginForm">
+                <b:panelGrid id="loginGrid" colSpans="3,6,3">
+                    #{" "}
+                    <h:panelGroup>
+                        <p:messages id="loginFormMessages" autoUpdate="false"/>
+                        <b:panelGrid colSpans="4,8">
+                            <h:outputLabel value="Login: "/>
+                            <b:inputText id="email" value="#{sessionMB.email}" required="true"
+                                         label="Login" renderLabel="false">
+                                <f:facet name="prepend">
+                                    <b:iconAwesome name="envelope"/>
+                                </f:facet>
+                            </b:inputText>
+
+                            <h:outputLabel value="Hasło: "/>
+                            <b:inputText type="password" id="password" value="#{sessionMB.password}" required="true"
+                                         converter="#{CharArrayConverter}" label="Hasło"
+                                         renderLabel="false">
+                                <f:facet name="prepend">
+                                    <b:iconAwesome name="key"/>
+                                </f:facet>
+                            </b:inputText>
+
+                            <h:outputLabel value=" "/>
+                            <b:commandButton value="Zaloguj" action="#{sessionMB.loginAction()}" update="loginFormMessages"/>
+
+                        </b:panelGrid>
+                    </h:panelGroup>
+                    #{" "}
+                </b:panelGrid>
+            </h:form>
+            <h:form style="overflow:none;">
+                <h:link title="polityk prywatnosci" outcome="policy"  >
+                    <h:outputLabel value="Polityk prywatnosci" style="cursor: pointer !important;" />
+                </h:link>
+                <p:messages id="messages" showDetail="true" escape="false" />
+            </h:form>
+        </b:container>
+
+    </h:body>
+</f:view>
+</html>
+

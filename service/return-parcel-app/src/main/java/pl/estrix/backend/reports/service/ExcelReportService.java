@@ -130,11 +130,14 @@ public class ExcelReportService {
         h6.setCellValue("z ceną");
         h6.setCellStyle(style1);
         Cell h7 = row.createCell(6);
-        h7.setCellValue("Nazwa");
+        h7.setCellValue("utylizacja");
         h7.setCellStyle(style1);
         Cell h8 = row.createCell(7);
-        h8.setCellValue("EAN");
+        h8.setCellValue("Nazwa");
         h8.setCellStyle(style1);
+        Cell h9 = row.createCell(8);
+        h9.setCellValue("EAN");
+        h9.setCellStyle(style1);
 
 
         int rowIndex = 1;
@@ -168,6 +171,9 @@ public class ExcelReportService {
                     XSSFCell cell5 = row.createCell(5);
                     cell5.setCellValue(shipmentProductDto.getScanLabel());
                     cell5.setCellStyle(style2);
+                    XSSFCell cell6 = row.createCell(6);
+                    cell6.setCellValue(shipmentProductDto.getScanUtilization());
+                    cell6.setCellStyle(style2);
                 }else{
                     XSSFCell cell0 = row.createCell(0);
                     cell0.setCellValue("");
@@ -189,15 +195,18 @@ public class ExcelReportService {
                     XSSFCell cell5 = row.createCell(5);
                     cell5.setCellValue("");
                     cell5.setCellStyle(style2);
+                    XSSFCell cell6 = row.createCell(6);
+                    cell6.setCellValue("");
+                    cell6.setCellStyle(style2);
                 }
 
-                XSSFCell cell5 = row.createCell(6);
-                cell5.setCellValue(shipmentProductDto.getName());
-                cell5.setCellStyle(style2);
+                XSSFCell cell7 = row.createCell(7);
+                cell7.setCellValue(shipmentProductDto.getName());
+                cell7.setCellStyle(style2);
 
-                XSSFCell cell6 = row.createCell(7);
-                cell6.setCellValue(ean);
-                cell6.setCellStyle(style2);
+                XSSFCell cell8 = row.createCell(8);
+                cell8.setCellValue(ean);
+                cell8.setCellStyle(style2);
 
                 rowIndex++;
                 artRow++;

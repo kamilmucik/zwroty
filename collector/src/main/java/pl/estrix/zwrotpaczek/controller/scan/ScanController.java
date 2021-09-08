@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -50,6 +52,9 @@ public class ScanController implements Initializable,Configurable {
     private Integer palletCounter=1;
 
     @FXML
+    public ComboBox stateBox;
+
+    @FXML
     public Button palletCounterButton;
 
     @FXML
@@ -86,9 +91,11 @@ public class ScanController implements Initializable,Configurable {
     @FXML
     private Label selectedCntCorrect;
     @FXML
-    private Label selectedCntLabel;
+    private Label selectedUtylizationLabel;
     @FXML
-    private Label selectedProductLabel;
+    private Label selectedCntLabel;
+//    @FXML
+//    private Label selectedProductLabel;
 
     @FXML
     private Label selectedCntAll;
@@ -147,8 +154,17 @@ public class ScanController implements Initializable,Configurable {
     private Long shopNr;
 
     private int optionPalletButtonIndex = 0;
-    private int optionButtonIndex = 0;
-    private String[] optionName = {"Dobre","Uszkodzone","Z ceną"};
+//    private int optionButtonIndex = 0;
+//    private String[] optionName = {"Dobre","Uszkodzone","Z ceną"};
+
+    ObservableList<String> options =
+            FXCollections.observableArrayList(
+                    "Dobre",
+                    "Uszkodzone",
+                    "Z ceną",
+                    "Utylizacja"
+            );
+
     private String[] optionPalletName = {"C","M"};
 
     private String eanZeros;
@@ -159,6 +175,9 @@ public class ScanController implements Initializable,Configurable {
     public void initialize(URL location, ResourceBundle resources) {
         setInstance(this);
         multipler = 1;
+
+        stateBox.setItems(options);
+        stateBox.setValue("Dobre");
 
         info.visibleProperty().bind(SessionManager.connectionStatus.not());
         info.setText("Brak połączenia z serwerem.");
@@ -189,6 +208,7 @@ public class ScanController implements Initializable,Configurable {
         selectedCntAll.disableProperty().bind(busy);
         selectedStore.disableProperty().bind(busy);
         selectedArtNumber.disableProperty().bind(busy);
+        selectedUtylizationLabel.disableProperty().bind(busy);
 
         Platform.runLater(() -> eanLabel.requestFocus());
 
@@ -207,26 +227,10 @@ public class ScanController implements Initializable,Configurable {
                 triStatePalletButton.getStyleClass().add("custom-button-damage"+index);
             }
         });
-        Platform.runLater(() -> {
-            triStateButton.setText(optionName[optionButtonIndex]);
-//            selectedProductLabel.setText(optionName[optionButtonIndex]);
-        });
-        triStateButton.pressedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                optionButtonIndex++;
-                if (optionButtonIndex > 2){
-                    optionButtonIndex = 0;
-                }
-                int index = optionButtonIndex;
-                triStateButton.setText(optionName[index]);
-                triStateButton.getStyleClass().clear();
-                triStateButton.getStyleClass().add("button");
-                triStateButton.getStyleClass().add("custom-button");
-                triStateButton.getStyleClass().add("custom-button-damage"+index);
 
-            }
+        stateBox.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+            Platform.runLater(() -> eanLabel.requestFocus());
         });
-
         printerToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (printerToggle.isSelected()){
                 busy.setValue(true);
@@ -321,6 +325,7 @@ public class ScanController implements Initializable,Configurable {
                 selectedCntBroken.setText(shipmentProductDto.getScanError().toString());
                 selectedCntCorrect.setText(shipmentProductDto.getScanCorrect().toString());
                 selectedCntLabel.setText(shipmentProductDto.getScanLabel().toString());
+                selectedUtylizationLabel.setText(shipmentProductDto.getScanUtilization().toString());
                 selectedCntAll.setText(shipmentProductDto.getCounter().toString() + "(" +(shipmentProductDto.getScanError()+shipmentProductDto.getScanCorrect())+ ")");
                 selectedArtNumber.setText(shipmentProductDto.getArtNumber().toString());
                 try {
@@ -346,20 +351,21 @@ public class ScanController implements Initializable,Configurable {
                         shipmentProductDto.setScanCorrect(0L);
                         shipmentProductDto.setScanError(0L);
                         shipmentProductDto.setScanLabel(0L);
+                        int optionButtonIndex = stateBox.getSelectionModel().getSelectedIndex();
+
                         if (optionButtonIndex == 0){
                             shipmentProductDto.setScanCorrect((long)multipler);
-//                        shipmentProductDto.setScanCorrect(shipmentProductDto.getScanCorrect() + (multipler));
                         }else if (optionButtonIndex == 1){
                             shipmentProductDto.setScanError((long)multipler);
-//                        shipmentProductDto.setScanError(shipmentProductDto.getScanError() + (multipler));
-                        }else if (optionButtonIndex ==2){
+                        }else if (optionButtonIndex == 2){
                             shipmentProductDto.setScanLabel((long)multipler);
-//                        shipmentProductDto.setScanLabel(shipmentProductDto.getScanLabel() + (multipler));
+                        }else if (optionButtonIndex == 3){
+                            shipmentProductDto.setScanUtilization((long)multipler);
                         }
 
-                        Platform.runLater(() -> {
-                            selectedProductLabel.setText(optionName[optionButtonIndex]);
-                        });
+//                        Platform.runLater(() -> {
+//                            selectedProductLabel.setText(optionName[optionButtonIndex]);
+//                        });
                     }
                     if (shipmentProductDto != null && multipler > 0 ) {
                         shipmentProductDto = RestService.getInstance().updateProduct(
@@ -367,7 +373,8 @@ public class ScanController implements Initializable,Configurable {
                                 code,
                                 shipmentProductDto.getScanCorrect(),
                                 shipmentProductDto.getScanError(),
-                                shipmentProductDto.getScanLabel()
+                                shipmentProductDto.getScanLabel(),
+                                shipmentProductDto.getScanUtilization()
                         );
 
                         if (shipmentProductDto.getReturnCode() == 200) {
@@ -377,6 +384,7 @@ public class ScanController implements Initializable,Configurable {
                             selectedCntBroken.setText(shipmentProductDto.getScanError().toString());
                             selectedCntCorrect.setText(shipmentProductDto.getScanCorrect().toString());
                             selectedCntLabel.setText(shipmentProductDto.getScanLabel().toString());
+                            selectedUtylizationLabel.setText(shipmentProductDto.getScanUtilization().toString());
                             selectedCntAll.setText(shipmentProductDto.getCounter().toString() + "(" + (shipmentProductDto.getScanError() + shipmentProductDto.getScanCorrect()) + ")");
                             selectedArtNumber.setText(shipmentProductDto.getArtNumber().toString());
                             selectedLogLabel.setText(getStringBuilderLog(shipmentProductDto).toString());
@@ -395,6 +403,7 @@ public class ScanController implements Initializable,Configurable {
                 selectedName.setText("Brak produktu w bazie.");
                 selectedCntBroken.setText("");
                 selectedCntCorrect.setText("");
+                selectedUtylizationLabel.setText("");
                 selectedCntAll.setText("");
                 selectedStore.setText("");
                 selectedArtNumber.setText("");
@@ -406,6 +415,7 @@ public class ScanController implements Initializable,Configurable {
             selectedCntBroken.setText("");
             selectedCntCorrect.setText("");
             selectedCntLabel.setText("");
+            selectedUtylizationLabel.setText("");
             selectedCntAll.setText("");
             selectedLogLabel.setText("");
             selectedStore.setText("");

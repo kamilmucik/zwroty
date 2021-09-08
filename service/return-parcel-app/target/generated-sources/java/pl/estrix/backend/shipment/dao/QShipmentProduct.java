@@ -48,6 +48,8 @@ public class QShipmentProduct extends EntityPathBase<ShipmentProduct> {
 
     public final StringPath scanLog = createString("scanLog");
 
+    public final NumberPath<Long> scanUtilization = createNumber("scanUtilization", Long.class);
+
     public final NumberPath<Long> shipmentId = createNumber("shipmentId", Long.class);
 
     public final NumberPath<Double> weight = createNumber("weight", Double.class);
