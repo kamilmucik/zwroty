@@ -62,6 +62,9 @@ public class ShipmentProduct extends AuditableEntity {
         @Column(name = "scan_label", length = 50, columnDefinition="int(10) default '0'")
         private Long scanLabel;
 
+        @Column(name = "scan_utilization", length = 50, columnDefinition="int(10) default '0'")
+        private Long scanUtilization;
+
         @Column(name = "last_update")
         @Convert(converter = LocalDateTimeToStringConverter.class)
         private LocalDateTime lastUpdate;

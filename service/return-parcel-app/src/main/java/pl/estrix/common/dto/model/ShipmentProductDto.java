@@ -38,6 +38,8 @@ public class ShipmentProductDto extends BaseEntityDto<Long> {
 
     private Long scanLabel;
 
+    private Long scanUtilization;
+
     private String store;
 
     private String scanLog;

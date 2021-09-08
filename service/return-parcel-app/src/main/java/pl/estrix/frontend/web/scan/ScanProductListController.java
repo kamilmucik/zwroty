@@ -79,7 +79,7 @@ public class ScanProductListController extends MainController implements Seriali
     public void init() {
         super.init();
 
-        list = Arrays.asList(false, true, false, true, false, false, true, true, true, true);
+        list = Arrays.asList(false, true, false, true, false, false, true, true, true, true, true);
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         id = Long.parseLong(request.getParameter("id"));
@@ -104,8 +104,8 @@ public class ScanProductListController extends MainController implements Seriali
         String fileName = printerService.printFile(selectedForPrintItem,PrintLabelDto.builder().author("").palletCounter(0).build());
         PrinterDto printerDto = printerService.getDatefault();
 //        System.out.println("printerDto: " + printerDto.getName());
-        System.out.println("fileName: " + fileName);
-        System.out.println("ridName: " + settingService.getSetting().getTempDirectory());
+//        System.out.println("fileName: " + fileName);
+//        System.out.println("ridName: " + settingService.getSetting().getTempDirectory());
 //        printerService.print(printerDto,fileName);
 
         printerService.saveOrUpdate(PrintFileDto

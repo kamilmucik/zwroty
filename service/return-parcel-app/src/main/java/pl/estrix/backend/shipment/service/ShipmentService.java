@@ -411,6 +411,7 @@ System.out.println("shipmentDto: " + shipmentDto.getNumber());
                         .scanError(productDto.getScanError())
                         .scanCorrect(productDto.getScanCorrect())
                         .scanLabel(productDto.getScanLabel())
+                        .scanUtilization(productDto.getScanUtilization())
                         .name(productDto.getName())
                         .companyName(productDto.getCompanyName())
                         .artNumber(productDto.getArtNumber())

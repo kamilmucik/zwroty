@@ -49,3 +49,6 @@ ALTER TABLE `release_article_pallet` ADD `return_number` VARCHAR(10) NULL DEFAUL
 
 --20210524
 ALTER TABLE `shipment` ADD `temp_pallet` bigint DEFAULT 0;
+
+--20210907
+ALTER TABLE `shipment_product` ADD `scan_utilization` int(10) default '0';

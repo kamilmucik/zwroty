@@ -287,14 +287,17 @@ public class RestService {
                                             String ean,
                                             Long scanCorrect,
                                             Long scanError,
-                                            Long scanLabel){
+                                            Long scanLabel,
+                                            Long scanUtilization
+    ){
         client.setReadTimeout(50000);
         try {
             String address2 = address + "/shipment_product/updateproduct?retNumber=" + retNumber
                     + "&ean=" + ean
                     + "&scanCorrect=" + scanCorrect
                     + "&scanError=" + scanError
-                    + "&scanLabel=" + scanLabel;
+                    + "&scanLabel=" + scanLabel
+                    + "&scanUtilization=" + scanUtilization;
             System.out.println(address2);
             WebResource webResource = client.resource(
                     address + "/shipment_product/updateproduct?retNumber=" + retNumber
@@ -302,6 +305,7 @@ public class RestService {
                             + "&scanCorrect=" + scanCorrect
                             + "&scanError=" + scanError
                             + "&scanLabel=" + scanLabel
+                            + "&scanUtilization=" + scanUtilization
             );
             ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
 

@@ -46,6 +46,7 @@ public class ShipmentProductRepositoryCustomImpl extends QueryDslRepositorySuppo
                 shipmentProduct.scanCorrect,
                 shipmentProduct.scanError,
                 shipmentProduct.scanLabel,
+                shipmentProduct.scanUtilization,
                 shipmentProduct.scanLog,
                 shipmentProduct.lastUpdate
         ));

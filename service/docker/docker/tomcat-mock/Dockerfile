@@ -9,6 +9,7 @@ WORKDIR /opt/tomcat
 RUN curl -O https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.55/bin/apache-tomcat-8.5.55.tar.gz
 RUN tar zxvf apache*.tar.gz
 RUN mv apache-tomcat-8.5.55/* /opt/tomcat/.
+RUN rm -rf /opt/tomcat/webapps/*
 
 RUN yum -y install java-1.8.0-openjdk
 RUN yum -y install less
