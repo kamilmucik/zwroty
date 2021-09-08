@@ -1,0 +1,13 @@
+---
+- name: This is a hello-world example
+  hosts: webserver
+  become: true
+  tasks:
+    - name: Copy WAR to server
+      copy:
+        src: return-parcel-app/target/return-parcel-app.war
+        dest: /var/www/e-strix.pl/public_html/megapack/ROOT_2.1.0.war
+    - name: Copy SQL to server
+      copy:
+        src: dump/update.sql
+        dest: /var/www/e-strix.pl/public_html/megapack/update.sql
