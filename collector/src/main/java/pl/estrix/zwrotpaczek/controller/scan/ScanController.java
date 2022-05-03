@@ -348,6 +348,9 @@ public class ScanController implements Initializable,Configurable {
                     if (!storageToggle.selectedProperty().getValue()) {
                         multipler = 0;
                     }else{
+
+                        System.out.println("Multiplert: " + multipler);
+
                         shipmentProductDto.setScanCorrect(0L);
                         shipmentProductDto.setScanError(0L);
                         shipmentProductDto.setScanLabel(0L);
@@ -389,7 +392,11 @@ public class ScanController implements Initializable,Configurable {
                             selectedArtNumber.setText(shipmentProductDto.getArtNumber().toString());
                             selectedLogLabel.setText(getStringBuilderLog(shipmentProductDto).toString());
                         }
-
+                    }else {
+                        RootController.getInstance().openToast(
+                                "Blad",
+                                "Popraw ilość produktów.\r\nWybrano: " + multipler + "\r\ndla " + shipmentProductDto.getName(),
+                                "#4CAF50");
                     }
 
                     multipler = 0;
