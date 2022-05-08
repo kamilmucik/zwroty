@@ -12,10 +12,7 @@ pipeline {
     agent any
     environment {
         CURRENT_TIME = buildTime()
-        ANDROID_HOME= "/Users/kamilmucik/Library/Android/sdk"
-        ANDROID_SDK_ROOT= "/Users/kamilmucik/Library/Android/sdk"
-        ANDROID_AVD_HOME= "/Users/kamilmucik/.android/avd"
-        PATH = "$PATH:$ANDROID_HOME/sdk:$ANDROID_HOME/tools:/usr/local/bin"
+        PATH = "$PATH:/usr/local/bin"
       }
 
     parameters {
@@ -25,7 +22,8 @@ pipeline {
         password(name: 'YOUR_PASSWORD', defaultValue: 'secret')
       }
     tools {
-        gradle "Gradle_4.6"
+        jdk "JDK_1.8"
+        maven "mvn_3.6.3"
     }
     stages {
 
@@ -35,14 +33,14 @@ pipeline {
             cleanWs()
             checkout scm
 
-            script {
-                if (runShell('grep \''+version_release+'\' collector/build.gradle')) {
-                    echo 'wersja bez zmian!'
-                } else {
-                    sh "sed 's/version=.*/version=\""+ version_release+"\"/g' collector/build.gradle > collector/build.gradle.tmp"
-                    sh 'mv collector/build.gradle.tmp collector/build.gradle'
-                }
-            }
+//             script {
+//                 if (runShell('grep \''+version_release+'\' collector/build.gradle')) {
+//                     echo 'wersja bez zmian!'
+//                 } else {
+//                     sh "sed 's/version=.*/version=\""+ version_release+"\"/g' collector/build.gradle > collector/build.gradle.tmp"
+//                     sh 'mv collector/build.gradle.tmp collector/build.gradle'
+//                 }
+//             }
           }
         }
         stage('Build') {
@@ -50,10 +48,7 @@ pipeline {
                 echo 'Building..'
                 script {
                     try {
-                        sh 'mkdir -p collector/build/resources/android/'
-                        sh 'echo "estrix.application.biuld-time=${CURRENT_TIME}" > collector/build/resources/android/filter.properties'
-                        sh 'echo "estrix.application.versio2n=${version_release}" >> collector/build/resources/android/filter.properties'
-                        sh 'gradle android -b collector/build.gradle'
+                        sh "mvn -Dmaven.test.failure.ignore=true clean package -Pmegapack -f service/pom.xml"
                     } finally { //Make checkstyle results available
                         //checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'publicapi/frontend/tslint-result.xml', unHealthy: ''
                     }
