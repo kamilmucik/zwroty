@@ -19,12 +19,13 @@ pipeline {
       }
 
     parameters {
-        string(name: 'version_release', defaultValue: '2.0.1-RC', description: 'Wersja publikacji')
-        string(name: 'version_snapshot', defaultValue: '2.0.2', description: 'Wersja rozwojowa')
+        string(name: 'version_release', defaultValue: '9.0.1-RC', description: 'Wersja publikacji')
+        string(name: 'version_snapshot', defaultValue: '9.0.2', description: 'Wersja rozwojowa')
         string(name: 'YOUR_USERNAME', defaultValue: 'ubuntu')
         password(name: 'YOUR_PASSWORD', defaultValue: 'secret')
       }
     tools {
+        jdk "JDK_1.8"
         gradle "Gradle_4.6"
     }
     stages {
