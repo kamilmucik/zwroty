@@ -52,3 +52,4 @@ ALTER TABLE `shipment` ADD `temp_pallet` bigint DEFAULT 0;
 
 --20210907
 ALTER TABLE `shipment_product` ADD `scan_utilization` int(10) default '0';
+update shipment_product  set scan_utilization = 0 where scan_utilization is null;

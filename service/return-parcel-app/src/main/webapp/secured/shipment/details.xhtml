@@ -101,6 +101,9 @@
                             <p:column headerText="Z ceną" visible="#{shipmentEditController.list[9]}" style="width:100px; text-align: center;">
                                 <h:outputText value="#{shipmentProduct.scanLabel}" />
                             </p:column>
+                            <p:column headerText="Utylizacja" visible="#{shipmentEditController.list[10]}" style="width:100px; text-align: center;">
+                                <h:outputText value="#{shipmentProduct.scanUtilization}" />
+                            </p:column>
                             <p:column headerText="" style="width:100px; text-align: center;">
                                 <p:commandLink styleClass=""
                                                title="Sklepy"

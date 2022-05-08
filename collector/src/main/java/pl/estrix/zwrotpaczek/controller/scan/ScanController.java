@@ -114,8 +114,8 @@ public class ScanController implements Initializable,Configurable {
     @FXML
     private Hyperlink scanedList;
 
-    @FXML
-    private Button triStateButton;
+//    @FXML
+//    private Button triStateButton;
     @FXML
     private Button triStatePalletButton;
 
@@ -194,7 +194,7 @@ public class ScanController implements Initializable,Configurable {
         text06.disableProperty().bind(busy);
         text07.disableProperty().bind(busy);
 
-        triStateButton.disableProperty().bind(busy);
+//        triStateButton.disableProperty().bind(busy);
         triStatePalletButton.disableProperty().bind(busy);
         storageToggle.disableProperty().bind(busy);
         scanedList.disableProperty().bind(print);
@@ -249,7 +249,7 @@ public class ScanController implements Initializable,Configurable {
         });
 
         printerToggle.focusedProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> eanLabel.requestFocus()));
-        triStateButton.focusedProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> eanLabel.requestFocus()));
+//        triStateButton.focusedProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> eanLabel.requestFocus()));
         triStatePalletButton.focusedProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> eanLabel.requestFocus()));
         storageToggle.focusedProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> eanLabel.requestFocus()));
         eanLabel.focusedProperty().addListener((obs, oldVal, newVal) -> {
@@ -348,9 +348,6 @@ public class ScanController implements Initializable,Configurable {
                     if (!storageToggle.selectedProperty().getValue()) {
                         multipler = 0;
                     }else{
-
-                        System.out.println("Multiplert: " + multipler);
-
                         shipmentProductDto.setScanCorrect(0L);
                         shipmentProductDto.setScanError(0L);
                         shipmentProductDto.setScanLabel(0L);
@@ -392,6 +389,7 @@ public class ScanController implements Initializable,Configurable {
                             selectedArtNumber.setText(shipmentProductDto.getArtNumber().toString());
                             selectedLogLabel.setText(getStringBuilderLog(shipmentProductDto).toString());
                         }
+
                     }else {
                         RootController.getInstance().openToast(
                                 "Blad",

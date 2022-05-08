@@ -67,7 +67,7 @@ public class ShipmentEditController extends MainController {
     public void init() {
         try{
             shipmentProductShopDtoList = new ArrayList<>();
-            list = Arrays.asList(false, true, false, false, false, false, true, true, true, true);
+            list = Arrays.asList(false, true, false, false, false, false, true, true, true, true,true);
 
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             id = Long.parseLong(request.getParameter("id"));
@@ -186,6 +186,7 @@ public class ShipmentEditController extends MainController {
                             shipmentProductDto.setScanCorrect(0L);
                             shipmentProductDto.setScanError(0L);
                             shipmentProductDto.setScanLabel(0L);
+                            shipmentProductDto.setScanUtilization(0L);
                             for (int filedIndx = 0; filedIndx < fieldLimit[sheetIndx]; filedIndx++){
                                 switch (filedIndx){
                                     case 0: shipmentProductDto.setArtNumber(getNumberValueFromCell(row.getCell(filedIndx))); break;
