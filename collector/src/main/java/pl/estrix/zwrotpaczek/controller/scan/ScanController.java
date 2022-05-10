@@ -391,10 +391,12 @@ public class ScanController implements Initializable,Configurable {
                         }
 
                     }else {
-                        RootController.getInstance().openToast(
-                                "Blad",
-                                "Popraw ilość produktów.\r\nWybrano: " + multipler + "\r\ndla " + shipmentProductDto.getName(),
-                                "#4CAF50");
+                        if (!print.get()) {
+                            RootController.getInstance().openToast(
+                                    "Blad",
+                                    "Popraw ilość produktów.\r\nWybrano: " + multipler + "\r\ndla " + shipmentProductDto.getName(),
+                                    "#4CAF50");
+                        }
                     }
 
                     multipler = 0;
