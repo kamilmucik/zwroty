@@ -1,0 +1,7 @@
+apiVersion: 1
+
+# tells grafana where to find the prom connection
+datasources:
+  - name: 'prometheus'
+    type: 'prometheus'
+    url: 'http://10.99.113.5:9090'

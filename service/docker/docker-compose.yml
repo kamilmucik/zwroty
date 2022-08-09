@@ -3,7 +3,7 @@ version: '3'
 services:
   mysql:
     image: mysql:latest
-    container_name: dev_mysql
+    container_name: mysql
     command: mysqld --user=root
     ports:
       - 3306:3306
@@ -15,8 +15,8 @@ services:
     volumes:
       - ./mysql-dump/:/docker-entrypoint-initdb.d
     networks:
-      app_net4:
-        ipv4_address: 10.99.103.2
+      app_zwroty:
+        ipv4_address: 10.99.113.2
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -31,29 +31,66 @@ services:
     ports:
       - 8183:80
     networks:
-      app_net4:
-        ipv4_address: 10.99.103.3
+      app_zwroty:
+        ipv4_address: 10.99.113.3
 
-#  tomcat-mock:
-#    image: estrix/tomcat-mock
-#    container_name: tomcat-mock
-#    build: ./docker/tomcat-mock
-#    volumes:
-#      - ./war/tomcat/:/opt/tomcat/webapps/
-#      - ./logs/tomcat/:/opt/tomcat/logs/
-#    environment:
-#      - TOMCAT_USER=root
-#      - TOMCAT_PASSWORD=password
-#    ports:
-#      - 8082:8080
-#      - 8443:8443
-#    networks:
-#      app_net4:
-#        ipv4_address: 10.99.103.4
+  tomcat:
+    image: estrix/tomcat-mock
+    container_name: tomcat-mock
+    build: ./docker/tomcat-mock
+    volumes:
+      - ./war/tomcat/:/opt/tomcat/webapps
+      - ./logs/tomcat/:/opt/tomcat/logs/
+    environment:
+      - TOMCAT_USER=root
+      - TOMCAT_PASSWORD=password
+    ports:
+      - 8080:8080
+      - 8000:8000
+      - 9100:9100
+    networks:
+      app_zwroty:
+        ipv4_address: 10.99.113.4
+  prometheus_zwrt:
+    image: prom/prometheus:v2.35.0
+    container_name: prometheus_zwrt
+    restart: unless-stopped
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    networks:
+      app_zwroty:
+        ipv4_address: 10.99.113.5
+  grafana_zwrt:
+    image: grafana/grafana:6.7.0
+    container_name: grafana_zwrt
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    networks:
+      app_zwroty:
+        ipv4_address: 10.99.113.6
+
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
 
 networks:
-  app_net4:
+  app_zwroty:
     ipam:
       driver: default
       config:
-        - subnet: "10.99.103.0/24"
+        - subnet: "10.99.113.0/24"

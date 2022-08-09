@@ -90,7 +90,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/secured/**").fullyAuthenticated()
                 .antMatchers("/secured/*").fullyAuthenticated()
                 .antMatchers("/secured/admin/**", "/secured/view/admin/**").access("hasRole('ROLE_SUPERUSER')")
-                .antMatchers("/index.xhtml", "/index.html", "/login.xhtml", "/javax.faces.resources/**").permitAll()
+                .antMatchers("/index.xhtml",
+                        "/index.html",
+                        "/login.xhtml",
+                        "/proc/**",
+                        "/javax.faces.resources/**").permitAll()
                 .antMatchers("/login*").anonymous()
                 .and()
                     .formLogin()

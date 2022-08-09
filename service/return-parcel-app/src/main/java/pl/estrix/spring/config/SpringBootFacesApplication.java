@@ -1,49 +1,40 @@
 package pl.estrix.spring.config;
 
-import java.util.*;
-
-import javax.faces.webapp.FacesServlet;
-import javax.servlet.DispatcherType;
-import javax.sql.DataSource;
-import javax.faces.application.ProjectStage;
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-
+import com.sun.faces.config.FacesInitializer;
+import org.apache.catalina.Context;
 import org.primefaces.webapp.filter.FileUploadFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.boot.orm.jpa.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import pl.estrix.frontend.jsf.FacesViewScope;
-import org.apache.catalina.Context;
-import org.primefaces.util.Constants;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.web.NonEmbeddedServletContainerFactory;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.sun.faces.config.FacesInitializer;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import pl.estrix.frontend.jsf.FacesViewScope;
 import pl.estrix.spring.scope.JsfViewScope;
+
+import javax.faces.application.ProjectStage;
+import javax.faces.webapp.FacesServlet;
+import javax.servlet.DispatcherType;
+import javax.servlet.ServletContainerInitializer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.HandlesTypes;
+import javax.sql.DataSource;
+import java.util.*;
 
 @EntityScan("pl.estrix")
 @ComponentScan("pl.estrix")
@@ -68,14 +59,14 @@ public class SpringBootFacesApplication extends SpringBootServletInitializer {
         SpringApplication.run(SpringBootFacesApplication.class, args);
     }
 
-    @RestController
-    static class HomeController {
-
-        @RequestMapping("/")
-        public String home() {
-            return "Hello World";
-        }
-    }
+//    @RestController
+//    static class HomeController {
+//
+//        @RequestMapping("/")
+//        public String home() {
+//            return "Hello World";
+//        }
+//    }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -188,5 +179,27 @@ public class SpringBootFacesApplication extends SpringBootServletInitializer {
         registrationBean.setDispatcherTypes(DispatcherType.FORWARD, DispatcherType.REQUEST);
         return registrationBean;
     }
+
+    /* With Spring */
+//    @Bean
+//    public MeterBinder processMemoryMetrics() {
+//        return new ProcessMemoryMetrics();
+//    }
+//
+//    @Bean
+//    public MeterBinder processThreadMetrics() {
+//        return new ProcessThreadMetrics();
+//    }
+//@Bean
+//MeterRegistryCustomizer<MeterRegistry> configurer(
+//        @Value("${spring.application.name}") String applicationName) {
+//    return (registry) -> registry.config().commonTags("application", applicationName);
+//}
+
+//    @Bean
+//    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+//        return tRegistry -> tRegistry.config();
+//    }
+
 
 }

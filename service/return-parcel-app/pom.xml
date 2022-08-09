@@ -344,6 +344,38 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-spring-legacy</artifactId>-->
+<!--            <version>1.3.12</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
+<!--            <version>1.3.12</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
+<!--            <version>1.1.19</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-core</artifactId>-->
+<!--            <version>1.3.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
+<!--            <version>1.3.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
+<!--            <version>1.9.2</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -577,7 +609,28 @@
             <version>2.0.15</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
+<!--            <version>1.9.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.github.mweirauch</groupId>-->
+<!--            <artifactId>micrometer-jvm-extras</artifactId>-->
+<!--            <version>0.2.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 	
 	<repositories>
@@ -588,11 +641,16 @@
 <!--            <layout>default</layout>-->
 <!--        </repository>-->
     </repositories>
-	
 
-  <scm>
-    <connection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</connection>
-    <developerConnection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</developerConnection>
-    <url>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</url>
-  </scm>
+    <scm>
+        <connection>scm:git:file:////Users/kamilmucik/workspace/shopsync</connection>
+        <developerConnection>scm:git:file:////Users/kamilmucik/workspace/shopsync</developerConnection>
+        <url>https://github.com/kamilmucik/shopsync.git</url>
+<!--        <tag>shopsync-0.0.3</tag>-->
+    </scm>
+<!--  <scm>-->
+<!--    <connection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</connection>-->
+<!--    <developerConnection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</developerConnection>-->
+<!--    <url>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</url>-->
+<!--  </scm>-->
 </project>

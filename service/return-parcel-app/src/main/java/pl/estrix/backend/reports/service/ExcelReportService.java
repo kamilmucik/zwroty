@@ -169,7 +169,7 @@ public class ExcelReportService {
                     cell4.setCellStyle(style2);
 
                     XSSFCell cell5 = row.createCell(5);
-                    cell5.setCellValue(shipmentProductDto.getScanLabel());
+                    cell5.setCellValue((shipmentProductDto.getScanLabel()==null)? 0L :shipmentProductDto.getScanLabel());
                     cell5.setCellStyle(style2);
                     XSSFCell cell6 = row.createCell(6);
                     cell6.setCellValue(shipmentProductDto.getScanUtilization());
