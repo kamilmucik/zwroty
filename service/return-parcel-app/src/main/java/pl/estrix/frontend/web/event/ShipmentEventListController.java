@@ -48,7 +48,7 @@ public class ShipmentEventListController extends MainController implements Seria
     }
 
     public void search() {
-        System.out.println("ScanListController.searchText: " + searchText);
+//        System.out.println("ScanListController.searchText: " + searchText);
         lazyModel = new ShipmentEventLazyDataModel(shipmentService, searchText);
     }
 }

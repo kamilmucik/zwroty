@@ -46,12 +46,12 @@ public class ItemBean implements Serializable {
     }
 
     public void addItem(){
-        System.out.println("addItem: ");
+//        System.out.println("addItem: ");
 //        empresas.add(new EmpresaRecolheInss());
     }
 
     public void removeItem(Item item){
-        System.out.println("removeItem: " + item);
+//        System.out.println("removeItem: " + item);
 //        empresas.remove(eri);
     }
 

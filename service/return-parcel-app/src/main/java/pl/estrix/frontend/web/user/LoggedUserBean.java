@@ -28,7 +28,7 @@ public class LoggedUserBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        System.out.println("LoggedUserBean");
+//        System.out.println("LoggedUserBean");
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         SecurityContext securityContext = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
         String username = securityContext.getAuthentication().getName();

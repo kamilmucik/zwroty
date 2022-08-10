@@ -36,8 +36,8 @@ public class ScanListController extends MainController implements Serializable {
         tablePageInx = 1;
         searchText = (String) getContext().getExternalContext().getSessionMap().get("_scan_list_search");
 
-        System.out.println("tablePageInx: " + tablePageInx);
-        System.out.println("searchText: " + searchText);
+//        System.out.println("tablePageInx: " + tablePageInx);
+//        System.out.println("searchText: " + searchText);
         lazyModel = new ScanLazyDataModel(shipmentService, searchText);
     }
 
@@ -50,7 +50,7 @@ public class ScanListController extends MainController implements Serializable {
     }
 
     public void search() {
-        System.out.println("ScanListController.searchText: " + searchText);
+//        System.out.println("ScanListController.searchText: " + searchText);
         lazyModel = new ScanLazyDataModel(shipmentService, searchText);
     }
 

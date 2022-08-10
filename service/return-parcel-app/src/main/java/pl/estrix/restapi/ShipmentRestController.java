@@ -50,8 +50,8 @@ public class ShipmentRestController {
             @RequestParam(value = "pageNumber", required = true, defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "limit", required = true, defaultValue = "10") Integer limit
             ) {
-        System.out.println("shipmentDetails.collectorId: " + collectorId);
-        System.out.println("shipmentDetails.id: " + id);
+//        System.out.println("shipmentDetails.collectorId: " + collectorId);
+//        System.out.println("shipmentDetails.id: " + id);
 
         GetShipmentDetailsDto shipmentDto = shipmentService.getItem(id);
         shipmentEventService.saveOrUpdate(
@@ -108,7 +108,7 @@ public class ShipmentRestController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public DeferredResult<GetShipmentDetailsDto> update(@RequestBody GetShipmentDetailsDto shipmentDetailsDto) {
-        System.out.println("shipmentDetailsDto: " + shipmentDetailsDto);
+//        System.out.println("shipmentDetailsDto: " + shipmentDetailsDto);
         DeferredResult<GetShipmentDetailsDto> deferredResult = new DeferredResult<>();
         CompletableFuture<GetShipmentDetailsDto> completableFuture = shipmentService.updateShipmentDetails(shipmentDetailsDto);
         completableFuture.whenComplete((res, ex) -> {

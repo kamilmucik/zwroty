@@ -29,22 +29,22 @@ public class CategoryController {
 
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
     public ResponseEntity<CategoryGroupDto> create(@RequestBody CategoryGroupDto categoryGroupDto) {
-        System.out.println("create.categoryGroupDto: " + categoryGroupDto);
+//        System.out.println("create.categoryGroupDto: " + categoryGroupDto);
         categoryGroupDto.setId(123L);
-        System.out.println("create.categoryGroupDto: " + categoryGroupDto);
+//        System.out.println("create.categoryGroupDto: " + categoryGroupDto);
         return new ResponseEntity<>(categoryGroupService.save(categoryGroupDto), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        System.out.println("delete.categoryGroupDto: " + id);
+//        System.out.println("delete.categoryGroupDto: " + id);
 //        categoryGroupService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<CategoryGroupDto> update(@RequestBody CategoryGroupDto categoryGroupDto) {
-        System.out.println("update.categoryGroupDto: " + categoryGroupDto);
+//        System.out.println("update.categoryGroupDto: " + categoryGroupDto);
         return new ResponseEntity<>(categoryGroupService.save(categoryGroupDto), HttpStatus.OK);
     }
 

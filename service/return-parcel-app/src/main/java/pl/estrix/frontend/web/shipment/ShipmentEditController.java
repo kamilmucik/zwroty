@@ -285,7 +285,7 @@ public class ShipmentEditController extends MainController {
 
                 //TODO: walidacja pustych pól
                 if (row.getCell(0) != null && !row.getCell(0).getCellTypeEnum().equals(CellType.BLANK)) {
-                    System.out.println(row.getCell(1).getCellTypeEnum() + " : " + row.getCell(1).getStringCellValue() );
+//                    System.out.println(row.getCell(1).getCellTypeEnum() + " : " + row.getCell(1).getStringCellValue() );
 //                    System.out.println(row.getCell(1).getCellTypeEnum() + " : " + ((Double)row.getCell(1).getNumericCellValue()).longValue() );
                     if (artReturn.isEmpty()) {
                         artReturn = getValueFromCell(row.getCell(4));

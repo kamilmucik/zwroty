@@ -63,10 +63,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'echo "[webserver]" > hosts.yml'
-                sh 'echo "e-strix.pl ansible_host=51.83.132.174 ansible_user=${YOUR_USERNAME} ansible_ssh_pass=${YOUR_PASSWORD} ansible_sudo_pass=${YOUR_PASSWORD}" >> hosts.yml'
+                sh 'echo "[webserver]" > hosts_tmp.yml'
+                sh 'echo "e-strix.pl ansible_host=51.83.132.174 ansible_user=${YOUR_USERNAME} ansible_ssh_pass=${YOUR_PASSWORD} ansible_sudo_pass=${YOUR_PASSWORD}" >> hosts_tmp.yml'
 
-                sh 'ansible-playbook service/playbook_rc.yml -i hosts.yml --extra-vars "version=${version_snapshot}"'
+                sh 'ansible-playbook service/playbook_rc.yml -i hosts_tmp.yml --extra-vars "version=${version_release}"'
 
             }
         }

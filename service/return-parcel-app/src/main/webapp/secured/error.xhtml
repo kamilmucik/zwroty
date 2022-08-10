@@ -12,7 +12,8 @@
     <h1>Wystąpił błąd</h1>
     <div class="errorDetails">
         Szczegóły: <br/>
-        #{flash.keep.errorDetails}
+        <h:outputText escape="false" value="${flash.keep.errorDetails}"/>
+
     </div>
 </ui:define>
 </ui:composition>

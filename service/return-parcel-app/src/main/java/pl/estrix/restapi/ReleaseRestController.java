@@ -35,13 +35,13 @@ public class ReleaseRestController {
             @PathVariable("code")  String code
     ) {
         if (code.startsWith("000000000")) return null;
-        System.out.println("code: " +code);
-        System.out.println("data: " +code.substring(0,8));
-        System.out.println("nr zwrotu: " +code.substring(8,14));
-        System.out.println("nr artykulu: " +code.substring(14,20));
-        System.out.println("ilosc: " +code.substring(20,26));
-        System.out.println("flaga: " +code.substring(26,27));
-        System.out.println("nr palety: " +code.substring(27,29));
+//        System.out.println("code: " +code);
+//        System.out.println("data: " +code.substring(0,8));
+//        System.out.println("nr zwrotu: " +code.substring(8,14));
+//        System.out.println("nr artykulu: " +code.substring(14,20));
+//        System.out.println("ilosc: " +code.substring(20,26));
+//        System.out.println("flaga: " +code.substring(26,27));
+//        System.out.println("nr palety: " +code.substring(27,29));
 
 
         String palletFlag = code.substring(26,27);
@@ -84,7 +84,7 @@ public class ReleaseRestController {
                 deferredResult.setResult(res);
             }
         });
-        System.out.println("deferredResult: " +deferredResult);
+//        System.out.println("deferredResult: " +deferredResult);
 
         return deferredResult;
     }

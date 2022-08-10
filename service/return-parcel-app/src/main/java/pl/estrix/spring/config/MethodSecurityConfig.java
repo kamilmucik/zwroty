@@ -29,6 +29,6 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     public static void main(String[] args) {
         StandardPasswordEncoder spe = new StandardPasswordEncoder("supersecret");
-        System.out.println(spe.encode("test"));
+//        System.out.println(spe.encode("test"));
     }
 }

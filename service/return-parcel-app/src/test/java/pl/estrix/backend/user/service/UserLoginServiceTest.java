@@ -38,7 +38,7 @@ public class UserLoginServiceTest {
         ShaPasswordEncoder encoder=new ShaPasswordEncoder(256);
         encoder.setIterations(1024);
         String encodedPassword = encoder.encodePassword(PASSWORD,"");
-        System.out.println("encodedPassword: " + encodedPassword);
+//        System.out.println("encodedPassword: " + encodedPassword);
 
 	}
 }

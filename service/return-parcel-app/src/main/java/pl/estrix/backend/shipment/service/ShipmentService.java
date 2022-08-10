@@ -257,9 +257,9 @@ public class ShipmentService {
             ListResponseDto<ShipmentProductDto> listResponseDto = readShipmentProductExecutor.find(searchCriteria,pagingCriteria, true);
 
             if (!listResponseDto.isEmpty()){
-                listResponseDto.getData().stream().forEach( o->{
-                    System.out.println("o= " + o.getArtNumber() + " : " + o.getShopCounter());
-                });
+//                listResponseDto.getData().stream().forEach( o->{
+//                    System.out.println("o= " + o.getArtNumber() + " : " + o.getShopCounter());
+//                });
             }
 
             GetShipmentDetailsDto getShipmentDetailsDto = GetShipmentDetailsDto
@@ -279,7 +279,7 @@ public class ShipmentService {
 
         Executors.newCachedThreadPool().submit(() -> {
             ShipmentDto shipmentDto = readShipmentExecutor.findByNumber(shipmentNumber);
-System.out.println("shipmentDto: " + shipmentDto.getNumber());
+//System.out.println("shipmentDto: " + shipmentDto.getNumber());
             if (shipmentDto == null){
                 completableFuture.cancel(false);
             }
@@ -291,7 +291,7 @@ System.out.println("shipmentDto: " + shipmentDto.getNumber());
                     .build();
 //
             ListResponseDto<ShipmentProductDto> listResponseDto = readShipmentProductExecutor.find(searchCriteria,null, true);
-            System.out.println("listResponseDto: " + listResponseDto.isEmpty());
+//            System.out.println("listResponseDto: " + listResponseDto.isEmpty());
 
 
             GetShipmentDetailsDto getShipmentDetailsDto = GetShipmentDetailsDto

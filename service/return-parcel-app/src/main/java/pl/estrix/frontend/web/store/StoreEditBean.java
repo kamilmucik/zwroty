@@ -40,7 +40,7 @@ public class StoreEditBean implements Serializable {
             if (id == null || id == 0) {
                 selectedStore = new StoreDto();
             }else{
-System.out.println("StoreEditBean: " + id);
+//System.out.println("StoreEditBean: " + id);
 //                selectedStore = storeService.getItem(id);
             }
         }catch (Exception e){

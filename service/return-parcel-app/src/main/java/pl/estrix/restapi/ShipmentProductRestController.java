@@ -30,16 +30,16 @@ public class ShipmentProductRestController {
             @RequestParam(value = "lastUpdate", required = true, defaultValue = "") String lastUpdate,
             @RequestParam(value = "collectorId", required = true, defaultValue = "0") Long collectorId
     ) {
-        System.out.println("sync.collectorId: " + collectorId);
-        System.out.println("sync.number: " + shipmentNumber);
-        System.out.println("sync.lastUpdate: " + lastUpdate);
+//        System.out.println("sync.collectorId: " + collectorId);
+//        System.out.println("sync.number: " + shipmentNumber);
+//        System.out.println("sync.lastUpdate: " + lastUpdate);
 
         DeferredResult<GetShipmentDetailsDto> deferredResult = new DeferredResult<>();
         CompletableFuture<GetShipmentDetailsDto> completableFuture = shipmentService.getDetails(shipmentNumber, lastUpdate);
         completableFuture.whenComplete((res, ex) -> {
 
-            System.out.println("sync.ex: " + ex);
-            System.out.println("sync.res: " + res);
+//            System.out.println("sync.ex: " + ex);
+//            System.out.println("sync.res: " + res);
             if (ex != null) {
                 ex.printStackTrace();
                 deferredResult.setErrorResult(ex);
@@ -61,12 +61,12 @@ public class ShipmentProductRestController {
             @RequestParam(value = "scanUtilization", required = true, defaultValue = "0") Long scanUtilization
     ) {
 
-        System.out.println("retNumber: " +retNumber);
-        System.out.println("ean: " +ean);
-        System.out.println("scanCorrect: " +scanCorrect);
-        System.out.println("scanError: " +scanError);
-        System.out.println("scanLabel: " +scanLabel);
-        System.out.println("scanUtilization: " +scanUtilization);
+//        System.out.println("retNumber: " +retNumber);
+//        System.out.println("ean: " +ean);
+//        System.out.println("scanCorrect: " +scanCorrect);
+//        System.out.println("scanError: " +scanError);
+//        System.out.println("scanLabel: " +scanLabel);
+//        System.out.println("scanUtilization: " +scanUtilization);
 
 
         DeferredResult<ShipmentProductDto> deferredResult = new DeferredResult<>();
@@ -187,14 +187,14 @@ public class ShipmentProductRestController {
                 deferredResult.setResult(res);
             }
         });
-        System.out.println("deferredResult: " +deferredResult);
+//        System.out.println("deferredResult: " +deferredResult);
 
         return deferredResult;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public DeferredResult<SaveShipmentProductDto> update(@RequestBody SaveShipmentProductDto shipmentDetailsDto) {
-        System.out.println("shipmentDetailsDto: " +shipmentDetailsDto);
+//        System.out.println("shipmentDetailsDto: " +shipmentDetailsDto);
 
         DeferredResult<SaveShipmentProductDto> deferredResult = new DeferredResult<>();
         CompletableFuture<SaveShipmentProductDto> completableFuture = shipmentService.updateShipmentDetails(shipmentDetailsDto);
@@ -206,7 +206,7 @@ public class ShipmentProductRestController {
                 deferredResult.setResult(res);
             }
         });
-        System.out.println("deferredResult: " +deferredResult);
+//        System.out.println("deferredResult: " +deferredResult);
 
         return deferredResult;
     }
