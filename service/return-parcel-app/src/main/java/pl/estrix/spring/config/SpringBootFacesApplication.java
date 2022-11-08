@@ -49,6 +49,7 @@ import java.util.*;
                 "pl.estrix.backend.print.repository",
                 "pl.estrix.backend.event.repository",
                 "pl.estrix.backend.release.repository",
+                "pl.estrix.backend.imageversion.repository",
                 "pl.estrix.backend.user.repository"
         })
 @SpringBootApplication

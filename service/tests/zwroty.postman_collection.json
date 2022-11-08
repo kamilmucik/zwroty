@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "c84c6a2a-caea-405f-8f52-3ba228248084",
+		"name": "zwroty",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "findbyean",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/productimageversion/findbyean?ean=123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"productimageversion",
+						"findbyean"
+					],
+					"query": [
+						{
+							"key": "ean",
+							"value": "123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_ean\": \"_ean\",\n    \"_image1_base64\": \"_image1_base64\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/productimageversion/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"productimageversion",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -42,7 +42,10 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
                 // page if necessary ...
                 flash.put("errorDetails", throwable.getMessage());
 
-//                System.out.println("the error is put in the flash: " + throwable.getMessage());
+                System.out.println("the error is put in the flash: " + throwable.getMessage());
+                System.out.println("the error is put in the flash: " + throwable.getLocalizedMessage());
+                System.out.println("the error is put in the flash: " + throwable.toString());
+                System.out.println("the error is put in the flash: " + throwable.getStackTrace());
 
                 NavigationHandler navigationHandler = fc.getApplication().getNavigationHandler();
 

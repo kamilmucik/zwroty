@@ -31,8 +31,6 @@ public class StoreService {
     public StoreDto saveOrUpdate(StoreDto storeDto){
         StoreDto temp = null;
         if (storeDto.getId() != null){
-//            System.out.println(": " + storeDto.getId());
-//            System.out.println(": " + storeDto.getGroup());
             temp = updateExecutor.update(storeDto);
         } else {
             temp = createExecutor.create(storeDto);

@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="db-unit" />
         <module name="return-parcel-app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="db-unit" target="1.8" />
       <module name="return-parcel" target="1.8" />
       <module name="return-parcel-app" target="1.8" />
     </bytecodeTargetLevel>
