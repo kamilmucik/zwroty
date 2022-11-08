@@ -2,6 +2,16 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="nexus" />
+      <option name="name" value="nexus-repo" />
+      <option name="url" value="https://nexus.parker.site/nexus/content/groups/parker-development/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="snapshots" />
+      <option name="name" value="libs-snapshot" />
+      <option name="url" value="https://artifactory.parker.site/artifactory/libs-snapshot" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
@@ -20,6 +30,16 @@
       <option name="id" value="prime-repo" />
       <option name="name" value="PrimeFaces Maven Repository" />
       <option name="url" value="http://repository.primefaces.org" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="parker" />
+      <option name="name" value="libs-release" />
+      <option name="url" value="https://artifactory.parker.site/artifactory/libs-release" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn" />
+      <option name="name" value="mvn central" />
+      <option name="url" value="https://repo.maven.apache.org/maven2/" />
     </remote-repository>
   </component>
 </project>

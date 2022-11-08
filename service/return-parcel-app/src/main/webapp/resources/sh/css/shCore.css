@@ -134,6 +134,7 @@
 #form\3A userTable\3A globalFilter,
 #form\3A printFileTable\3A globalFilter,
 #form\3A releaseArticleTable\3A globalFilter,
+#form\3A productImageVersionTable\3A globalFilter,
 #form\3A shipmentEventTable\3A globalFilter {
     width: 150px;
     padding: 6px;

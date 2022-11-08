@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form style="overflow:none; padding-top: 10px !important;">
+            <h:link title="Powrót" outcome="cancel"  >
+                <f:param name="table_page" value="#{productImageVersionEditController.tablePageInx}" />
+                <h:outputLabel value="Powrót" style="cursor: pointer !important;" />
+            </h:link>
+            <p:messages id="messages" showDetail="true" escape="false" />
+        </h:form>
+
+        <h1>Dodaj wersje produktu</h1>
+
+        <h:form id="form1">
+            <p:panel id="panel" header="" style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top;max-width:720px;margin: 0 auto;">
+                <h:inputHidden value="#{productImageVersionRevisionEditController.id}" id="id" />
+                <h:inputHidden value="#{productImageVersionRevisionEditController.versionId}" id="idVersion" />
+                <h:panelGrid columns="2" style="vertical-align:top; width: 100%;"  columnClasses="alignTop,alignCenterTop" >
+
+                    <h:outputLabel for="reason"  value="Powód: " />
+                    <p:inputText id="reason"
+                                 style="width: 100%"
+                                 required="true"
+                                 requiredMessage="Powód: Pole jest wymagane."
+                                 value="#{productImageVersionRevisionEditController.selected.reason}"
+                                 label="reason">
+                        <p:ajax event="blur" update="reasonMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="reason" id="reasonMsg" />
+
+                    <h:outputLabel   value="Zdjęcia: " />
+                    <p:panel id="display" header="Import pliku " style="margin-bottom:20px">
+                        <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadFront}"
+                                      mode="advanced"
+                                      update="content"
+                                      auto="true"
+                                      label="Przód" />
+                        <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadBack}"
+                                      mode="advanced"
+                                      update="content"
+                                      auto="true"
+                                      label="Tył" />
+                        <p:growl  showDetail="true" />
+
+                    </p:panel>
+
+                    <h:outputText  />
+                    <p:panel id="content" style="border:none;">
+                        <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgFrontBase64 ne null}">
+                            <h4>Przód:</h4>
+                            <h:graphicImage
+                                    id="displayFileFrontBase64"
+                                    style="max-width: 300px; max-height: 300px;"
+                                    value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgFrontBase64}" />
+                        </p:outputPanel>
+                        <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgBackBase64 ne null}">
+                            <h4>Tył:</h4>
+                            <h:graphicImage
+                                    id="displayFileBackBase64"
+                                    style="max-width: 300px; max-height: 300px;"
+                                    value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgBackBase64}" />
+                        </p:outputPanel>
+                    </p:panel>
+                </h:panelGrid>
+
+                <p:commandButton value="Zapisz"
+                                 actionListener="#{productImageVersionRevisionEditController.saveDetail()}"
+                                 partialSubmit="true" ajax="false"
+                                 process="@this"
+                                 styleClass="appButton"
+                                 update=""/>
+                <h:link title="Anuluj" outcome="cancel"   >
+                    <f:param name="table_page" value="#{productImageVersionRevisionEditController.tablePageInx}" />
+                    <h:outputLabel value="Anuluj" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only appButton fakeButton" style="" />
+                </h:link>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

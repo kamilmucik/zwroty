@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form style="overflow:none; padding-top: 10px !important;">
+            <h:link title="Powrót" outcome="cancel"  >
+                <f:param name="table_page" value="#{productImageVersionEditController.tablePageInx}" />
+                <h:outputLabel value="Powrót" style="cursor: pointer !important;" />
+            </h:link>
+            <p:messages id="messages" showDetail="true" escape="false" />
+        </h:form>
+
+        <h1>Dodaj wersje produktu</h1>
+
+        <h:form id="form1">
+            <p:panel id="panel" header="" style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top;margin: 0 auto;">
+                <h:inputHidden value="#{productImageVersionEditController.selected.id}" id="id" />
+                <h:panelGrid columns="2" style="vertical-align:top; width: 100%;"  columnClasses="alignTop,alignCenterTop" >
+
+                    <h:outputLabel for="artNumber"  value="Numer artykułu: " />
+                    <p:inputText id="artNumber"
+                                 style="width: 100%"
+                                 required="true"
+                                 requiredMessage="Numer artykułu: Pole jest wymagane."
+                                 validatorMessage="Numer artykułu: Pole powinno być numeryczne."
+                                 converterMessage="Numer artykułu: Pole powinno być numeryczne."
+                                 value="#{productImageVersionEditController.selected.artNumber}"
+                                 label="artNumber">
+                        <p:ajax event="blur" update="artNumberMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="artNumber" id="artNumberMsg" />
+
+                    <h:outputLabel for="ean"  value="EAN: " />
+                    <p:inputText id="ean"
+                                 style="width: 100%"
+                                 required="true"
+                                 requiredMessage="EAN: Pole jest wymagane."
+                                 validatorMessage="EAN: Pole powinno być numeryczne."
+                                 converterMessage="EAN: Pole powinno być numeryczne."
+                                 value="#{productImageVersionEditController.selected.ean}"
+                                 label="ean">
+                        <p:ajax event="blur" update="eanMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="ean" id="eanMsg" />
+
+                    <h:outputLabel for="title"  value="Nazwa: " />
+                    <p:inputText id="title"
+                                 style="width: 100%"
+                                 required="true"
+                                 requiredMessage="Nazwa: Pole jest wymagane."
+                                 validatorMessage="Nazwa: Pole powinno być numeryczne."
+                                 converterMessage="Nazwa: Pole powinno być numeryczne."
+                                 value="#{productImageVersionEditController.selected.title}"
+                                 label="title">
+                        <p:ajax event="blur" update="titleMsg" />
+                    </p:inputText>
+                    <h:outputText  />
+                    <p:message for="title" id="titleMsg" />
+
+
+                </h:panelGrid>
+                <p:dataTable var="imageVersionRevision"
+                             value="#{productImageVersionRevisionListController.lazyModel}"
+                             paginator="true"
+                             rows="10"
+                             currentPageReportTemplate="{currentPage} z {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15"
+                             id="imageVersionRevisionTable"
+                             lazy="true"
+                             paginatorPosition="bottom"
+                >
+                    <f:facet name="header">
+                        <h:link title="Dodaj" styleClass="tableAddButton" outcome="revisionDetails">
+                            <h:graphicImage library="sh" name="img/new.png" />
+                            <f:param name="id" value="0" />
+                            <f:param name="idVersion" value="#{productImageVersionEditController.selected.id}" />
+                            <f:param name="table_page" value="#{dtLazyView.tablePageInx}" />
+                        </h:link>
+                    </f:facet>
+                    <p:column headerText="Data"  style="width:100px; text-align: center;">
+                        <h:outputText value="#{imageVersionRevision.lastUpdate}" />
+                    </p:column>
+                    <p:column headerText="Powód"  style="width:100px; text-align: center;">
+                        <h:outputText value="#{imageVersionRevision.reason}" />
+                    </p:column>
+                    <p:column headerText="Przód"  style="width:100px; text-align: center;">
+                        <h:graphicImage
+                                style="max-width: 300px; max-height: 300px;"
+                                value="data:image/jpg;base64,#{imageVersionRevision.imgFrontBase64}" />
+                    </p:column>
+                    <p:column headerText="Tył"  style="width:100px; text-align: center;">
+                        <h:graphicImage
+                                style="max-width: 300px; max-height: 300px;"
+                                value="data:image/jpg;base64,#{imageVersionRevision.imgBackBase64}" />
+                    </p:column>
+
+                </p:dataTable>
+
+            <p:commandButton value="Zapisz"
+                             actionListener="#{productImageVersionEditController.saveDetail()}"
+                             partialSubmit="true" ajax="false"
+                             process="@this"
+                             styleClass="appButton"
+                             update=""/>
+            <h:link title="Anuluj" outcome="cancel"   >
+                <f:param name="table_page" value="#{productImageVersionEditController.tablePageInx}" />
+                <h:outputLabel value="Anuluj" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only appButton fakeButton" style="" />
+            </h:link>
+        </p:panel>
+    </h:form>
+
+</ui:define>
+        </ui:composition>

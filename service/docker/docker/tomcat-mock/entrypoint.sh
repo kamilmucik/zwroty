@@ -1,7 +1,10 @@
 #!/bin/bash
 
-#cp /opt/d3s_home/tmp/nl-activemq.xml /opt/d3s_home/conf/nl-activemq.xml
-#cp /opt/d3s_home/tmp/setenv.sh /opt/d3s_home/catalina/bin/setenv.sh
 /opt/node_exporter &
+
+/opt/promtail-linux-amd64 -config.file  /opt/config-promtail.yml &
+
+rm -rf /opt/tomcat/webapps/*
+cp /opt/ROOT.war /opt/tomcat/webapps/ROOT.war
 
 /opt/tomcat/bin/catalina.sh run
