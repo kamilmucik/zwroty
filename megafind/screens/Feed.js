@@ -34,24 +34,29 @@ function Feed({ navigation }) {
   const getData = () => {
     
     setLoading(true);
-    
+    // setDebugInfo("Step.1");
     AsyncStorage.getItem('@storage_Key').then((value) => {
       setMainEndpoint(value);
     }).done();
 
+    setDebugInfo("Step.2" + mainEndpoint);
     fetch(mainEndpoint+'/productimageversion/findbyean?ean=' + searchEan)
       //Sending the currect offset with get request
       .then((response) => response.json())
       .then((responseJson) => {
+        setDebugInfo("Step.3: success");
         //Successful response
         setDataSource([...responseJson.results]); 
         // setDataSource([...dataSource, ...responseJson.results]);
-        setLoading(false);
+        
         setSearchEan('');
       })
       .catch((error) => {
+
+        // setDebugInfo("Step.3.error: " + error);
         console.error(error);
       });
+      setLoading(false);
   };
 
   const renderFooter = () => {
@@ -223,7 +228,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   loadMoreBtn: {
-    margin: 20,
+    margin: 10,
     padding: 14,
     backgroundColor: '#3740ff',
     borderRadius: 4,

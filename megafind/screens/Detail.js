@@ -39,7 +39,7 @@ function Detail({ route, navigation  }) {
         <Text>Tył:</Text>  
         <Image
             source={{
-              uri: 'data:image/jpeg;base64,' + JSON.stringify(imgFrontBase64),
+              uri: 'data:image/jpeg;base64,' + JSON.stringify(imgBackBase64),
             }}
             style={{ width: 256, height: 256, alignItems: 'center'  }}
           />
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   
   loadMoreBtn: {
-    margin: 20,
+    margin: 10,
     padding: 14,
     backgroundColor: '#3740ff',
     borderRadius: 4,
