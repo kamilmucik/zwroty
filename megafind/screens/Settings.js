@@ -1,76 +1,95 @@
-import React, { useState, Component } from 'react';
-import { StyleSheet,Text, View, TextInput, Button,TouchableOpacity,ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet,Text, View, TextInput,SafeAreaView, ScrollView,TouchableOpacity,ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class  Settings extends Component {
 
-  constructor(props){
-    super(props)
+function Settings({ navigation }) {
 
-    this.state = {
-      sourceUrl: 'http://www.e-strix.pl/api/megapack',
-      loading: false
-    }
+  const [loading, setLoading] = useState(false);
+  const [sourceUrl, setSourceUrl] = useState('http://zwroty.e-strix.pl');
+  const [debugInfo, setDebugInfo] = useState('');
+
+
+  useEffect(() => getData());
+  const getData = () => {
+    setLoading(true);
+    AsyncStorage.getItem('@storage_Key').then((value) => {
+      if (value) {
+        setSourceUrl(value);
+      }else{
+        setSourceUrl('http://zwroty.e-strix.pl');
+      }
+    }).done();
+
+    setLoading(false);
+  };
+
+  const saveSettings = typ => {
+    setLoading(true);
+
+    AsyncStorage.setItem('@storage_Key', sourceUrl)
+
+    setDebugInfo("Zapisałem zmiany");
+    setLoading(false);
   }
 
-  _handlePress() {
-    // setLoading(true);
-    this.setState({
-      loading: true
-    });
-
-    // console.log(this.state.sourceUrl);
-    AsyncStorage.setItem('@storage_Key', this.state.sourceUrl)
-
-    this.setState({
-      loading: false
-    });
-  }
-
-  componentDidMount(){
-  AsyncStorage.getItem('@storage_Key').then((value) => {
-    if (value) {
-      this.setState({sourceUrl:value})
-    }else{
-      this.setState({sourceUrl:'http://www.e-strix.pl/api/megapack'})
-    }
-  })
-  }
-  
-render(){
   return (
-    <View>
-      <TextInput 
-        style={styles.input} 
-        placeholder='Domyślny url serwera'
-        value={this.state.sourceUrl}
-        onChangeText={(text) => this.setState({sourceUrl:text})}
-        />
-      
-      <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => this._handlePress()}
-          style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>Zapisz</Text>
-          {this.state.loading ? (
-            <ActivityIndicator
-              color="white"
-              style={{marginLeft: 8}} />
-          ) : null}
-        </TouchableOpacity>
-    </View>
-  );
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+      <View style={{flex: 1}}>
+        <View style={styles.sectionStyle}>
+          <TextInput 
+                style={styles.input} 
+                placeholder='Domyślny url serwera'
+                value={sourceUrl}
+                onChangeText={(text) => setSourceUrl(text)}
+                />
+        </View>
+        <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => saveSettings()}
+            style={styles.loadMoreBtn}>
+            <Text style={styles.btnText}>Zapisz</Text>
+            {loading ? (
+              <ActivityIndicator
+                color="white"
+                style={{marginLeft: 8}} />
+            ) : null}
+          </TouchableOpacity>
+          <Text>
+            {debugInfo}
+          </Text>
+        </View> 
+      </ScrollView>
+      </SafeAreaView>
+      );
 }
-  
-};
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  sectionStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 0.5,
+    borderColor: '#000',
+    height: 40,
+    borderRadius: 5,
+    margin: 10,
+  },
   input: {
     color: 'black',
-    fontSize: 17,
+    flex: 5,
+    fontSize: 14,
     textAlign: 'center',
-    borderColor: 'black',
-    borderBottomWidth: 1
+    borderColor: 'black'
   },
   buttonStyle:{
     color: 'white',
@@ -79,7 +98,7 @@ const styles = StyleSheet.create({
   },
   
   loadMoreBtn: {
-    margin: 20,
+    margin: 10,
     padding: 14,
     backgroundColor: '#3740ff',
     borderRadius: 4,
@@ -92,6 +111,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
   },
+  error: {
+    color: 'red',
+    // alignSelf: 'center'
+  }
 });
 
 export default Settings;

@@ -31,14 +31,12 @@ const requestCameraPermission = async () => {
 const AddItem = ({ route, navigation  }) => {
   
   const { _itemId, _ean, artNumber,title,reason, imgFrontBase64,imgBackBase64} = route.params;
-  // const scanner = useRef(null);
   const [debugInfo, setDebugInfo] = useState('');
+  const [debugError, setDebugError] = useState('');
   const [mainEndpoint, setMainEndpoint] = useState('');
-  // const [inputEAN, setInputEAN] = useState('');
   const [inputReason, setInputReason] = useState('');
   const [fileBase64Front, setFileBase64Front] = useState('');
   const [fileBase64Back, setFileBase64Back] = useState('');
-  // const [scan, setScan] = useState(false);
   const [result, setResult] = useState(null);
 
   AsyncStorage.getItem('@storage_Key').then((value) => {
@@ -95,27 +93,39 @@ const launchScannerCamera = () => {
 
 
   const sendToServer = () => {
-    fetch(mainEndpoint + '/productimageversion/add-version', {
-      method: 'POST',
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        versionImageId: _itemId.itemId,
-        reason: inputReason,
-        imgFrontBase64: fileBase64Front,
-        imgBackBase64: fileBase64Back
-      })
-  })
-  .then((response) => response.json())
-      .then((responseJson) => {
-        setDebugInfo(responseJson.message);
-      })
-      .catch((error) => {
-        setDebugInfo("Błąd dodawania zdjęcia");
-        console.error(error);
-      });
+    
+
+    if (typeof inputReason === 'string' && inputReason.trim().length === 0) {
+      setDebugError('Pole "Powód zmian" musi być wypełnione!');
+
+    } else {
+      // setDebugInfo('string is NOT empty');
+
+      fetch(mainEndpoint + '/productimageversion/add-version', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          versionImageId: _itemId.itemId,
+          reason: inputReason,
+          imgFrontBase64: fileBase64Front,
+          imgBackBase64: fileBase64Back
+        })
+    })
+    .then((response) => response.json())
+        .then((responseJson) => {
+          setDebugInfo(responseJson.message);
+        })
+        .catch((error) => {
+          setDebugInfo("Błąd dodawania zdjęcia");
+          console.error(error);
+        });
+    }
+
+
+    
   };
 
   const renderFileData = typ => {
@@ -163,6 +173,9 @@ const launchScannerCamera = () => {
               onChangeText={(text) => setInputReason(text)}
             />
           </View>
+            <Text >
+              {debugError}
+            </Text>   
           <TouchableOpacity 
             onPress={() => launchCamera(1)}
             style={styles.chooseImage}>
@@ -190,11 +203,9 @@ const launchScannerCamera = () => {
 
 const styles = StyleSheet.create({
   container: {
-    
     backgroundColor: '#fff'
   },
   chooseImage: {
-    
     alignItems: 'center',
   },
   button: {
