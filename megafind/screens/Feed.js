@@ -135,6 +135,10 @@ function Feed({ navigation }) {
       artNumber: item.artNumber,
       imgFrontBase64: item.imgFrontBase64,
       imgBackBase64: item.imgBackBase64,
+      imgLeftBase64: item.imgLeftBase64,
+      imgRightBase64: item.imgRightBase64,
+      imgTopBase64: item.imgTopBase64,
+      imgBottomBase64: item.imgBottomBase64,
       reason: item.reason
     });
 
