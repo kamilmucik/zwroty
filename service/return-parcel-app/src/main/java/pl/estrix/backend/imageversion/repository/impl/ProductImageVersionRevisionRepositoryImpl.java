@@ -6,6 +6,7 @@ import com.mysema.query.types.Projections;
 import org.apache.commons.lang3.StringUtils;
 import pl.estrix.backend.base.PagingCriteria;
 import pl.estrix.backend.base.QueryDslRepositorySupportBase;
+import pl.estrix.backend.category.dao.Category;
 import pl.estrix.backend.imageversion.dao.ProductImageVersion;
 import pl.estrix.backend.imageversion.dao.ProductImageVersionRevision;
 import pl.estrix.backend.imageversion.dao.QProductImageVersion;
@@ -25,6 +26,7 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
 
     private static final QProductImageVersionRevision productImageVersionRevision = new QProductImageVersionRevision("productImageVersionRevision");
 
+    private static final QProductImageVersion productImageVersion = new QProductImageVersion("productImageVersion");
     public ProductImageVersionRevisionRepositoryImpl() {
         super(ProductImageVersionRevision.class);
     }
@@ -48,7 +50,7 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
 //                                        .as(productImageVersion.revisions))));
 //    return new ArrayList<ProductImageVersion>(transform.values());
         JPQLQuery query = getQueryForFind(searchCriteria);
-
+//        query.join(productImageVersion.revisions, productImageVersionRevision);
         query.orderBy(productImageVersionRevision.id.desc());
         addPagingCriteriaToQuery(query, pagingCriteria);
 
@@ -58,7 +60,20 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
                 productImageVersionRevision.releaseDate,
                 productImageVersionRevision.reason,
                 productImageVersionRevision.imgFrontBase64,
-                productImageVersionRevision.imgBackBase64
+                productImageVersionRevision.imgBackBase64,
+                productImageVersionRevision.imgLeftBase64,
+                productImageVersionRevision.imgRightBase64,
+                productImageVersionRevision.imgTopBase64,
+                productImageVersionRevision.imgBottomBase64,
+                productImageVersionRevision.parentId
+//                Projections.bean(
+//                        ProductImageVersion.class,
+//                        productImageVersion.id,
+//                        productImageVersion.ean,
+//                        productImageVersion.title,
+//                        productImageVersion.artNumber
+//                ).as(productImageVersionRevision.productImageVersion)
+
             ));
     }
 
@@ -74,6 +89,9 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
 
         if (Objects.nonNull(searchParams.getVersionId()) && searchParams.getVersionId() > 0) {
             builder.and(productImageVersionRevision.productImageVersion.id.eq(searchParams.getVersionId()));
+        }
+        if (Objects.nonNull(searchParams.getVersionRevisionId()) && searchParams.getVersionRevisionId() > 0) {
+            builder.and(productImageVersionRevision.id.eq(searchParams.getVersionRevisionId()));
         }
         query.where(builder);
         return query;

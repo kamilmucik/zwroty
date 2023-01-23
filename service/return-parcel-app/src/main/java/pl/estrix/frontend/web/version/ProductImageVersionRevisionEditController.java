@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.estrix.backend.imageversion.service.ProductImageVersionService;
+import pl.estrix.common.dto.model.ProductImageVersionDto;
 import pl.estrix.common.dto.model.ProductImageVersionRevisionDto;
 import pl.estrix.common.exception.CustomException;
 import pl.estrix.frontend.jsf.FacesViewScope;
@@ -30,10 +31,16 @@ public class ProductImageVersionRevisionEditController extends MainController im
 
 
     private ProductImageVersionRevisionDto selected;
+    private ProductImageVersionDto selectedVersion;
     private Long id;
     private Long versionId;
     private UploadedFile fileFront;
     private UploadedFile fileBack;
+    private UploadedFile fileLeft;
+    private UploadedFile fileRight;
+    private UploadedFile fileTop;
+    private UploadedFile fileBottom;
+
 
     @Autowired
     private ProductImageVersionService releaseService;
@@ -54,13 +61,16 @@ public class ProductImageVersionRevisionEditController extends MainController im
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public void saveDetail() throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         try {
-            releaseService.saveOrUpdate(selected);
+            selected = releaseService.saveOrUpdate(selected);
+            selectedVersion = releaseService.getItem(versionId);
+            selectedVersion.setLastVersionDate(selected.getLastUpdate().toString());
+            releaseService.saveOrUpdate(selectedVersion);
+
             facesContext.addMessage("null", new FacesMessage(FacesMessage.SEVERITY_INFO, "Zapis rekordu", ""));
         } catch (Exception e) {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Zapis rekordu", ""));
@@ -78,12 +88,26 @@ public class ProductImageVersionRevisionEditController extends MainController im
     public void handleFileUploadFront(FileUploadEvent event) {
         fileFront = event.getFile();
         selected.setImgFrontBase64(Base64.getEncoder().encodeToString(fileFront.getContents()));
-        System.out.println("fileFront: " + selected.getImgFrontBase64().length());
     }
     public void handleFileUploadBack(FileUploadEvent event) {
         fileBack = event.getFile();
         selected.setImgBackBase64(Base64.getEncoder().encodeToString(fileBack.getContents()));
-        System.out.println("fileBack: " + selected.getImgBackBase64().length());
+    }
+    public void handleFileUploadLeft(FileUploadEvent event) {
+        fileLeft = event.getFile();
+        selected.setImgLeftBase64(Base64.getEncoder().encodeToString(fileLeft.getContents()));
+    }
+    public void handleFileUploadRight(FileUploadEvent event) {
+        fileRight = event.getFile();
+        selected.setImgRightBase64(Base64.getEncoder().encodeToString(fileRight.getContents()));
+    }
+    public void handleFileUploadTop(FileUploadEvent event) {
+        fileTop = event.getFile();
+        selected.setImgTopBase64(Base64.getEncoder().encodeToString(fileTop.getContents()));
+    }
+    public void handleFileUploadBottom(FileUploadEvent event) {
+        fileBottom = event.getFile();
+        selected.setImgBottomBase64(Base64.getEncoder().encodeToString(fileBottom.getContents()));
     }
 
 }

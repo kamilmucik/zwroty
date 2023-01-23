@@ -31,7 +31,7 @@ public class ProductImageVersionRestController {
     @ResponseBody
     public DeferredResult<RestProductImageVersionDto> updateByEAN(
             @RequestParam(value = "retNumber", required = true, defaultValue = "0") String retNumber,
-            @RequestParam(value = "ean", required = true, defaultValue = "0") String ean
+            @RequestParam(value = "ean", required = true, defaultValue = "") String ean
     ) {
         DeferredResult<RestProductImageVersionDto> deferredResult = new DeferredResult<>();
         CompletableFuture<RestProductImageVersionDto> completableFuture = service.findByEAN(ean);
@@ -49,7 +49,6 @@ public class ProductImageVersionRestController {
     @RequestMapping(value = "/add-version", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public DeferredResult<RestProductImageVersionRevisionDto> create(@RequestBody ProductImageVersionRevisionDto dto) {
-
         DeferredResult<RestProductImageVersionRevisionDto> deferredResult = new DeferredResult<>();
         CompletableFuture<RestProductImageVersionRevisionDto> completableFuture = service.addVersion(dto);
         completableFuture.whenComplete((res, ex) -> {
@@ -60,17 +59,22 @@ public class ProductImageVersionRestController {
                 deferredResult.setResult(res);
             }
         });
+        return deferredResult;
+    }
 
-
-//        CompletableFuture<PrintLabelDto> completableFuture = printerService.printFileByWebServie(printLabelDto);
-//        completableFuture.whenComplete((res, ex) -> {
-//            if (ex != null) {
-//                ex.printStackTrace();
-//                deferredResult.setErrorResult(ex);
-//            } else {
-//                deferredResult.setResult(res);
-//            }
-//        });
+    @RequestMapping(value = "/update-part-version", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public DeferredResult<RestProductImageVersionRevisionDto> updateImage(@RequestBody ProductImageVersionRevisionDto dto) {
+        DeferredResult<RestProductImageVersionRevisionDto> deferredResult = new DeferredResult<>();
+        CompletableFuture<RestProductImageVersionRevisionDto> completableFuture = service.updateVersion(dto);
+        completableFuture.whenComplete((res, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                deferredResult.setErrorResult(ex);
+            } else {
+                deferredResult.setResult(res);
+            }
+        });
         return deferredResult;
     }
 }

@@ -34,9 +34,9 @@ logging:
         ROOT: ERROR
         org:
             springframework:
-                data: DEBUG
+                data: INFO
             hibernate:
-                type: DEBUG
+                type: INFO
         pl:
             estrix: DEBUG
     pattern:

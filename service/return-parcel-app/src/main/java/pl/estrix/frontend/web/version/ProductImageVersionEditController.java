@@ -14,7 +14,9 @@ import pl.estrix.frontend.web.MainController;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @Component("productImageVersionEditController")
 @Scope(FacesViewScope.NAME)
@@ -33,6 +35,7 @@ public class ProductImageVersionEditController extends MainController {
     @Autowired
     private ProductImageVersionService service;
 
+    private String selectedImage;
 
     @PostConstruct
     public void init() {
@@ -57,6 +60,10 @@ public class ProductImageVersionEditController extends MainController {
     }
 
 
+    public void showImage(String base64){
+        selectedImage = base64;
+    }
+
     public void delete() {
 //        service.delete(selected);
     }
@@ -69,14 +76,20 @@ public class ProductImageVersionEditController extends MainController {
         }
     }
 
-
-    public void saveDetail() {
+    public void saveDetail() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            service.saveOrUpdate(selected);
+            selected = service.saveOrUpdate(selected);
+
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Zapis rekordu", ""));
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Zapis rekordu", ""));
         }
+
+        Flash flash = context.getExternalContext().getFlash();
+        flash.setKeepMessages(true);
+        flash.setRedirect(true);
+
+        context.getExternalContext().redirect("/secured/versions/details.html?id="+selected.getId()+"&table_page=0");
     }
 }

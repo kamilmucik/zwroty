@@ -30,11 +30,14 @@ public class BaseProductImageVersionRevisionCommandExecute extends BaseCommandEx
         entity.setReason(dto.getReason());
         entity.setImgBackBase64(dto.getImgBackBase64());
         entity.setImgFrontBase64(dto.getImgFrontBase64());
+        entity.setImgLeftBase64(dto.getImgLeftBase64());
+        entity.setImgRightBase64(dto.getImgRightBase64());
+        entity.setImgTopBase64(dto.getImgTopBase64());
+        entity.setImgBottomBase64(dto.getImgBottomBase64());
         entity.setReleaseDate(LocalDate.now());
         ProductImageVersion productImageVersion = new ProductImageVersion();
         productImageVersion.setId(dto.getVersionImageId());
         entity.setProductImageVersion(productImageVersion);
-//        entity.setReleaseDate(dto.getLastUpdate());
         return entity;
     }
 
@@ -47,6 +50,11 @@ public class BaseProductImageVersionRevisionCommandExecute extends BaseCommandEx
         dto.setLastUpdate(entity.getReleaseDate());
         dto.setImgBackBase64(entity.getImgBackBase64());
         dto.setImgFrontBase64(entity.getImgFrontBase64());
+        dto.setImgLeftBase64(entity.getImgLeftBase64());
+        dto.setImgRightBase64(entity.getImgRightBase64());
+        dto.setImgTopBase64(entity.getImgTopBase64());
+        dto.setImgBottomBase64(entity.getImgBottomBase64());
+        dto.setVersionImageId(entity.getParentId());
         return dto;
     }
 }
