@@ -19,6 +19,9 @@ public class ProductImageVersionRevisionDto extends BaseEntityDto<Long> {
     private String reason;
 
     private String imgFrontBase64;
-
     private String imgBackBase64;
+    private String imgLeftBase64;
+    private String imgRightBase64;
+    private String imgTopBase64;
+    private String imgBottomBase64;
 }

@@ -21,8 +21,13 @@ public class ProductImageVersionDto extends BaseEntityDto<Long> {
     private Long artNumber;
 
     private String imgFrontBase64;
-
     private String imgBackBase64;
+    private String imgLeftBase64;
+    private String imgRightBase64;
+    private String imgTopBase64;
+    private String imgBottomBase64;
 
     private String reason;
+
+    private String lastVersionDate;
 }

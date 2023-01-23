@@ -3,6 +3,7 @@
 <ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:p="http://primefaces.org/ui"
@@ -37,7 +38,6 @@
                     </p:inputText>
                     <h:outputText  />
                     <p:message for="artNumber" id="artNumberMsg" />
-
                     <h:outputLabel for="ean"  value="EAN: " />
                     <p:inputText id="ean"
                                  style="width: 100%"
@@ -51,7 +51,6 @@
                     </p:inputText>
                     <h:outputText  />
                     <p:message for="ean" id="eanMsg" />
-
                     <h:outputLabel for="title"  value="Nazwa: " />
                     <p:inputText id="title"
                                  style="width: 100%"
@@ -65,46 +64,164 @@
                     </p:inputText>
                     <h:outputText  />
                     <p:message for="title" id="titleMsg" />
-
-
                 </h:panelGrid>
-                <p:dataTable var="imageVersionRevision"
-                             value="#{productImageVersionRevisionListController.lazyModel}"
-                             paginator="true"
-                             rows="10"
-                             currentPageReportTemplate="{currentPage} z {totalPages}"
-                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                             rowsPerPageTemplate="5,10,15"
-                             id="imageVersionRevisionTable"
-                             lazy="true"
-                             paginatorPosition="bottom"
-                >
-                    <f:facet name="header">
-                        <h:link title="Dodaj" styleClass="tableAddButton" outcome="revisionDetails">
-                            <h:graphicImage library="sh" name="img/new.png" />
-                            <f:param name="id" value="0" />
-                            <f:param name="idVersion" value="#{productImageVersionEditController.selected.id}" />
-                            <f:param name="table_page" value="#{dtLazyView.tablePageInx}" />
-                        </h:link>
-                    </f:facet>
-                    <p:column headerText="Data"  style="width:100px; text-align: center;">
-                        <h:outputText value="#{imageVersionRevision.lastUpdate}" />
-                    </p:column>
-                    <p:column headerText="Powód"  style="width:100px; text-align: center;">
-                        <h:outputText value="#{imageVersionRevision.reason}" />
-                    </p:column>
-                    <p:column headerText="Przód"  style="width:100px; text-align: center;">
-                        <h:graphicImage
-                                style="max-width: 300px; max-height: 300px;"
-                                value="data:image/jpg;base64,#{imageVersionRevision.imgFrontBase64}" />
-                    </p:column>
-                    <p:column headerText="Tył"  style="width:100px; text-align: center;">
-                        <h:graphicImage
-                                style="max-width: 300px; max-height: 300px;"
-                                value="data:image/jpg;base64,#{imageVersionRevision.imgBackBase64}" />
-                    </p:column>
 
-                </p:dataTable>
+                <c:if test="#{productImageVersionEditController.selected.id!=0}">
+                    <p:dataTable var="imageVersionRevision"
+                                 value="#{productImageVersionRevisionListController.lazyModel}"
+                                 paginator="true"
+                                 rows="10"
+                                 currentPageReportTemplate="{currentPage} z {totalPages}"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 rowsPerPageTemplate="5,10,15"
+                                 id="imageVersionRevisionTable"
+                                 lazy="true"
+                                 paginatorPosition="bottom"
+                    >
+                        <f:facet name="header">
+                            <h:link title="Dodaj" styleClass="tableAddButton" outcome="revisionDetails">
+                                <h:graphicImage library="sh" name="img/new.png" />
+                                <f:param name="id" value="0" />
+                                <f:param name="idVersion" value="#{productImageVersionEditController.selected.id}" />
+                                <f:param name="table_page" value="#{dtLazyView.tablePageInx}" />
+                            </h:link>
+                        </f:facet>
+                        <p:column headerText="Data"  style="width:100px; text-align: center;">
+                            <h:outputText value="#{imageVersionRevision.lastUpdate}" />
+                        </p:column>
+                        <p:column headerText="Powód"  style="width:100px; text-align: center;">
+                            <h:outputText value="#{imageVersionRevision.reason}" />
+                        </p:column>
+                        <p:column headerText="Przód"  style="width:120px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Obrazek"
+                                           action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.imgFrontBase64)}"
+                                           update="@([id$=displayImage])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage
+                                        rendered="#{imageVersionRevision.imgFrontBase64 ne null}"
+                                        style="max-width: 300px; max-height: 300px;"
+                                        value="data:image/jpg;base64,#{imageVersionRevision.imgFrontBase64}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Tył"  style="width:120px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Obrazek"
+                                           action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.imgBackBase64)}"
+                                           update="@([id$=displayImage])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage
+                                        rendered="#{imageVersionRevision.imgBackBase64 ne null}"
+                                        style="max-width: 300px; max-height: 300px;"
+                                        value="data:image/jpg;base64,#{imageVersionRevision.imgBackBase64}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Lewy"  style="width:120px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Obrazek"
+                                           action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.imgLeftBase64)}"
+                                           update="@([id$=displayImage])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage
+                                        rendered="#{imageVersionRevision.imgLeftBase64 ne null}"
+                                        style="max-width: 300px; max-height: 300px;"
+                                        value="data:image/jpg;base64,#{imageVersionRevision.imgLeftBase64}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Prawy"  style="width:120px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Obrazek"
+                                           action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.imgRightBase64)}"
+                                           update="@([id$=displayImage])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage
+                                        rendered="#{imageVersionRevision.imgRightBase64 ne null}"
+                                        style="max-width: 300px; max-height: 300px;"
+                                        value="data:image/jpg;base64,#{imageVersionRevision.imgRightBase64}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Góra"  style="width:120px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Obrazek"
+                                           action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.imgTopBase64)}"
+                                           update="@([id$=displayImage])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage
+                                        rendered="#{imageVersionRevision.imgTopBase64 ne null}"
+                                        style="max-width: 300px; max-height: 300px;"
+                                        value="data:image/jpg;base64,#{imageVersionRevision.imgTopBase64}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Dół"  style="width:120px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Obrazek"
+                                           action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.imgBottomBase64)}"
+                                           update="@([id$=displayImage])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage
+                                        rendered="#{imageVersionRevision.imgBottomBase64 ne null}"
+                                        style="max-width: max-width: 300px; max-height: 300px;"
+                                        value="data:image/jpg;base64,#{imageVersionRevision.imgBottomBase64}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="" style="width:40px; text-align: center;">
+                            <p:commandLink styleClass=""
+                                           title="Usuń"
+                                           action="#{productImageVersionRevisionListController.edit(imageVersionRevision.id)}"
+                                           update="@([id$=display])"
+                                           oncomplete="PF('deleteDialogW').show();">
+                                <h:graphicImage library="sh" name="img/delete.png" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog id="deleteDialog"
+                              widgetVar="deleteDialogW"
+                              header="Usuń"
+                              modal="true"
+                              resizable="false"
+                              minHeight="200"
+                              appendTo="@(body)"
+                              width="400">
+                        <h:panelGrid columns="3" id="display" columnClasses="alignTop,alignTop,alignTop"
+                                     style="display: block;width: 270px; border: 0px black solid;">
+                            <h:outputLabel value="Czy usunąć '" />
+                            <h:outputLabel value="#{productImageVersionRevisionListController.selectedItem.lastUpdate}" />
+                            <h:outputLabel value="'?" />
+                        </h:panelGrid>
+                        <p:separator />
+                        <p:commandButton value="OK"
+                                         actionListener="#{productImageVersionRevisionListController.delete}"
+                                         partialSubmit="true"
+                                         ajax="true"
+                                         rendered="#{p:ifGranted('ROLE_ADMIN')}"
+                                         oncomplete="PF('deleteDialogW').hide();"
+                                         process="@this"
+                                         style="display: inline; margin: 0 auto 10px; width: 100px;"
+                                         update="@([id$=imageVersionRevisionTable])" />
+                    </p:dialog>
+
+                    <p:dialog id="showImageDialog"
+                              widgetVar="showImageDialogW"
+                              header="Obrazek"
+                              modal="true"
+                              resizable="false"
+                              maxHeight="600"
+                              appendTo="@(body)"
+                              maxWidth="800">
+                        <h:panelGrid columns="3" id="displayImage" columnClasses="alignTop,alignTop,alignTop"
+                                     style="display: block;max-width: 800px; border: 0px black solid;">
+                            <h:graphicImage
+                                    value="data:image/jpg;base64,#{productImageVersionRevisionListController.selectedImage}" />
+                        </h:panelGrid>
+                        <p:separator />
+                        <p:commandButton value="OK"
+                                         partialSubmit="true"
+                                         ajax="true"
+                                         oncomplete="PF('showImageDialogW').hide();"
+                                         process="@this"
+                                         style="display: inline; margin: 0 auto 10px; width: 100px;" />
+                    </p:dialog>
+                </c:if>
 
             <p:commandButton value="Zapisz"
                              actionListener="#{productImageVersionEditController.saveDetail()}"

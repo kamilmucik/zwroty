@@ -34,16 +34,25 @@ public class ProductImageVersionRevision extends AuditableEntity {
     @Convert(converter = LocalDateToStringConverter.class)
     private LocalDate releaseDate;
 
+    @Column(name = "product_image_version_id", insertable = false,updatable = false)
+    private Long parentId;
+
     @Column(name = "reason", length = 4096)
     private String reason;
 
-
     @Column(name = "img_front", length = 420000)
     private String imgFrontBase64;
-
     @Column(name = "img_back", length = 420000)
     private String imgBackBase64;
 
-//    @OneToMany(mappedBy="productImageVersionRevisionImage")
-//    private List<ProductImageVersionRevisionImage> images;
+    @Column(name = "img_left", length = 420000)
+    private String imgLeftBase64;
+    @Column(name = "img_right", length = 420000)
+    private String imgRightBase64;
+
+    @Column(name = "img_top", length = 420000)
+    private String imgTopBase64;
+    @Column(name = "img_bottom", length = 420000)
+    private String imgBottomBase64;
+
 }

@@ -80,6 +80,7 @@ public class ProductImageVersionRepositoryImpl extends QueryDslRepositorySupport
 
         if (StringUtils.isNotEmpty(searchParams.getTableSearch())){
             builder.and(productImageVersion.ean.like("%"+searchParams.getTableSearch()+"%"))
+                    .or(productImageVersion.lastVersionDate.like("%"+searchParams.getTableSearch()+"%"))
                     .or(productImageVersion.artNumber.like("%"+searchParams.getTableSearch()+"%"))
                     .or(productImageVersion.title.like("%"+searchParams.getTableSearch()+"%"));
         }

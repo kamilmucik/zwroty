@@ -33,8 +33,8 @@ public class ProductImageVersion extends AuditableEntity {
     private String title;
 
     @Column(name = "last_version_date")
-    @Convert(converter = LocalDateToStringConverter.class)
-    private LocalDate latVersionDate;
+//    @Convert(converter = LocalDateToStringConverter.class)
+    private String lastVersionDate;
 
     @OneToMany(mappedBy="productImageVersion")
     private List<ProductImageVersionRevision> revisions;
