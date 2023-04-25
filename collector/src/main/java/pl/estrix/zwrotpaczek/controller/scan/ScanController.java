@@ -136,6 +136,8 @@ public class ScanController implements Initializable,Configurable {
     private Text info;
     @FXML
     private Label headLabel;
+    @FXML
+    private Label debugLogInfo;
 
     @FXML
     private Ellipse eanFieldSematphor;
@@ -275,10 +277,13 @@ public class ScanController implements Initializable,Configurable {
                     selectedCntAll.setText("");
                     selectedStore.setText("");
                     selectedArtNumber.setText("");
+                    debugLogInfo.setText("");
                     eanLabel.clear();
                 });
                 return;
             }
+
+            debugLogInfo.setText("code: " + event.getCode().getName());
             if (event.getCode().equals(KeyCode.ENTER)
                     || event.getCode().equals(KeyCode.UNDEFINED)
                     ) {
@@ -289,7 +294,6 @@ public class ScanController implements Initializable,Configurable {
                 eanZeros = leftPadZeros(eanCode.toString().trim(), 13);
                 selectedEAN.setText(eanZeros);
                 search(eanZeros);
-
                 Platform.runLater(() -> {
                     eanLabel.clear();
                     eanLabel.requestFocus();});
