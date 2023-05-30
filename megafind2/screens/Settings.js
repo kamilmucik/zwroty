@@ -38,8 +38,8 @@ function Settings({ navigation }) {
       <ScrollView style={styles.scrollView}>
       <View style={{flex: 1}}>
         <View style={styles.sectionStyle}>
-          <TextInput 
-                style={styles.input} 
+          <TextInput
+                style={styles.input}
                 placeholder='Domyślny url serwera'
                 value={sourceUrl}
                 onChangeText={(text) => setSourceUrl(text)}
@@ -59,10 +59,10 @@ function Settings({ navigation }) {
           <Text>
             {debugInfo}
           </Text>
-        </View> 
+        </View>
       </ScrollView>
       </SafeAreaView>
-      );
+  );
 }
 
 const styles = StyleSheet.create({
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
   },
-  
+
   loadMoreBtn: {
     margin: 10,
     padding: 14,

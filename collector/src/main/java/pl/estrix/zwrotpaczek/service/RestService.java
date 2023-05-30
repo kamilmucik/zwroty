@@ -330,13 +330,18 @@ public class RestService {
 
             String input = gson.toJson(dto);
 
+            System.out.println("req:" + input);
+
             ClientResponse response = webResource.type("application/json").post(ClientResponse.class, input);
 
             if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
             }
 
-            return gson.fromJson(response.getEntity(String.class), PrintLabelDto.class);
+            String res = response.getEntity(String.class);
+            System.out.println("res:" + res);
+
+            return gson.fromJson(res, PrintLabelDto.class);
         } catch (ClientHandlerException e ){
             return new PrintLabelDto(408 /*Request Timeout*/);
         }

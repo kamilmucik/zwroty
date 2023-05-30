@@ -19,7 +19,7 @@ spring:
         hibernate:
             ddl-auto: update
     datasource:
-        url: jdbc:mysql://10.99.1.2:3306/zwroty_e_strix_com?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://mysql:3306/zwroty_e_strix_com?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
         username: user
         password: user
         driver-class-name: com.mysql.jdbc.Driver

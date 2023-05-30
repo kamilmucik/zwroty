@@ -61,12 +61,6 @@ public class ShipmentProductRestController {
             @RequestParam(value = "scanUtilization", required = true, defaultValue = "0") Long scanUtilization
     ) {
 
-//        System.out.println("retNumber: " +retNumber);
-//        System.out.println("ean: " +ean);
-//        System.out.println("scanCorrect: " +scanCorrect);
-//        System.out.println("scanError: " +scanError);
-//        System.out.println("scanLabel: " +scanLabel);
-//        System.out.println("scanUtilization: " +scanUtilization);
 
 
         DeferredResult<ShipmentProductDto> deferredResult = new DeferredResult<>();
@@ -81,16 +75,16 @@ public class ShipmentProductRestController {
                     sb.append("+");
                 }
                 if (scanCorrect > 0){
-                    sb.append(scanCorrect);
+                    sb.append(scanCorrect);//.append("(dob)");
                 }
                 if (scanError > 0){
-                    sb.append(scanError);
+                    sb.append(scanError).append("us");
                 }
                 if (scanLabel > 0){
-                    sb.append(scanLabel);
+                    sb.append(scanLabel).append("c");
                 }
                 if (scanUtilization > 0){
-                    sb.append(scanUtilization);
+                    sb.append(scanUtilization).append("ut");
                 }
                 res.setScanLog(sb.toString());
 
