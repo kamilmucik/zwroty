@@ -49,9 +49,9 @@ function Detail({ route, navigation  }) {
               style={styles.loadMoreBtn}>
               <Text style={styles.btnText}>Dodaj nową wersję</Text>
           </TouchableOpacity>
-          <Text>EAN: {ean}</Text>      
-          <Text>Nr Artykułu: {JSON.stringify(artNumber)}</Text>  
-          <Text>Opis: {title}</Text>  
+          <Text>EAN: {ean}</Text>
+          <Text>Nr Artykułu: {JSON.stringify(artNumber)}</Text>
+          <Text>Opis: {title}</Text>
           <Text>Ostatnia zmiana: {reason}</Text>
 
           <Modal
@@ -63,7 +63,7 @@ function Detail({ route, navigation  }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>{modalTitle}</Text>
-              
+
               <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
@@ -72,32 +72,32 @@ function Detail({ route, navigation  }) {
                     source={{
                       uri: 'data:image/jpeg;base64,' + modalImage,
                     }}
-                    
+
                   style={{ minWidth: 450, minHeight: 600, alignItems: 'center'  }}
-                  /> 
+                  />
               <Text style={styles.textStyle}>Zamknij</Text>
               </Pressable>
             </View>
           </View>
 
          </Modal>
-          
+
           <ScrollView horizontal={true}>
           <View >
-              <TouchableOpacity onPress={() => showSlider(1)}>
-                <Text>Przód:</Text>      
+              <TouchableOpacity s onPress={() => showSlider(1)}>
+                <Text>Przód:</Text>
                 <Image
                     source={{
                       uri: 'data:image/jpeg;base64,' + imgFrontBase64,
                     }}
-                    
+
                   style={{ width: 250, height: 300, alignItems: 'center'  }}
-                  /> 
+                  />
               </TouchableOpacity>
             </View>
             <View style={{ marginLeft: 2}}>
               <TouchableOpacity onPress={() => showSlider(2)}>
-                <Text>Tył:</Text>  
+                <Text>Tył:</Text>
                 <Image
                     source={{
                       uri: 'data:image/jpeg;base64,' + JSON.stringify(imgBackBase64),
@@ -108,7 +108,7 @@ function Detail({ route, navigation  }) {
             </View>
             <View style={{ marginLeft: 2}}>
               <TouchableOpacity onPress={() => showSlider(3)}>
-                <Text>Lewa stron:</Text>  
+                <Text>Lewa stron:</Text>
                 <Image
                     source={{
                       uri: 'data:image/jpeg;base64,' + JSON.stringify(imgLeftBase64),
@@ -119,7 +119,7 @@ function Detail({ route, navigation  }) {
             </View>
             <View style={{ marginLeft: 2}}>
               <TouchableOpacity onPress={() => showSlider(4)}>
-                <Text>Prawa stron:</Text>  
+                <Text>Prawa stron:</Text>
                 <Image
                     source={{
                       uri: 'data:image/jpeg;base64,' + JSON.stringify(imgRightBase64),
@@ -130,7 +130,7 @@ function Detail({ route, navigation  }) {
             </View>
             <View style={{ marginLeft: 2}}>
               <TouchableOpacity onPress={() => showSlider(5)}>
-                <Text>Góra:</Text>  
+                <Text>Góra:</Text>
                 <Image
                     source={{
                       uri: 'data:image/jpeg;base64,' + JSON.stringify(imgTopBase64),
@@ -141,7 +141,7 @@ function Detail({ route, navigation  }) {
             </View>
             <View style={{ marginLeft: 2}}>
               <TouchableOpacity onPress={() => showSlider(6)}>
-                <Text>Dół:</Text>  
+                <Text>Dół:</Text>
                 <Image
                     source={{
                       uri: 'data:image/jpeg;base64,' + JSON.stringify(imgBottomBase64),
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
   },
-  
+
   loadMoreBtn: {
     margin: 10,
     padding: 14,

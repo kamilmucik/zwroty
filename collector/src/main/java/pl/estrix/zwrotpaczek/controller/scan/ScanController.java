@@ -283,7 +283,7 @@ public class ScanController implements Initializable,Configurable {
                 return;
             }
 
-            debugLogInfo.setText("code: " + event.getCode().getName());
+            debugLogInfo.setText("c: " + event.getCode().getName() + "_"+event.getCode());
             if (event.getCode().equals(KeyCode.ENTER)
                     || event.getCode().equals(KeyCode.UNDEFINED)
                     ) {

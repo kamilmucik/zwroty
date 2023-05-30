@@ -35,14 +35,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-					<font fontName="Arial" size="26"/>
+					<font fontName="DejaVu Sans" size="26"/>
 				</textElement>
 				<text><![CDATA[NR ZWROTU]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="380" y="0" width="300" height="40" uuid="84a1d34f-d9fd-4939-90a9-b12e2ee92749"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="28"/>
+					<font fontName="DejaVu Sans" size="28"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NRZWROTU}]]></textFieldExpression>
 			</textField>
@@ -61,14 +61,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-					<font fontName="Arial" size="26" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans" size="26" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[NR ARTYKUŁU]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="380" y="0" width="300" height="40" uuid="686d6dce-2fc0-4e45-a847-0016a6e309db"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="28"/>
+					<font fontName="DejaVu Sans" size="28"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NRARTYKULU}]]></textFieldExpression>
 			</textField>
@@ -86,14 +86,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="html">
-					<font fontName="Arial" size="26" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans" size="26" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[ILOŚĆ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="380" y="0" width="300" height="40" uuid="17f01568-0268-4a56-86a5-d82b5d6d361d"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="28"/>
+					<font fontName="DejaVu Sans" size="28"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ILOSC}]]></textFieldExpression>
 			</textField>
@@ -116,7 +116,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="html">
-					<font fontName="Arial" size="12" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans" size="12" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{BARCODE}]]></textFieldExpression>
 			</textField>
@@ -134,7 +134,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-					<font fontName="Arial" size="60"/>
+					<font fontName="DejaVu Sans" size="60"/>
 				</textElement>
 				<text><![CDATA[MEGA PACK]]></text>
 			</staticText>
@@ -152,14 +152,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-					<font fontName="Arial" size="22"/>
+					<font fontName="DejaVu Sans" size="22"/>
 				</textElement>
 				<text><![CDATA[DATA PRZYGOTOWANIA]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="380" y="0" width="300" height="51" uuid="c6d68bda-3fa5-484d-9af5-64cdc8b2814f"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="28"/>
+					<font fontName="DejaVu Sans" size="28"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{DATAPRZYGOTOWANIA}]]></textFieldExpression>
 			</textField>
@@ -177,7 +177,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-					<font fontName="Arial" size="22" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans" size="22" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[OSOBA PRZYGOTOWUJĄCA
 (IMIĘ I NAZWISKO)]]></text>
@@ -185,7 +185,7 @@
 			<textField>
 				<reportElement x="380" y="1" width="300" height="51" uuid="6c0996b1-a5fb-471f-a77d-b0978507df08"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="28" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans" size="28" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Author}]]></textFieldExpression>
 			</textField>
