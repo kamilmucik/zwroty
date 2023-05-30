@@ -12,7 +12,7 @@
     <packaging>war</packaging>
     <version>2.1.1-SNAPSHOT</version>
     <name>Spring Boot App :: Return Parcel</name>
-	
+
 	<properties>
         <!-- can be 8.0.x also -->
         <tomcat.version>7.0.62</tomcat.version>
@@ -45,7 +45,7 @@
         <dist.jmx.port>50202</dist.jmx.port>
         <start-class>pl.estrix.spring.config.SpringBootFacesApplication</start-class>
     </properties>
-	
+
 	<build>
         <finalName>return-parcel-app</finalName>
         <plugins>
@@ -333,7 +333,7 @@
             </build>
         </profile>
     </profiles>
-	
+
 	<dependencies>
 
         <dependency>
@@ -418,7 +418,7 @@
             <version>3.1.0</version>
         </dependency>
 
-        <!-- Repository: http://repository.primefaces.org/ -->      
+        <!-- Repository: http://repository.primefaces.org/ -->
         <!-- include a custom theme jar -->
         <dependency>
             <groupId>org.primefaces.themes</groupId>
@@ -444,7 +444,7 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
         </dependency>
-	
+
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.faces</artifactId>
@@ -544,7 +544,9 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-<!--        <dependency>-->
+
+
+        <!--        <dependency>-->
 <!--            <groupId>org.apache.commons</groupId>-->
 <!--            <artifactId>commons-lang3</artifactId>-->
 <!--            <version>3.4</version>-->
@@ -585,6 +587,14 @@
             <artifactId>jasperreports</artifactId>
             <version>6.16.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+        <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>6.16.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/net.sourceforge.barbecue/barbecue -->
         <dependency>
             <groupId>net.sourceforge.barbecue</groupId>
@@ -639,7 +649,7 @@
 <!--            <version>0.2.0</version>-->
 <!--        </dependency>-->
     </dependencies>
-	
+
 	<repositories>
 <!--        <repository>-->
 <!--            <id>prime-repo</id>-->

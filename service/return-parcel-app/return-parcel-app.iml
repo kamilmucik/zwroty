@@ -217,6 +217,7 @@
     <orderEntry type="library" name="Maven: org.codehaus.castor:castor-core:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.6.6" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.6" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.jasperreports:jasperreports-fonts:6.16.0" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.barbecue:barbecue:1.5-beta1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.pdfbox:pdfbox:2.0.15" level="project" />
     <orderEntry type="library" name="Maven: org.apache.pdfbox:fontbox:2.0.15" level="project" />
