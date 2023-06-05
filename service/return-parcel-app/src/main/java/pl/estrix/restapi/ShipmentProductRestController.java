@@ -75,16 +75,16 @@ public class ShipmentProductRestController {
                     sb.append("+");
                 }
                 if (scanCorrect > 0){
-                    sb.append(scanCorrect).append("(dob)");
+                    sb.append(scanCorrect);//.append("(dob)");
                 }
                 if (scanError > 0){
-                    sb.append(scanError).append("(usz)");
+                    sb.append(scanError).append("us");
                 }
                 if (scanLabel > 0){
-                    sb.append(scanLabel).append("(cen)");
+                    sb.append(scanLabel).append("c");
                 }
                 if (scanUtilization > 0){
-                    sb.append(scanUtilization).append("(uty)");
+                    sb.append(scanUtilization).append("ut");
                 }
                 res.setScanLog(sb.toString());
 

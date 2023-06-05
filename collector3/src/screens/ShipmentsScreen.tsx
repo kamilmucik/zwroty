@@ -1,7 +1,8 @@
-import { StyleSheet, View, Text, Pressable, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Pressable, FlatList, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from '@react-navigation/native';
 import AppContext from "../store/AppContext";
+import { InfoToast } from "../components/common/InfoToast.component";
 
 const ShipmentsScreen = () => {
   const navigation = useNavigation();
@@ -10,6 +11,7 @@ const ShipmentsScreen = () => {
   const [shipments, setShipments] = useState([]);
 
   getShipments = () => {
+    setShipments([]);
     fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment/list')
       .then((response) => response.json())
       // .then((response) => response.json())
@@ -17,7 +19,10 @@ const ShipmentsScreen = () => {
       .then((data) => {
         setShipments(data.shipmentsDto);
       })
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        // console.error(error);
+        appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
+      })
       .finally(() => setLoading(false));
   }
 
@@ -53,7 +58,9 @@ const ShipmentsScreen = () => {
 
   return (
     <View style={{ flex: 1, paddingTop: 10 }}>
-      {isLoading ? <Text>Loading...</Text> :
+
+      <InfoToast></InfoToast>
+      {isLoading ? <ActivityIndicator /> :
         (
           <FlatList data={shipments} keyExtractor={({ id }) => id.toString()} renderItem={renderListItems} />
         )}

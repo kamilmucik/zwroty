@@ -4,10 +4,9 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
-  StyleSheet,
+  StyleSheet, ActivityIndicator
 } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
-import  NumericPad  from  'react-native-numeric-pad';
 import SelectDropdown from 'react-native-select-dropdown';
 import { DataTable } from 'react-native-paper';
 import Toggle from '../components/common/Toggle.component';
@@ -15,7 +14,8 @@ import NumericPadModal from '../components/common/NumericPadModal.component';
 import imagePrinter from '../assets/print_icon.png';
 import imageStorage from '../assets/storage_icon.png';
 import AppContext from '../store/AppContext';
-
+import GlobalStyle from "../utils/GlobalStyle";
+import { InfoToast } from "../components/common/InfoToast.component";
 
 
 const DetailScreen = ({navigation, route}) => {
@@ -26,7 +26,7 @@ const DetailScreen = ({navigation, route}) => {
   const numpadRef = useRef(null);
   const eanInputRef = useRef();
   const [artNumber, setArtNumber] = useState(0);
-  const [eanValue, setEanValue] = useState('5900116029993');
+  const [eanValue, setEanValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [shipmentProduct, setShipmentProduct] = useState([]);
 
@@ -48,11 +48,35 @@ const DetailScreen = ({navigation, route}) => {
     {title: 'Utylizacja', code: '4'},
   ];
 
+  const [isFocused, setIsFocused] = useState(false);
+  useEffect(() => {
+    if (isFocused === false){
+      setDefaultFocus();
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    let phoneNumberLength = eanValue.length;
+    if (phoneNumberLength >= 13 ){
+      sendDataToServer(eanValue);
+     // getShipmentProductInfo(eanValue);
+    }
+    
+    // console.log("eanValue.zmiana: " + eanValue + " : " + phoneNumberLength);
+    
+
+  }, [eanValue]);
+
+
+  useEffect(() => {
+    // console.log("zmiana");
+    setDefaultFocus();
+  }, [appCtx.scanCMValue,appCtx.scanPrintValue,appCtx.scanStorageValue,appCtx.scanMultiperValue,appCtx.scanPalletCounterValue]);
+
   const setDefaultFocus = () => {
     eanInputRef.current.focus();
   };
   const onModalPress = (place, amount) => {
-    setDebugInfo('onModalPress ['+place+']'+amount);
     if (place === 'x'){
       appCtx.setScanMultiperValue(amount);
     }else {
@@ -60,25 +84,22 @@ const DetailScreen = ({navigation, route}) => {
     }
     setDefaultFocus();
   };
+  const onModalTest = () => {
+    console.log("onModalTest");
+  }
+
   const onPressCMHandler = (val) => {
     appCtx.setScanCMValue(val);
     setDefaultFocus();
   };
   const onPressStorageHandler = (val) => {
+    // console.log("onPressStorageHandler: " + val);
     appCtx.setScanStorageValue(val);
-    setDefaultFocus();
+    // setDefaultFocus();
   };
   const onPressPrintHandler = (val) => {
     appCtx.setScanPrintValue(val);
-    setDefaultFocus();
-  };
-  const checkStorageHandler = () => {
-    appCtx.setScanStorageValue(1);
-    setDefaultFocus();
-  };
-  const uncheckStorageHandler = () => {
-    appCtx.setScanStorageValue(0);
-    setDefaultFocus();
+    // setDefaultFocus();
   };
 
   const checkCMHandler = () => {
@@ -99,29 +120,32 @@ const DetailScreen = ({navigation, route}) => {
     setDefaultFocus();
   };
 
-
   displayModal = (show) => {
     setVisible(show);
     setDefaultFocus();
   };
 
   sendDataToServer = (ean) => {
-
-    setDebugInfo('sendDataToServer.scanPrintValue: ' + scanPrintValue);
+    setShipmentProduct([]);
+    setLoading(true);
     if ( scanPrintValue === 1){
       printLabel();
-      setDebugInfo('sendDataToServer.scanPrintValue: ' + scanPrintValue);
-    } else if (scanStorageValue === 1) {
-
-      updateProduct(ean);
-      setDebugInfo('sendDataToServer.scanStorageValue: ' + scanStorageValue);
+    } else if ( Number(appCtx.scanStorageValue) === 1) {
+      if (Number(appCtx.scanMultiperValue) > 0){
+        updateProduct(ean);
+      } else {
+        appCtx.setToastInfoValue('Wybierz ilośc ('+appCtx.scanMultiperValue+') produktów.', 'info');
+      }
     }
-
     getShipmentProductInfo(ean);
+    appCtx.setScanMultiperValue(0);
+    appCtx.setScanPalletCounterValue(0);
+    setEanValue('');
     setDefaultFocus();
   }
 
   const printLabel = async () => {
+    setLoading(true);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -140,18 +164,12 @@ const DetailScreen = ({navigation, route}) => {
 
     try {
       await fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/print/label', requestOptions)
-        // .then((response) => response.json())
-        .then(responseData => {
-          console.log(responseData);
-          return responseData;
+        .catch((error) => {
+          appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
         })
-        .then((data) => {
-          console.info(data);
-        })
-        .catch((error) => console.error(error))
         .finally(() => setLoading(false));
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
     appCtx.setScanMultiperValue(0);
     appCtx.setScanPalletCounterValue(0);
@@ -167,8 +185,10 @@ const DetailScreen = ({navigation, route}) => {
   function setScanError(val) {scanError = val;}
   function setScanLabel(val) {scanLabel = val;}
   function setScanUtilization(val) {scanUtilization = val;}
-  const updateProduct =  (ean) => {
-    console.log('updateProduct['+ean+']' + selectedOption + ' : ' + appCtx.scanMultiperValue)
+
+  const updateProduct =  async (ean) => {
+    // setLoading(true);2
+    // console.log('updateProduct');
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -186,7 +206,7 @@ const DetailScreen = ({navigation, route}) => {
         setScanUtilization(appCtx.scanMultiperValue);
       }
 
-       fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/updateproduct?' +
+      await fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/updateproduct?' +
         'retNumber='+retNumber+'&' +
         'ean='+ean+'&' +
         'scanCorrect='+scanCorrect+'&' +
@@ -194,50 +214,49 @@ const DetailScreen = ({navigation, route}) => {
         'scanLabel='+scanLabel+'&' +
         'scanUtilization='+scanUtilization, requestOptions)
         .then((response) => response.json())
-        // .then(responseData => {
-        //   // console.log(responseData);
-        //   return responseData;
-        // })
-        // .then((data) => {
-          // console.info(data);
-
-        // })
-        .catch((error) => console.error(error))
         .finally(() =>{
-          getShipmentProductInfo(ean);
           setLoading(false);
           }
-        );
+        )
+        ;
+
+
+        getShipmentProductInfo(ean);
     } catch (error) {
       console.error(error);
+      appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
     }
-    appCtx.setScanMultiperValue(0);
-    appCtx.setScanPalletCounterValue(0);
-    setDefaultFocus();
+    // appCtx.setScanMultiperValue(0);
+    // appCtx.setScanPalletCounterValue(0);
+    // setDefaultFocus();
   }
 
   getShipmentProductInfo = (ean) => {
     setShipmentProduct([]);
-
+    console.log(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean);
     fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean)
       .then((response) => response.json())
-      .then(responseData => {console.log(responseData); return responseData;})
+      .then(responseData => { return responseData;})
       .then((data) => {
         setShipmentProduct(data);
         setArtNumber(data.artNumber);
       })
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        // console.error(error);
+        appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
+      })
       .finally(() => setLoading(false));
     setDefaultFocus();
   }
 
   async function loadProperties() {
     try {
-      console.log("loadProperties: " );
       appCtx.setScanPalletCounterValue(0);
       appCtx.setScanMultiperValue(0);
       appCtx.setScanStorageValue(0);
 
+      appCtx.setScanCMValue(0);
+      appCtx.setScanPrintValue(0);
     } catch(e) {
       console.error(e)
     }
@@ -250,26 +269,35 @@ const DetailScreen = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={{flex: 1}}>
-          <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-            <SelectDropdown
-              buttonStyle={styles.dropdown4BtnStyle}
-              // buttonTextStyle={styles.dropdown4BtnTxtStyle}
+    <InfoToast></InfoToast>
+      {isLoading ? <ActivityIndicator /> : <Text/>}
+        <View style={{ flex: 1}}>
+          
+          {/* <Text style={{fontSize:6, }}>{isFocused ? 'focused' : 'unfocused'}</Text>
+          <Text style={{fontSize:6, }}>scanStorageValue: {appCtx.scanStorageValue}</Text>
+          <Text style={{fontSize:6, }}>scanPrintValue: {appCtx.scanPrintValue}</Text>
+          <Text style={{fontSize:6, }}>scanCMValue: {appCtx.scanCMValue}</Text>
+          <Text style={{fontSize:6, }}>scanMultiperValue: {appCtx.scanMultiperValue}</Text>
+          <Text style={{fontSize:6, }}>scanPalletCounterValue: {appCtx.scanPalletCounterValue}</Text> */}
+
+
+
+          <View style={[{flexDirection:'row', paddingLeft:10,zIndex:3}]}>
+           <SelectDropdown
+              buttonStyle={[GlobalStyle.AppSelectButton]}
+              buttonTextStyle={[GlobalStyle.AppSelectButtonText]}
               data={options}
               defaultValueByIndex='0'
+              onFocus={() => setIsFocused(false)}
+              onBlur={() => setIsFocused(false)}
               onSelect={(selectedItem, index) => {
-                // console.log(selectedItem.title, selectedItem.code, index);
                 setSelectedOption(selectedItem.code);
                 eanInputRef.current.focus();
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
-                // text represented after item is selected
-                // if data array is an array of objects then return selectedItem.property to render after item is selected
                 return selectedItem;
               }}
               rowTextForSelection={(item, index) => {
-                // text represented for each item in dropdown
-                // if data array is an array of objects then return item.property to represent item in dropdown
                 return item;
               }}
               renderCustomizedButtonChild={(selectedItem, index) => {
@@ -296,36 +324,34 @@ const DetailScreen = ({navigation, route}) => {
               currentVal={scanMultiperValue}
               innerMinWidth='big'
               onPress={onModalPress}
+              onUncheck={onModalTest}
               returnValue={debugInfo}
             />
           </View>
 
-          <View style={styles.sectionStyle}>
+          <View style={[GlobalStyle.AppInputSection]}>
             <TextInput
-              style={styles.input}
+              style={[GlobalStyle.AppInput]}
               placeholder='EAN'
               autoFocus={true}
               keyboardType='numeric'
               ref={eanInputRef}
               value={eanValue}
-              onChange={(event) => sendDataToServer( event.nativeEvent.text)}
-              onKeyPress={(event) => sendDataToServer( event.nativeEvent.text)}
-              onSubmitEditing={(event) => sendDataToServer( event.nativeEvent.text)}
-              onChangeText={(text) => {
-                setEanValue(text);
-                sendDataToServer(text);
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              // onChange={(event) => sendDataToServer( event.nativeEvent.text)}
+              // onKeyPress={(event) => sendDataToServer( event.nativeEvent.text)}
+              // onSubmitEditing={(event) => sendDataToServer( event.nativeEvent.text)}
+              onChangeText={(event) => {
+                setEanValue(event);
+                // sendDataToServer(event.nativeEvent.text);
               }}
             />
           </View>
-          <Text>
-            {debugInfo}
-          </Text>
 
-
-          <ScrollView style={styles.scrollView}>
-            <View style={styles.container}>
-
-              <DataTable style={styles.dataTable}>
+          <ScrollView style={styles.scrollView} >
+            <View style={styles.container} >
+              <DataTable style={styles.dataTable} >
                 <DataTable.Row style={styles.dataTableRow}>
                   <DataTable.Cell style={styles.dataTableCellLeft}>Nazwa</DataTable.Cell>
                   <DataTable.Cell style={styles.dataTableCell}>
@@ -362,9 +388,10 @@ const DetailScreen = ({navigation, route}) => {
                     </View>
                   </DataTable.Cell>
                 </DataTable.Row>
-                <DataTable.Row style={styles.dataTableRow}>
+                <DataTable.Row style={styles.dataTableRow} >
                   <DataTable.Cell style={styles.dataTableCellLeft}>Wszystkie</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{shipmentProduct.counter}({shipmentProduct.scanCorrect + shipmentProduct.scanError} )</DataTable.Cell>
+                  <DataTable.Cell style={styles.dataTableCell}>
+                    <Text >{shipmentProduct.counter}({shipmentProduct.scanCorrect != null ? shipmentProduct.scanCorrect + shipmentProduct.scanError : ''} ) </Text></DataTable.Cell>
                 </DataTable.Row>
                 <DataTable.Row style={styles.dataTableRow}>
                   <DataTable.Cell style={styles.dataTableCellLeft}>Uszkodzone</DataTable.Cell>
@@ -404,31 +431,6 @@ const DetailScreen = ({navigation, route}) => {
                     </View>
                 </DataTable.Cell>
                 </DataTable.Row>
-
-                <DataTable.Row style={styles.dataTableRow}>
-                  <DataTable.Cell style={styles.dataTableCellLeft}>settingsPortValue</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{settingsPortValue}</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row style={styles.dataTableRow}>
-                  <DataTable.Cell style={styles.dataTableCellLeft}>scanStorageValue</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{scanStorageValue}</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row style={styles.dataTableRow}>
-                  <DataTable.Cell style={styles.dataTableCellLeft}>scanPrintValue</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{scanPrintValue}</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row style={styles.dataTableRow}>
-                  <DataTable.Cell style={styles.dataTableCellLeft}>scanCMValue</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{scanCMValue}</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row style={styles.dataTableRow}>
-                  <DataTable.Cell style={styles.dataTableCellLeft}>scanMultiperValue</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{scanMultiperValue}</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row style={styles.dataTableRow}>
-                  <DataTable.Cell style={styles.dataTableCellLeft}>scanPalletCounterValue</DataTable.Cell>
-                  <DataTable.Cell style={styles.dataTableCell}>{scanPalletCounterValue}</DataTable.Cell>
-                </DataTable.Row>
               </DataTable>
             </View>
           </ScrollView>
@@ -444,27 +446,27 @@ const DetailScreen = ({navigation, route}) => {
               onPress={onModalPress}
               returnValue={debugInfo}
               />
-
             <Toggle
+isDisabled={false}
               initVal='false'
               onPress={onPressPrintHandler}
-              onCheck={checkPrintHandler}
-              onUncheck={uncheckPrintHandler}
+              // onCheck={checkPrintHandler}
+              // onUncheck={uncheckPrintHandler}
               imgScr={imagePrinter}
             />
             <Toggle
               initVal='false'
+              isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
               onPress={onPressCMHandler}
-              onCheck={checkCMHandler}
-              onUncheck={uncheckCMHandler}
               valueCheck={<Text>C</Text>}
               valueUnCheck={<Text>M</Text>}
             />
             <Toggle
               initVal='false'
+              isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
               onPress={onPressStorageHandler}
-              onCheck={checkStorageHandler}
-              onUncheck={uncheckStorageHandler}
+              // onCheck={checkStorageHandler}
+              // onUncheck={uncheckStorageHandler}
               imgScr={imageStorage}
             />
           </View>
@@ -506,19 +508,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  dropdown4BtnStyle: {
-    width: '50%',
-    height: 40,
-    backgroundColor: '#FFF',
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#444',
-  },
-  dropdown4BtnTxtStyle: {color: '#444', textAlign: 'left'},
-  dropdown4DropdownStyle: {backgroundColor: '#EFEFEF'},
-  dropdown4RowStyle: {backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5'},
-  dropdown4RowTxtStyle: {color: '#444', textAlign: 'left'},
-
   button: {
     display: 'flex',
     height: 40,
@@ -551,17 +540,11 @@ const styles = StyleSheet.create({
     width: '70%',
     alignItems: 'center',
     justifyContent: 'center',
-    // marginTop: LAYOUT['spacing-06'],
-    // color: COLORS['brand-01']
   },
   amountButton: {
-    // color: 'white',
-    // fontSize: 6,
     textAlign: 'center',
     borderWidth: 1,
     width: '30%',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   amountButtonText: {
     textAlign: 'center',
@@ -588,44 +571,17 @@ const styles = StyleSheet.create({
   dataTableRow: {
     margin: 0,
     minHeight: 20,
-    // alignItems: 'stretch',
-    // flexDirection:'row',
   },
   dataTableCell: {
     margin: 0,
     bottom: 0,
-    // alignItems: 'stretch',
-
-    // flexDirection:'row',
-    // overflow: 'visible',
-    // // justifyContent: 'center',
-    // alignItems: 'stretch',
-    // alignSelf: 'stretch',
-    // // alignItems: 'stretch',
-// borderWidth: 1,
-    // textAlignVertical: 'center',
-    // flex: 1,
-    // minHeight: 120,
-    // flexWrap: 'wrap',
-    // flexDirection:'row',
-    // alignItems: 'stretch',
-    // minHeight: 120,
-    // flexWrap: 'wrap',
-    // display: 'flex',
-    // writingDirection: 'auto',
-    // justifyContent: 'space-between',
-    // flexWrap
-    // justifyContent: 'center',
   },
   dataTableCellLeft: {
     margin: 0,
     bottom: 0,
     maxWidth: 80,
-    // verticalAlign: 'top',
     textAlignVertical: 'top',
     textAlign: 'left',
-    // justifyContent: '',
-    // alignItems: 'stretch',
   },
   boxInline: {
     borderTopWidth: 1,

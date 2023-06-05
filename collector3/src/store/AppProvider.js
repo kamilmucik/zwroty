@@ -15,6 +15,8 @@ function AppProvider({children}) {
   const [settingsPortValue, setContextSettingsPortValue] = useState('801');
   const [settingsInstanceValue, setContextSettingsInstanceValue] = useState('1');
   const [settingsOperatorValue, setContextSettingsOperatorValue] = useState('');
+  const [toastInfoValue, setContextToastInfoValue] = useState('');
+  const [toastInfoTypeValue, setContextToastInfoTypeValue] = useState('');
 
   function setValue(val){
     setContextValue( (currentVal) => [...currentVal,val]);
@@ -46,6 +48,10 @@ function AppProvider({children}) {
   function setSettingsOperatorValue(val){
     setContextSettingsOperatorValue( val);
   }
+  function setToastInfoValue(val, type){
+    setContextToastInfoValue( val);
+    setContextToastInfoTypeValue( type);
+  }
 
   const value = {
     contextValue: contextValue,
@@ -59,6 +65,8 @@ function AppProvider({children}) {
     settingsPortValue: settingsPortValue,
     settingsInstanceValue: settingsInstanceValue,
     settingsOperatorValue: settingsOperatorValue,
+    toastInfoValue: toastInfoValue,
+    toastInfoTypeValue: toastInfoTypeValue,
 
     setScanPalletCounterValue: setScanPalletCounterValue,
     setScanMultiperValue: setScanMultiperValue,
@@ -69,6 +77,7 @@ function AppProvider({children}) {
     setSettingsPortValue: setSettingsPortValue,
     setSettingsInstanceValue: setSettingsInstanceValue,
     setSettingsOperatorValue: setSettingsOperatorValue,
+    setToastInfoValue: setToastInfoValue,
   }
 
   return <AppContext.Provider value={value}>

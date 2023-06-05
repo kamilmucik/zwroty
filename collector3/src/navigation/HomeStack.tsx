@@ -14,6 +14,7 @@ const HomeStackNavigator = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={HomeScreen}
                         options={({ navigation }) => ({
+                          headerShown: false,
                           title: ''
                         })}/>
       <HomeStack.Screen name="Scan" component={ScanScreen}

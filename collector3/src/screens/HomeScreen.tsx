@@ -1,8 +1,9 @@
-import { Button, View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { Button, View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import PackageJson from '../../package';
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import AppContext from "../store/AppContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import GlobalStyle from "../utils/GlobalStyle";
 
 const HomeScreen = ({ navigation }) => {
 
@@ -59,23 +60,25 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.container}>
-          <Text style={styles.versionText}>v: {PackageJson.version} </Text>
-          <View style={styles.sectionStyle}>
-            <Button
-              title="Zwroty"
-              style={styles.button}
+    <SafeAreaView style={[GlobalStyle.AppContainer, styles.container]}>
+      <Text style={styles.versionText}>v: {PackageJson.version} </Text>
+      <ScrollView style={[GlobalStyle.AppScrollView]}>
+        <View style={[GlobalStyle.AppContainer]}>
+          <View >
+            <TouchableOpacity
+              activeOpacity={0.9}
               onPress={() => navigation.navigate('Shipments')}
-            />
+              style={[GlobalStyle.AppButton]}>
+              <Text style={[GlobalStyle.AppButtonText]}>Zwroty</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.sectionStyle}>
-            <Button
-              title="Ustawienia"
-              style={styles.button}
+          <View >
+            <TouchableOpacity
+              activeOpacity={0.9}
               onPress={() => navigation.navigate('Settings', {name: 'Jane'})}
-            />
+              style={[GlobalStyle.AppButton]}>
+              <Text style={[GlobalStyle.AppButtonText]}>Ustawienia</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -85,22 +88,14 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  button: {
-    backgroundColor: '#3740ff',
-  },
-  scrollView: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  sectionStyle: {
-    margin: 10,
+    marginTop:40,
   },
   versionText: {
     color: 'gray',
     fontSize: 10,
     textAlign: 'right',
+    position: 'absolute',
+    bottom: 10,
   },
 });
 

@@ -1,16 +1,15 @@
 import React, { useState} from 'react';
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 
 export type ToggleProps = {
   imgScr: string;
   valueCheck: string;
   valueUnCheck: string;
   initVal: string;
+  isDisabled: string;
   onPress: () => void;
-  onCheck: () => void;
-  onUncheck: () => void;
 };
-const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal, onCheck,onUncheck, onPress }: ToggleProps) => {
+const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal, onPress, isDisabled }: ToggleProps) => {
 
   const [isToggleOn, setToggleOn] = useState(initVal == 'true'? true:false);
 
@@ -20,7 +19,8 @@ const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal, onCheck,onUncheck, 
   }
 
   return (
-    <TouchableOpacity style={[styles.boxInline, isToggleOn ? styles.boxInlineBlue : styles.boxInlineRed]}
+    <TouchableOpacity style={[styles.boxInline, isToggleOn ? styles.boxInlineBlue : styles.boxInlineRed, isDisabled == 'true'? styles.disabled : styles.enabled]}
+                    disabled={isDisabled == 'true'? true : false}
                       onPress={handleClick}>
       {imgScr && <Image source={imgScr} style={{ width: 32, height: 32 }} />}
       {isToggleOn ? valueCheck : valueUnCheck}
@@ -28,14 +28,13 @@ const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal, onCheck,onUncheck, 
   );
 };
 
-
 const styles = StyleSheet.create({
   boxInline: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
     fontSize: 16,
     flexDirection: 'row',
-    minHeight: 56,
+    minHeight: 50,
     minWidth: 58,
     justifyContent: 'center',
     alignItems: 'center',
@@ -51,6 +50,12 @@ const styles = StyleSheet.create({
     borderTopColor: '#E66465',
     borderBottomColor: '#E66465',
   },
+  disabled: {
+    backgroundColor: '#999999',
+  },
+  enabled: {
+
+  }
 }
 );
 export default Toggle;

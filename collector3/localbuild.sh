@@ -37,11 +37,13 @@ npx react-native bundle --platform android --dev false --entry-file index.js --b
 
 #npx mkdirp android/app/src/main/assets/ && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
 
-cd $SCRIPT_DIR/android/  
+cd $SCRIPT_DIR/android/
 
 $SCRIPT_DIR/android/gradlew clean assembleDebug
 
 # cd $SCRIPT_DIR
+echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/debug/app-debug.apk ubuntu@e-strix.pl:/var/www/e-strix.pl/public_html/megapack/AZwroty3.1.apk'
+
 scp $SCRIPT_DIR/android/app/build/outputs/apk/debug/app-debug.apk ubuntu@e-strix.pl:/var/www/e-strix.pl/public_html/megapack/AZwroty3.1.apk
 
 # npx react-native info

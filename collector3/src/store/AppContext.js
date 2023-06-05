@@ -11,6 +11,8 @@ const AppContext = React.createContext({
   settingsInstanceValue: '1',
   settingsOperatorValue: '',
   contextValue: [],
+  toastInfoValue: '',
+  toastInfoTypeValue: '',
   setValue: (val) => {},
   setScanPalletCounterValue: (val) => {},
   setScanMultiperValue: (val) => {},
@@ -21,6 +23,7 @@ const AppContext = React.createContext({
   setSettingsPortValue: (val) => {},
   setSettingsInstanceValue: (val) => {},
   setSettingsOperatorValue: (val) => {},
+  setToastInfoValue: (val, type) => {},
 });
 
 export default AppContext;
