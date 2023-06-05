@@ -37,7 +37,7 @@ npx react-native bundle --platform android --dev false --entry-file index.js --b
 
 #npx mkdirp android/app/src/main/assets/ && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
 
-cd $SCRIPT_DIR/android/  
+cd $SCRIPT_DIR/android/
 
 $SCRIPT_DIR/android/gradlew clean assembleDebug
 
