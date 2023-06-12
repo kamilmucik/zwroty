@@ -28,6 +28,7 @@ const ShipmentsScreen = () => {
 
   useEffect(() => {
     setLoading(true);
+    appCtx.setToastInfoValue(null, 'info');
     getShipments();
   }, []);
 

@@ -13,6 +13,8 @@ const AppContext = React.createContext({
   contextValue: [],
   toastInfoValue: '',
   toastInfoTypeValue: '',
+  isMobile: 0,
+  isDebugMode: 0,
   setValue: (val) => {},
   setScanPalletCounterValue: (val) => {},
   setScanMultiperValue: (val) => {},
@@ -24,6 +26,8 @@ const AppContext = React.createContext({
   setSettingsInstanceValue: (val) => {},
   setSettingsOperatorValue: (val) => {},
   setToastInfoValue: (val, type) => {},
+  setIsMobile: (val) => {},
+  setIsDebugMode: (val) => {},
 });
 
 export default AppContext;

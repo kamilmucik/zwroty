@@ -38,16 +38,36 @@ const HomeScreen = ({ navigation }) => {
     }
     return value;
   }
+  async function loadSettingsIsMobileData(key) {
+    const value = await AsyncStorage.getItem(key);
+    if(value !== null) {
+      appCtx.setIsMobile(value);
+    }
+    return value;
+  }
+  async function loadSettingsIsDebugModeData(key) {
+    const value = await AsyncStorage.getItem(key);
+    if(value !== null) {
+      appCtx.setIsDebugMode(value);
+    }
+    return value;
+  }
 
   async function loadProperties() {
     try {
       console.log("loadProperties: " );
+      appCtx.setIsMobile(0);
+      appCtx.setIsDebugMode(0);
       loadSettingsURLData('@storage_sourceUrl');
       loadSettingsPortData('@storage_sourcePort');
       loadSettingsInstanceData('@storage_sourceCollectorNo');
       loadSettingsOperatorData('@storage_sourceOperatorName');
+      loadSettingsIsMobileData('@storage_isMobile');
+      loadSettingsIsDebugModeData('@storage_isDebugMode');
       appCtx.setScanPalletCounterValue(0);
       appCtx.setScanMultiperValue(0);
+      appCtx.setToastInfoValue(null, 'info');
+
 
     } catch(e) {
       console.error(e)

@@ -4,6 +4,7 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
+  TouchableOpacity, Image,
   StyleSheet, ActivityIndicator
 } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
@@ -16,8 +17,29 @@ import imageStorage from '../assets/storage_icon.png';
 import AppContext from '../store/AppContext';
 import GlobalStyle from "../utils/GlobalStyle";
 import { InfoToast } from "../components/common/InfoToast.component";
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
-
+const requestCameraPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: "App Camera Permission",
+        message:"App needs access to your camera ",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("Camera permission given");
+    } else {
+      console.log("Camera permission denied");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
 const DetailScreen = ({navigation, route}) => {
   const { retNumber } = route.params;
   const [debugInfo, setDebugInfo] = useState('');
@@ -27,9 +49,13 @@ const DetailScreen = ({navigation, route}) => {
   const eanInputRef = useRef();
   const [artNumber, setArtNumber] = useState(0);
   const [eanValue, setEanValue] = useState('');
+  const [ean2SendValue, setEan2SendValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [shipmentProduct, setShipmentProduct] = useState([]);
 
+  const [scan, setScan] = useState(false);
+  const scanner = useRef(null);
+  const [eanScannerValue, setEanScannerValue] = useState('');
 
   const appCtx = useContext(AppContext);
   const scanPalletCounterValue = appCtx.scanPalletCounterValue;
@@ -42,10 +68,10 @@ const DetailScreen = ({navigation, route}) => {
 
   const [selectedOption, setSelectedOption] = useState(1);
   const options = [
-    {title: 'Dobre', code: '1'},
-    {title: 'Uszkodzone', code: '2'},
-    {title: 'Z ceną', code: '3'},
-    {title: 'Utylizacja', code: '4'},
+    {title: 'Dobre', code: '0'},
+    {title: 'Uszkodzone', code: '1'},
+    {title: 'Z ceną', code: '2'},
+    {title: 'Utylizacja', code: '3'},
   ];
 
   const [isFocused, setIsFocused] = useState(false);
@@ -55,17 +81,95 @@ const DetailScreen = ({navigation, route}) => {
     }
   }, [isFocused]);
 
-  useEffect(() => {
-    let phoneNumberLength = eanValue.length;
-    if (phoneNumberLength >= 13 ){
-      sendDataToServer(eanValue);
-     // getShipmentProductInfo(eanValue);
-    }
-    
-    // console.log("eanValue.zmiana: " + eanValue + " : " + phoneNumberLength);
-    
+  const eanValidate = (inputEan) => {
+    // console.log("eanValidate");
+    //4009900382250
+    let innerEAN = '';
 
+    const reg13 = /^[0-9]{13}$/;
+    const reg8 = /^[0-9]{8}$/;
+
+    if(reg13.test(inputEan) === false && reg8.test(inputEan) === false){
+      return false;
+    }
+
+    if(reg8.test(inputEan) === false){
+      innerEAN = inputEan;
+    } else {
+      innerEAN = '00000' + inputEan;
+    }
+
+    let originalCheck = innerEAN.substring(innerEAN.length - 1);
+    let eanCode = innerEAN.substring(0, innerEAN.length - 1);
+
+     // Add even numbers together
+    let even = Number(eanCode.charAt(1)) +
+      Number(eanCode.charAt(3)) +
+      Number(eanCode.charAt(5)) +
+      Number(eanCode.charAt(7)) +
+      Number(eanCode.charAt(9)) +
+      Number(eanCode.charAt(11));
+    // Multiply this result by 3
+    even *= 3;
+
+    // Add odd numbers together
+    let odd = Number(eanCode.charAt(0)) +
+      Number(eanCode.charAt(2)) +
+      Number(eanCode.charAt(4)) +
+      Number(eanCode.charAt(6)) +
+      Number(eanCode.charAt(8)) +
+      Number(eanCode.charAt(10));
+
+    // Add two totals together
+    let total = even + odd;
+
+    // Calculate the checksum
+    // Divide total by 10 and store the remainder
+    let checksum = total % 10;
+
+    // If result is not 0 then take away 10
+    if (checksum != 0) {
+      checksum = 10 - checksum;
+    }
+
+    // console.log("checksum: " + checksum + ' = ' +  originalCheck);
+    // console.log("even: " + even );
+    // console.log("innerEAN: " + innerEAN );
+    // Return the result
+    if (Number(checksum) != Number(originalCheck)) {
+      return false;
+    }
+    return true;
+  }
+
+  useEffect(() => {
+    if (eanValidate(eanValue) === false) {
+      setEan2SendValue(eanValue);
+    }
+
+    // console.log("eanValue.zmiana: " + eanValue + " : " + eanValidate(eanValue));
   }, [eanValue]);
+
+  useEffect(() => {
+    // let eanLength = eanScannerValue.length;
+    // if (eanValidate(eanValue)){
+    //   sendDataToServer(eanScannerValue);
+    //  // getShipmentProductInfo(eanValue);
+    // }
+    if (eanValidate(eanScannerValue) === false) {
+      setEan2SendValue(eanScannerValue);
+    }
+
+    // console.log("eanScannerValue.zmiana: " + eanScannerValue + " : " + eanValidate(eanScannerValue));
+  }, [eanScannerValue]);
+
+  useEffect(() => {
+    if (eanValidate(ean2SendValue)){
+      sendDataToServer(ean2SendValue);
+    }
+
+    // console.log("ean2SendValue.zmiana: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
+  }, [ean2SendValue]);
 
 
   useEffect(() => {
@@ -141,6 +245,8 @@ const DetailScreen = ({navigation, route}) => {
     appCtx.setScanMultiperValue(0);
     appCtx.setScanPalletCounterValue(0);
     setEanValue('');
+    setEanScannerValue('');
+    setSelectedOption(0);
     setDefaultFocus();
   }
 
@@ -173,6 +279,8 @@ const DetailScreen = ({navigation, route}) => {
     }
     appCtx.setScanMultiperValue(0);
     appCtx.setScanPalletCounterValue(0);
+    // scanPrintValue
+    // appCtx.setScanStorageValue(val);
     setDefaultFocus();
   }
 
@@ -187,8 +295,6 @@ const DetailScreen = ({navigation, route}) => {
   function setScanUtilization(val) {scanUtilization = val;}
 
   const updateProduct =  async (ean) => {
-    // setLoading(true);2
-    // console.log('updateProduct');
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -196,13 +302,13 @@ const DetailScreen = ({navigation, route}) => {
 
     try {
 
-      if (selectedOption == 1) {
+      if (selectedOption == 0) {
         setScanCorrect(appCtx.scanMultiperValue);
-      } else if (selectedOption == 2) {
+      } else if (selectedOption == 1) {
         setScanError(appCtx.scanMultiperValue);
-      } else if (selectedOption == 3) {
+      } else if (selectedOption == 2) {
         setScanLabel(appCtx.scanMultiperValue);
-      } else if (selectedOption == 4) {
+      } else if (selectedOption == 3) {
         setScanUtilization(appCtx.scanMultiperValue);
       }
 
@@ -217,29 +323,28 @@ const DetailScreen = ({navigation, route}) => {
         .finally(() =>{
           setLoading(false);
           }
-        )
-        ;
-
-
+        );
         getShipmentProductInfo(ean);
     } catch (error) {
       console.error(error);
       appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
     }
-    // appCtx.setScanMultiperValue(0);
-    // appCtx.setScanPalletCounterValue(0);
-    // setDefaultFocus();
   }
 
   getShipmentProductInfo = (ean) => {
     setShipmentProduct([]);
-    console.log(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean);
+    // console.log(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean);
     fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean)
       .then((response) => response.json())
       .then(responseData => { return responseData;})
       .then((data) => {
-        setShipmentProduct(data);
-        setArtNumber(data.artNumber);
+        if (data.status === 500){
+          appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
+        } else {
+          setShipmentProduct(data);
+          setArtNumber(data.artNumber);
+        }
+
       })
       .catch((error) => {
         // console.error(error);
@@ -256,38 +361,56 @@ const DetailScreen = ({navigation, route}) => {
       appCtx.setScanStorageValue(0);
 
       appCtx.setScanCMValue(0);
+      // setScanCMValue(0);
       appCtx.setScanPrintValue(0);
+      setSelectedOption(0);
     } catch(e) {
-      console.error(e)
+      console.error(e);
     }
     setDefaultFocus();
   }
 
+  const launchScannerCamera = () => {
+    setScan(true);
+  }
+  const onSuccess = e => {
+    setEanScannerValue('' + e.data);
+    setScan(false);
+  }
+
   useEffect(() => {
+
     loadProperties();
   }, []);
 
-  return (
+  return !scan ? (
     <SafeAreaView style={styles.container}>
     <InfoToast></InfoToast>
       {isLoading ? <ActivityIndicator /> : <Text/>}
         <View style={{ flex: 1}}>
-          
-          {/* <Text style={{fontSize:6, }}>{isFocused ? 'focused' : 'unfocused'}</Text>
-          <Text style={{fontSize:6, }}>scanStorageValue: {appCtx.scanStorageValue}</Text>
-          <Text style={{fontSize:6, }}>scanPrintValue: {appCtx.scanPrintValue}</Text>
-          <Text style={{fontSize:6, }}>scanCMValue: {appCtx.scanCMValue}</Text>
-          <Text style={{fontSize:6, }}>scanMultiperValue: {appCtx.scanMultiperValue}</Text>
-          <Text style={{fontSize:6, }}>scanPalletCounterValue: {appCtx.scanPalletCounterValue}</Text> */}
 
 
+          {appCtx.isDebugMode === 'true' ?
+            <View>
+              <Text style={{fontSize:6, }}>isMobile: {appCtx.isMobile}</Text>
+              <Text style={{fontSize:6, }}>eanScannerValue: {eanScannerValue}</Text>
+              <Text style={{fontSize:6, }}>{isFocused ? 'focused' : 'unfocused'}</Text>
+              <Text style={{fontSize:6, }}>scanStorageValue: {appCtx.scanStorageValue}</Text>
+              <Text style={{fontSize:6, }}>scanPrintValue: {appCtx.scanPrintValue}</Text>
+              <Text style={{fontSize:6, }}>scanCMValue: {appCtx.scanCMValue}</Text>
+              <Text style={{fontSize:6, }}>scanMultiperValue: {appCtx.scanMultiperValue}</Text>
+              <Text style={{fontSize:6, }}>scanPalletCounterValue: {appCtx.scanPalletCounterValue}</Text>
+            </View>
+
+            : <View/>}
 
           <View style={[{flexDirection:'row', paddingLeft:10,zIndex:3}]}>
            <SelectDropdown
               buttonStyle={[GlobalStyle.AppSelectButton]}
               buttonTextStyle={[GlobalStyle.AppSelectButtonText]}
               data={options}
-              defaultValueByIndex='0'
+
+              defaultValueByIndex={selectedOption}
               onFocus={() => setIsFocused(false)}
               onBlur={() => setIsFocused(false)}
               onSelect={(selectedItem, index) => {
@@ -347,6 +470,12 @@ const DetailScreen = ({navigation, route}) => {
                 // sendDataToServer(event.nativeEvent.text);
               }}
             />
+            {appCtx.isMobile === 'true' ? <TouchableOpacity onPress={launchScannerCamera} style={styles.button2}>
+              <Image source={require('../assets/barcode.png')}
+                     style={{ width: 60, height: 38 }}
+              />
+            </TouchableOpacity> : <View/>}
+
           </View>
 
           <ScrollView style={styles.scrollView} >
@@ -447,32 +576,51 @@ const DetailScreen = ({navigation, route}) => {
               returnValue={debugInfo}
               />
             <Toggle
-isDisabled={false}
-              initVal='false'
+              isDisabled={false}
+              initVal={appCtx.scanPrintValue === '1' ? 'true' : 'false'}
+              val={scanPrintValue === 1 ? 'true' : 'false'}
               onPress={onPressPrintHandler}
-              // onCheck={checkPrintHandler}
-              // onUncheck={uncheckPrintHandler}
               imgScr={imagePrinter}
             />
             <Toggle
-              initVal='false'
+              initVal={appCtx.scanCMValue === '1' ? 'true' : 'false'}
+              val={scanCMValue === 1 ? 'true' : 'false'}
               isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
               onPress={onPressCMHandler}
               valueCheck={<Text>C</Text>}
               valueUnCheck={<Text>M</Text>}
             />
             <Toggle
-              initVal='false'
+              initVal={appCtx.scanStorageValue === '1' ? 'true' : 'false'}
+              val={scanStorageValue === 1 ? 'true' : 'false'}
               isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
               onPress={onPressStorageHandler}
-              // onCheck={checkStorageHandler}
-              // onUncheck={uncheckStorageHandler}
               imgScr={imageStorage}
             />
           </View>
         </View>
     </SafeAreaView>
-  );
+  ):(
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1}}>
+        <QRCodeScanner
+          onRead={onSuccess}
+          ref={scanner}
+          reactivate={true}
+          showMarker={true}
+          bottomContent={
+            <View style={{flexDirection: 'row'}}>
+
+              <TouchableOpacity style={[styles.boxInline, styles.boxInlineBlue, {minWidth: '48%'}]} onPress={() => setScan(false)}>
+                <Text style={styles.buttonText2}>Wróc</Text>
+              </TouchableOpacity>
+            </View>
+          }
+        />
+      </View>
+    </SafeAreaView>
+  )
+    ;
 };
 
 

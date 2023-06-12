@@ -6,10 +6,11 @@ export type ToggleProps = {
   valueCheck: string;
   valueUnCheck: string;
   initVal: string;
+  val: string;
   isDisabled: string;
   onPress: () => void;
 };
-const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal, onPress, isDisabled }: ToggleProps) => {
+const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal,val, onPress, isDisabled }: ToggleProps) => {
 
   const [isToggleOn, setToggleOn] = useState(initVal == 'true'? true:false);
 
