@@ -17,6 +17,8 @@ function AppProvider({children}) {
   const [settingsOperatorValue, setContextSettingsOperatorValue] = useState('');
   const [toastInfoValue, setContextToastInfoValue] = useState('');
   const [toastInfoTypeValue, setContextToastInfoTypeValue] = useState('');
+  const [isMobile, setContextIsMobile] = useState(0);
+  const [isDebugMode, setContextIsDebugMode] = useState(0);
 
   function setValue(val){
     setContextValue( (currentVal) => [...currentVal,val]);
@@ -48,6 +50,12 @@ function AppProvider({children}) {
   function setSettingsOperatorValue(val){
     setContextSettingsOperatorValue( val);
   }
+  function setIsMobile(val){
+    setContextIsMobile(val);
+  }
+  function setIsDebugMode(val){
+    setContextIsDebugMode(val);
+  }
   function setToastInfoValue(val, type){
     setContextToastInfoValue( val);
     setContextToastInfoTypeValue( type);
@@ -67,6 +75,8 @@ function AppProvider({children}) {
     settingsOperatorValue: settingsOperatorValue,
     toastInfoValue: toastInfoValue,
     toastInfoTypeValue: toastInfoTypeValue,
+    isMobile: isMobile,
+    isDebugMode: isDebugMode,
 
     setScanPalletCounterValue: setScanPalletCounterValue,
     setScanMultiperValue: setScanMultiperValue,
@@ -78,6 +88,8 @@ function AppProvider({children}) {
     setSettingsInstanceValue: setSettingsInstanceValue,
     setSettingsOperatorValue: setSettingsOperatorValue,
     setToastInfoValue: setToastInfoValue,
+    setIsMobile: setIsMobile,
+    setIsDebugMode: setIsDebugMode,
   }
 
   return <AppContext.Provider value={value}>

@@ -7,14 +7,14 @@ export default StyleSheet.create({
   AppButton: {
     borderColor: '#1f89ce',
     backgroundColor: '#2399e5',
-    minWidth: 40,
+    minWidth: 50,
     alignContent: 'center',
     margin: 10,
   },
   AppButtonText: {
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 36,
+    lineHeight: 46,
   },
   AppScrollView: {
     flex: 1,
