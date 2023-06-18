@@ -14,6 +14,8 @@ export default StyleSheet.create({
   AppButtonText: {
     color: '#fff',
     textAlign: 'center',
+
+    fontSize: 20,
     lineHeight: 46,
   },
   AppScrollView: {

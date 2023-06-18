@@ -15,7 +15,7 @@ const ShipmentsScreen = () => {
     fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment/list')
       .then((response) => response.json())
       // .then((response) => response.json())
-      .then(responseData => {console.log(responseData); return responseData;})
+      // .then(responseData => {console.log(responseData); return responseData;})
       .then((data) => {
         setShipments(data.shipmentsDto);
       })
