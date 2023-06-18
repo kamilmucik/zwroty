@@ -56,6 +56,8 @@ const DetailScreen = ({navigation, route}) => {
   const [scan, setScan] = useState(false);
   const scanner = useRef(null);
   const [eanScannerValue, setEanScannerValue] = useState('');
+  const [eanScannerDebugValue, setEanScannerDebugValue] = useState('');
+  const [eanScannerExtendedValue, setEanScannerExtendedValue] = useState('');
 
   const appCtx = useContext(AppContext);
   const scanPalletCounterValue = appCtx.scanPalletCounterValue;
@@ -84,6 +86,7 @@ const DetailScreen = ({navigation, route}) => {
   const eanValidate = (inputEan) => {
     // console.log("eanValidate");
     //4009900382250
+    //50173204
     let innerEAN = '';
 
     const reg13 = /^[0-9]{13}$/;
@@ -147,28 +150,40 @@ const DetailScreen = ({navigation, route}) => {
       setEan2SendValue(eanValue);
     }
 
+    let condition = eanValidate(eanValue);
+
+    setEanScannerDebugValue("eanValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(eanValue));
+    if (condition === true ){
+      sendDataToServer(ean2SendValue);
+    }
+
     // console.log("eanValue.zmiana: " + eanValue + " : " + eanValidate(eanValue));
   }, [eanValue]);
 
   useEffect(() => {
-    // let eanLength = eanScannerValue.length;
-    // if (eanValidate(eanValue)){
-    //   sendDataToServer(eanScannerValue);
-    //  // getShipmentProductInfo(eanValue);
-    // }
     if (eanValidate(eanScannerValue) === false) {
       setEan2SendValue(eanScannerValue);
+    }
+
+    let condition = eanValidate(eanScannerValue);
+    setEanScannerDebugValue("eanScannerValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(eanScannerValue));
+    if (condition === true ){
+      sendDataToServer(eanScannerValue);
     }
 
     // console.log("eanScannerValue.zmiana: " + eanScannerValue + " : " + eanValidate(eanScannerValue));
   }, [eanScannerValue]);
 
   useEffect(() => {
-    if (eanValidate(ean2SendValue)){
+    let condition = eanValidate(ean2SendValue);
+
+    // setEanScannerDebugValue("ean2SendValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
+    if (condition === true ){
+      // setEanScannerDebugValue("ean2SendValue.wysylam: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
       sendDataToServer(ean2SendValue);
     }
 
-    // console.log("ean2SendValue.zmiana: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
+    // setEanScannerDebugValue("ean2SendValue.zmiana: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
   }, [ean2SendValue]);
 
 
@@ -230,6 +245,7 @@ const DetailScreen = ({navigation, route}) => {
   };
 
   sendDataToServer = (ean) => {
+    // setEanScannerDebugValue("sendDataToServer: " + ean);
     setShipmentProduct([]);
     setLoading(true);
     if ( scanPrintValue === 1){
@@ -375,6 +391,7 @@ const DetailScreen = ({navigation, route}) => {
   }
   const onSuccess = e => {
     setEanScannerValue('' + e.data);
+    setEanScannerExtendedValue('' + JSON.stringify(e));
     setScan(false);
   }
 
@@ -394,12 +411,14 @@ const DetailScreen = ({navigation, route}) => {
             <View>
               <Text style={{fontSize:6, }}>isMobile: {appCtx.isMobile}</Text>
               <Text style={{fontSize:6, }}>eanScannerValue: {eanScannerValue}</Text>
+              <Text style={{fontSize:6, }}>eanScannerExtendedValue: {eanScannerExtendedValue}</Text>
               <Text style={{fontSize:6, }}>{isFocused ? 'focused' : 'unfocused'}</Text>
-              <Text style={{fontSize:6, }}>scanStorageValue: {appCtx.scanStorageValue}</Text>
-              <Text style={{fontSize:6, }}>scanPrintValue: {appCtx.scanPrintValue}</Text>
-              <Text style={{fontSize:6, }}>scanCMValue: {appCtx.scanCMValue}</Text>
-              <Text style={{fontSize:6, }}>scanMultiperValue: {appCtx.scanMultiperValue}</Text>
-              <Text style={{fontSize:6, }}>scanPalletCounterValue: {appCtx.scanPalletCounterValue}</Text>
+              <Text style={{fontSize:6, }}>scanStorageValue: {appCtx.scanStorageValue} / {scanStorageValue}</Text>
+              <Text style={{fontSize:6, }}>scanPrintValue: {appCtx.scanPrintValue} / {scanPrintValue}</Text>
+              <Text style={{fontSize:6, }}>scanCMValue: {appCtx.scanCMValue} / {scanCMValue}</Text>
+              <Text style={{fontSize:6, }}>scanMultiperValue: {appCtx.scanMultiperValue} / {scanMultiperValue}</Text>
+              <Text style={{fontSize:6, }}>scanPalletCounterValue: {appCtx.scanPalletCounterValue} / {scanPalletCounterValue}</Text>
+              <Text style={{fontSize:6, }}>debug: {eanScannerDebugValue}</Text>
             </View>
 
             : <View/>}
@@ -576,23 +595,23 @@ const DetailScreen = ({navigation, route}) => {
               returnValue={debugInfo}
               />
             <Toggle
-              isDisabled={false}
-              initVal={appCtx.scanPrintValue === '1' ? 'true' : 'false'}
-              val={scanPrintValue === 1 ? 'true' : 'false'}
+              initVal={Number(appCtx.scanPrintValue) === 1 ? 'true' : 'false'}
+              val={Number(appCtx.scanPrintValue) === 1 ? 'true' : 'false'}
+              isDisabled={appCtx.scanPrintValue === 1 ? 'false' : 'false'}
               onPress={onPressPrintHandler}
               imgScr={imagePrinter}
             />
             <Toggle
-              initVal={appCtx.scanCMValue === '1' ? 'true' : 'false'}
-              val={scanCMValue === 1 ? 'true' : 'false'}
+              initVal={Number(appCtx.scanCMValue) == 1 ? 'true' : 'false'}
+              val={Number(appCtx.scanCMValue) == 1 ? 'true' : 'false'}
               isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
               onPress={onPressCMHandler}
               valueCheck={<Text>C</Text>}
               valueUnCheck={<Text>M</Text>}
             />
             <Toggle
-              initVal={appCtx.scanStorageValue === '1' ? 'true' : 'false'}
-              val={scanStorageValue === 1 ? 'true' : 'false'}
+              initVal={Number(appCtx.scanStorageValue) === 1 ? 'true' : 'false'}
+              val={Number(appCtx.scanStorageValue) === 1 ? 'true' : 'false'}
               isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
               onPress={onPressStorageHandler}
               imgScr={imageStorage}

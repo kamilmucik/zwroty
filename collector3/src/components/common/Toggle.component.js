@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 
 export type ToggleProps = {
@@ -12,7 +12,12 @@ export type ToggleProps = {
 };
 const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal,val, onPress, isDisabled }: ToggleProps) => {
 
-  const [isToggleOn, setToggleOn] = useState(initVal == 'true'? true:false);
+  const [isToggleOn, setToggleOn] = useState(false);
+
+  useEffect(() => {
+    var isTrueSet = (String(isToggleOn).toLowerCase() === 'true');
+    setToggleOn(isTrueSet);
+  }, []);
 
   function handleClick() {
     setToggleOn(!isToggleOn);
@@ -20,8 +25,8 @@ const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal,val, onPress, isDisa
   }
 
   return (
-    <TouchableOpacity style={[styles.boxInline, isToggleOn ? styles.boxInlineBlue : styles.boxInlineRed, isDisabled == 'true'? styles.disabled : styles.enabled]}
-                    disabled={isDisabled == 'true'? true : false}
+    <TouchableOpacity style={[styles.boxInline, isToggleOn === true ? styles.boxInlineBlue : styles.boxInlineRed, isDisabled === 'true'? styles.disabled : styles.enabled]}
+                    disabled={isDisabled === 'true'? true : false}
                       onPress={handleClick}>
       {imgScr && <Image source={imgScr} style={{ width: 32, height: 32 }} />}
       {isToggleOn ? valueCheck : valueUnCheck}
