@@ -10,7 +10,7 @@
 
     <artifactId>return-parcel-app</artifactId>
     <packaging>war</packaging>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.2.0</version>
     <name>Spring Boot App :: Return Parcel</name>
 
 	<properties>
@@ -117,13 +117,11 @@
                         <configuration>
                             <target>
                                 <echo message="Start compile of jasper reports" />
-                                <mkdir dir="${project.build.directory}/classes/reports"/>
+                                <mkdir dir="${project.build.directory}/classes/reports" />
                                 <echo message="${basedir}/src/main/resources/jasper" />
-                                <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask"
-                                         classpathref="maven.compile.classpath" />
-                                <jrc srcdir="${basedir}/src/main/resources/jasper" destdir="${basedir}/src/main/resources/jasper"
-                                     xmlvalidation="true">
-                                    <classpath refid="maven.compile.classpath"/>
+                                <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask" classpathref="maven.compile.classpath" />
+                                <jrc srcdir="${basedir}/src/main/resources/jasper" destdir="${basedir}/src/main/resources/jasper" xmlvalidation="true">
+                                    <classpath refid="maven.compile.classpath" />
                                     <include name="**/*.jrxml" />
                                 </jrc>
                             </target>
@@ -660,9 +658,9 @@
     </repositories>
 
     <scm>
-        <connection>scm:git:file:////Users/kamilmucik/workspace/shopsync</connection>
-        <developerConnection>scm:git:file:////Users/kamilmucik/workspace/shopsync</developerConnection>
-        <url>https://github.com/kamilmucik/shopsync.git</url>
+        <connection>scm:git:file:////Users/kamilmucik/workspace/shopsync/tags/return-parcel-2.2.0/shopsync</connection>
+        <developerConnection>scm:git:file:////Users/kamilmucik/workspace/shopsync/tags/return-parcel-2.2.0/shopsync</developerConnection>
+        <url>https://github.com/kamilmucik/shopsync.git/tags/return-parcel-2.2.0/shopsync.git</url>
 <!--        <tag>shopsync-0.0.3</tag>-->
     </scm>
 <!--  <scm>-->

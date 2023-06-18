@@ -23,9 +23,9 @@
     </developers>
 
     <scm>
-		<connection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</connection>
-		<developerConnection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</developerConnection>
-		<url>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/trunk</url>
+		<connection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/tags/return-parcel-2.2.0</connection>
+		<developerConnection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/tags/return-parcel-2.2.0</developerConnection>
+		<url>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/tags/return-parcel-2.2.0</url>
     </scm>
 
     <licenses>
@@ -150,7 +150,7 @@
             <uniqueVersion>false</uniqueVersion>
             <id>corp1</id>
             <name>Corporate Repository</name>
-            <url>file:///c:/Users/TEST/.m2</url>
+            <url>file:///Users/kamilmuc/.m2</url>
             <layout>default</layout>
         </repository>
     </distributionManagement>
