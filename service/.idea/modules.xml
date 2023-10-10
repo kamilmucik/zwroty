@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/db-unit/db-unit.iml" filepath="$PROJECT_DIR$/db-unit/db-unit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/return-parcel.iml" filepath="$PROJECT_DIR$/return-parcel.iml" />
       <module fileurl="file://$PROJECT_DIR$/return-parcel-app/return-parcel-app.iml" filepath="$PROJECT_DIR$/return-parcel-app/return-parcel-app.iml" />
     </modules>
   </component>

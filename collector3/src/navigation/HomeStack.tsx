@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ScanScreen from '../screens/ScanScreen';
 import ShipmentsScreen from '../screens/ShipmentsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ReleaseScreen from '../screens/ReleaseScreen';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -28,7 +29,12 @@ const HomeStackNavigator = () => {
                         })}/>
       <HomeStack.Screen name="Shipments" component={ShipmentsScreen}
                         options={({ navigation }) => ({
-                          title: 'Zwroty'
+                          title: 'Skanowanie'
+                        })}/>
+      
+      <HomeStack.Screen name="Release" component={ReleaseScreen}
+                        options={({ navigation }) => ({
+                          title: 'Wysyłka'
                         })}/>
       <HomeStack.Screen name="Settings"
                         component={SettingsScreen}

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
 import SelectDropdown from 'react-native-select-dropdown';
+import PackageJson from '../../package';
 import { DataTable } from 'react-native-paper';
 import Toggle from '../components/common/Toggle.component';
 import NumericPadModal from '../components/common/NumericPadModal.component';
@@ -43,9 +44,6 @@ const requestCameraPermission = async () => {
 const DetailScreen = ({navigation, route}) => {
   const { retNumber } = route.params;
   const [debugInfo, setDebugInfo] = useState('');
-  const [isVisible, setVisible] = useState('');
-  const [amount, setAmount] = useState('0');
-  const numpadRef = useRef(null);
   const eanInputRef = useRef();
   const [artNumber, setArtNumber] = useState(0);
   const [eanValue, setEanValue] = useState('');
@@ -57,16 +55,12 @@ const DetailScreen = ({navigation, route}) => {
   const scanner = useRef(null);
   const [eanScannerValue, setEanScannerValue] = useState('');
   const [eanScannerDebugValue, setEanScannerDebugValue] = useState('');
-  const [eanScannerExtendedValue, setEanScannerExtendedValue] = useState('');
+  const [fetchDebugValue, setFetchDebugValue] = useState('');
+  const [updateDebugValue, setUpdateDebugValue] = useState('');
+  const [printDebugValue, setPrintDebugValue] = useState('');
+
 
   const appCtx = useContext(AppContext);
-  const scanPalletCounterValue = appCtx.scanPalletCounterValue;
-  const scanMultiperValue = appCtx.scanMultiperValue;
-
-  const scanCMValue = appCtx.scanCMValue;
-  const scanPrintValue = appCtx.scanPrintValue;
-  const scanStorageValue = appCtx.scanStorageValue;
-  const settingsPortValue = appCtx.settingsPortValue;
 
   const [selectedOption, setSelectedOption] = useState(1);
   const options = [
@@ -83,24 +77,38 @@ const DetailScreen = ({navigation, route}) => {
     }
   }, [isFocused]);
 
+
+  const paddingZeros = (num, padlen, padchar) => {
+    var pad_char = typeof padchar !== 'undefined' ? padchar : '0';
+    var pad = new Array(1 + padlen).join(pad_char);
+    return (pad + num).slice(-pad.length);
+  }
+
   const eanValidate = (inputEan) => {
-    // console.log("eanValidate");
     //4009900382250
+    //309978358015
     //50173204
     let innerEAN = '';
 
-    const reg13 = /^[0-9]{13}$/;
-    const reg8 = /^[0-9]{8}$/;
 
-    if(reg13.test(inputEan) === false && reg8.test(inputEan) === false){
+    const antyReg13 = /^[0]{13}$/;
+
+    const reg13 = /^[0-9]{13}$/;
+    const reg12 = /^[0-9]{12}$/;
+    const reg8 = /^[0-9]{8}$/;
+    // const reg001 = /^[0-9]{8,13}$/;
+
+    if (antyReg13.test(inputEan) === true ){
       return false;
     }
 
-    if(reg8.test(inputEan) === false){
-      innerEAN = inputEan;
-    } else {
-      innerEAN = '00000' + inputEan;
+    if(reg13.test(inputEan) === false 
+        && reg12.test(inputEan) === false 
+        && reg8.test(inputEan) === false
+        ){
+      return false;
     }
+    innerEAN = paddingZeros(inputEan,13);
 
     let originalCheck = innerEAN.substring(innerEAN.length - 1);
     let eanCode = innerEAN.substring(0, innerEAN.length - 1);
@@ -135,9 +143,6 @@ const DetailScreen = ({navigation, route}) => {
       checksum = 10 - checksum;
     }
 
-    // console.log("checksum: " + checksum + ' = ' +  originalCheck);
-    // console.log("even: " + even );
-    // console.log("innerEAN: " + innerEAN );
     // Return the result
     if (Number(checksum) != Number(originalCheck)) {
       return false;
@@ -146,44 +151,22 @@ const DetailScreen = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    if (eanValidate(eanValue) === false) {
       setEan2SendValue(eanValue);
-    }
-
-    let condition = eanValidate(eanValue);
-
-    setEanScannerDebugValue("eanValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(eanValue));
-    if (condition === true ){
-      sendDataToServer(ean2SendValue);
-    }
-
-    // console.log("eanValue.zmiana: " + eanValue + " : " + eanValidate(eanValue));
   }, [eanValue]);
 
   useEffect(() => {
-    if (eanValidate(eanScannerValue) === false) {
       setEan2SendValue(eanScannerValue);
-    }
-
-    let condition = eanValidate(eanScannerValue);
-    setEanScannerDebugValue("eanScannerValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(eanScannerValue));
-    if (condition === true ){
-      sendDataToServer(eanScannerValue);
-    }
-
-    // console.log("eanScannerValue.zmiana: " + eanScannerValue + " : " + eanValidate(eanScannerValue));
   }, [eanScannerValue]);
 
   useEffect(() => {
     let condition = eanValidate(ean2SendValue);
-
+    // let zeroPaddEAN = paddingZeros(eanValue,13);
+    // let condition2 = eanValidate(zeroPaddEAN);
+    // console.log("ean2SendValue: "+ condition + "/" +condition2 + " : " + ean2SendValue  + " : " + zeroPaddEAN );
     // setEanScannerDebugValue("ean2SendValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
     if (condition === true ){
-      // setEanScannerDebugValue("ean2SendValue.wysylam: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
-      sendDataToServer(ean2SendValue);
+      sendDataToServer(paddingZeros(ean2SendValue,13));
     }
-
-    // setEanScannerDebugValue("ean2SendValue.zmiana: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
   }, [ean2SendValue]);
 
 
@@ -204,7 +187,7 @@ const DetailScreen = ({navigation, route}) => {
     setDefaultFocus();
   };
   const onModalTest = () => {
-    console.log("onModalTest");
+    // console.log("onModalTest");
   }
 
   const onPressCMHandler = (val) => {
@@ -212,44 +195,25 @@ const DetailScreen = ({navigation, route}) => {
     setDefaultFocus();
   };
   const onPressStorageHandler = (val) => {
-    // console.log("onPressStorageHandler: " + val);
     appCtx.setScanStorageValue(val);
-    // setDefaultFocus();
   };
   const onPressPrintHandler = (val) => {
     appCtx.setScanPrintValue(val);
-    // setDefaultFocus();
-  };
-
-  const checkCMHandler = () => {
-    appCtx.setScanCMValue(1);
-    setDefaultFocus();
-  };
-  const uncheckCMHandler = () => {
-    appCtx.setScanCMValue(0);
-    setDefaultFocus();
-  };
-
-  const checkPrintHandler = () => {
-    appCtx.setScanPrintValue(1);
-    setDefaultFocus();
-  };
-  const uncheckPrintHandler = () => {
-    appCtx.setScanPrintValue(0);
-    setDefaultFocus();
   };
 
   displayModal = (show) => {
-    setVisible(show);
     setDefaultFocus();
   };
 
   sendDataToServer = (ean) => {
-    // setEanScannerDebugValue("sendDataToServer: " + ean);
-    setShipmentProduct([]);
+    setFetchDebugValue('');
+    setUpdateDebugValue('');
+    setPrintDebugValue('');
+    getShipmentProductInfo(ean);
     setLoading(true);
-    if ( scanPrintValue === 1){
-      printLabel();
+
+    if (Number(appCtx.scanPrintValue) === 1){
+        printLabel(ean);
     } else if ( Number(appCtx.scanStorageValue) === 1) {
       if (Number(appCtx.scanMultiperValue) > 0){
         updateProduct(ean);
@@ -257,46 +221,70 @@ const DetailScreen = ({navigation, route}) => {
         appCtx.setToastInfoValue('Wybierz ilośc ('+appCtx.scanMultiperValue+') produktów.', 'info');
       }
     }
-    getShipmentProductInfo(ean);
+    // getShipmentProductInfo(ean);
     appCtx.setScanMultiperValue(0);
     appCtx.setScanPalletCounterValue(0);
     setEanValue('');
     setEanScannerValue('');
     setSelectedOption(0);
+    setLoading(false);
     setDefaultFocus();
   }
 
-  const printLabel = async () => {
+  const printLabel = (ean) => {
     setLoading(true);
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(
-        {
-          "artNumber":artNumber,
-          "returnNumber":""+retNumber+"",
-          "palletOption":""+appCtx.scanCMValue+"",
-          "counter": appCtx.scanMultiperValue,
-          "palletCounter":appCtx.scanPalletCounterValue ,
-          "author": appCtx.settingsOperatorValue,
-          "returnCode":200
-        }
-      )
-    };
 
     try {
-      await fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/print/label', requestOptions)
+      setFetchDebugValue(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean);
+      fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean)
+        .then((response) => response.json())
+        .then(responseData => { return responseData;})
+        .then((data) => {
+          if (data.status === 500){
+            appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
+          } else {
+            try {
+              // setShipmentProduct(data);
+              setArtNumber(data.artNumber);
+
+              let requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(
+                  {
+                    "id":null,
+                    "label": null,
+                    "artNumber":data.artNumber,
+                    "returnNumber":retNumber.toString(),
+                    "palletOption":Number(appCtx.scanCMValue) === 1 ? 'C' : 'M',
+                    "counter": appCtx.scanMultiperValue,
+                    "palletCounter":appCtx.scanPalletCounterValue ,
+                    "author": appCtx.settingsOperatorValue,
+                    "returnCode":200
+                  }
+                )
+              };
+
+              setPrintDebugValue(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/print/label' + requestOptions.body );
+              fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/print/label', requestOptions)
+              .catch((error) => {
+                appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
+              })
+              ;
+            } catch (error) {
+              appCtx.setToastInfoValue('Nie można pobrac danych! ' + error, 'error');
+            }
+          }
+        })
         .catch((error) => {
           appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
         })
-        .finally(() => setLoading(false));
+
     } catch (error) {
-      // console.error(error);
+      appCtx.setToastInfoValue('Nie można pobrac danych! ' + error, 'error');
     }
     appCtx.setScanMultiperValue(0);
     appCtx.setScanPalletCounterValue(0);
-    // scanPrintValue
-    // appCtx.setScanStorageValue(val);
     setDefaultFocus();
   }
 
@@ -317,7 +305,6 @@ const DetailScreen = ({navigation, route}) => {
     };
 
     try {
-
       if (selectedOption == 0) {
         setScanCorrect(appCtx.scanMultiperValue);
       } else if (selectedOption == 1) {
@@ -327,6 +314,13 @@ const DetailScreen = ({navigation, route}) => {
       } else if (selectedOption == 3) {
         setScanUtilization(appCtx.scanMultiperValue);
       }
+      setUpdateDebugValue(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/updateproduct?' +
+      'retNumber='+retNumber+'&' +
+      'ean='+ean+'&' +
+      'scanCorrect='+scanCorrect+'&' +
+      'scanError='+scanError+'&' +
+      'scanLabel='+scanLabel+'&' +
+      'scanUtilization='+scanUtilization);
 
       await fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/updateproduct?' +
         'retNumber='+retNumber+'&' +
@@ -336,10 +330,7 @@ const DetailScreen = ({navigation, route}) => {
         'scanLabel='+scanLabel+'&' +
         'scanUtilization='+scanUtilization, requestOptions)
         .then((response) => response.json())
-        .finally(() =>{
-          setLoading(false);
-          }
-        );
+        ;
         getShipmentProductInfo(ean);
     } catch (error) {
       console.error(error);
@@ -347,10 +338,9 @@ const DetailScreen = ({navigation, route}) => {
     }
   }
 
-  getShipmentProductInfo = (ean) => {
-    setShipmentProduct([]);
-    // console.log(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean);
-    fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean)
+  const getShipmentProductInfo = async (ean) => {
+    setFetchDebugValue(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean);
+    const response = await fetch(''+appCtx.settingsURLValue+':'+appCtx.settingsPortValue +'/shipment_product/findbyean?retNumber=' + retNumber + '&ean=' + ean)
       .then((response) => response.json())
       .then(responseData => { return responseData;})
       .then((data) => {
@@ -366,8 +356,9 @@ const DetailScreen = ({navigation, route}) => {
         // console.error(error);
         appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');
       })
-      .finally(() => setLoading(false));
-    setDefaultFocus();
+      // .finally(() => setLoading(false))
+    ;
+    // setDefaultFocus();
   }
 
   async function loadProperties() {
@@ -376,8 +367,9 @@ const DetailScreen = ({navigation, route}) => {
       appCtx.setScanMultiperValue(0);
       appCtx.setScanStorageValue(0);
 
+      appCtx.setScanPrintValue(0);
+
       appCtx.setScanCMValue(0);
-      // setScanCMValue(0);
       appCtx.setScanPrintValue(0);
       setSelectedOption(0);
     } catch(e) {
@@ -391,12 +383,11 @@ const DetailScreen = ({navigation, route}) => {
   }
   const onSuccess = e => {
     setEanScannerValue('' + e.data);
-    setEanScannerExtendedValue('' + JSON.stringify(e));
+    // setEanScannerExtendedValue('' + JSON.stringify(e));
     setScan(false);
   }
 
   useEffect(() => {
-
     loadProperties();
   }, []);
 
@@ -404,23 +395,51 @@ const DetailScreen = ({navigation, route}) => {
     <SafeAreaView style={styles.container}>
     <InfoToast></InfoToast>
       {isLoading ? <ActivityIndicator /> : <Text/>}
-        <View style={{ flex: 1}}>
-
-
+        <View style={{ flex: 1}} >
           {appCtx.isDebugMode === 'true' ?
             <View>
-              <Text style={{fontSize:6, }}>isMobile: {appCtx.isMobile}</Text>
-              <Text style={{fontSize:6, }}>eanScannerValue: {eanScannerValue}</Text>
-              <Text style={{fontSize:6, }}>eanScannerExtendedValue: {eanScannerExtendedValue}</Text>
-              <Text style={{fontSize:6, }}>{isFocused ? 'focused' : 'unfocused'}</Text>
-              <Text style={{fontSize:6, }}>scanStorageValue: {appCtx.scanStorageValue} / {scanStorageValue}</Text>
-              <Text style={{fontSize:6, }}>scanPrintValue: {appCtx.scanPrintValue} / {scanPrintValue}</Text>
-              <Text style={{fontSize:6, }}>scanCMValue: {appCtx.scanCMValue} / {scanCMValue}</Text>
-              <Text style={{fontSize:6, }}>scanMultiperValue: {appCtx.scanMultiperValue} / {scanMultiperValue}</Text>
-              <Text style={{fontSize:6, }}>scanPalletCounterValue: {appCtx.scanPalletCounterValue} / {scanPalletCounterValue}</Text>
-              <Text style={{fontSize:6, }}>debug: {eanScannerDebugValue}</Text>
-            </View>
+              <Text style={{fontSize:6, paddingBottom:4 }}>v: {PackageJson.version}</Text>
+              <Text style={{fontSize:6, paddingBottom:4}}>pobierz: {fetchDebugValue}</Text>
+              <Text style={{fontSize:6, paddingBottom:4}}>aktualizuj: {updateDebugValue}</Text>
+              <Text style={{fontSize:6, paddingBottom:4}}>drukuj: {printDebugValue}</Text>
+              <Text style={{fontSize:6, paddingBottom:4}}>artNumber: {artNumber}</Text>
 
+
+              <DataTable  >
+                <DataTable.Row  >
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>ładuje</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>multi</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>palety</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>druk</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>C/M</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>zapis</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>opcje</Text></DataTable.Cell>
+                </DataTable.Row>
+                <DataTable.Row>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>{isLoading}</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>{appCtx.scanMultiperValue}</Text></DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:8, }}>{appCtx.scanPalletCounterValue}</Text></DataTable.Cell>
+                  <DataTable.Cell >
+                    <Text style={{fontSize:8, }}>
+                        {appCtx.scanPrintValue}_
+                        {appCtx.scanPrintValue === 1 ? 't': 'n'}
+                    </Text>
+                    </DataTable.Cell>
+                  <DataTable.Cell >
+                    <Text style={{fontSize:8, }}>
+                      {appCtx.scanCMValue}
+                      </Text>
+                    </DataTable.Cell>
+                  <DataTable.Cell >
+                    <Text style={{fontSize:8, }}>
+                      {appCtx.scanStorageValue}_
+                        {appCtx.scanStorageValue === 1 && Number(appCtx.scanMultiperValue) > 0 ? 't': 'n'}
+                    </Text>
+                    </DataTable.Cell>
+                  <DataTable.Cell ><Text style={{fontSize:6}}>{selectedOption} {options[selectedOption].title}</Text></DataTable.Cell>
+                </DataTable.Row>
+              </DataTable>
+            </View>
             : <View/>}
 
           <View style={[{flexDirection:'row', paddingLeft:10,zIndex:3}]}>
@@ -428,7 +447,6 @@ const DetailScreen = ({navigation, route}) => {
               buttonStyle={[GlobalStyle.AppSelectButton]}
               buttonTextStyle={[GlobalStyle.AppSelectButtonText]}
               data={options}
-
               defaultValueByIndex={selectedOption}
               onFocus={() => setIsFocused(false)}
               onBlur={() => setIsFocused(false)}
@@ -463,10 +481,10 @@ const DetailScreen = ({navigation, route}) => {
               title='x'
               titleHeader='Mnożnik'
               initVal='1'
-              currentVal={scanMultiperValue}
+              currentVal={appCtx.scanMultiperValue}
               innerMinWidth='big'
               onPress={onModalPress}
-              onUncheck={onModalTest}
+              // onUncheck={onModalTest}
               returnValue={debugInfo}
             />
           </View>
@@ -477,16 +495,13 @@ const DetailScreen = ({navigation, route}) => {
               placeholder='EAN'
               autoFocus={true}
               keyboardType='numeric'
+              editable={!isLoading}
               ref={eanInputRef}
               value={eanValue}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              // onChange={(event) => sendDataToServer( event.nativeEvent.text)}
-              // onKeyPress={(event) => sendDataToServer( event.nativeEvent.text)}
-              // onSubmitEditing={(event) => sendDataToServer( event.nativeEvent.text)}
               onChangeText={(event) => {
                 setEanValue(event);
-                // sendDataToServer(event.nativeEvent.text);
               }}
             />
             {appCtx.isMobile === 'true' ? <TouchableOpacity onPress={launchScannerCamera} style={styles.button2}>
@@ -589,7 +604,7 @@ const DetailScreen = ({navigation, route}) => {
               title='Pal'
               titleHeader='Palety'
               initVal='1'
-              currentVal={scanPalletCounterValue}
+              currentVal={appCtx.scanPalletCounterValue}
               innerMinWidth='small'
               onPress={onModalPress}
               returnValue={debugInfo}
@@ -597,14 +612,12 @@ const DetailScreen = ({navigation, route}) => {
             <Toggle
               initVal={Number(appCtx.scanPrintValue) === 1 ? 'true' : 'false'}
               val={Number(appCtx.scanPrintValue) === 1 ? 'true' : 'false'}
-              isDisabled={appCtx.scanPrintValue === 1 ? 'false' : 'false'}
               onPress={onPressPrintHandler}
               imgScr={imagePrinter}
             />
             <Toggle
-              initVal={Number(appCtx.scanCMValue) == 1 ? 'true' : 'false'}
-              val={Number(appCtx.scanCMValue) == 1 ? 'true' : 'false'}
-              isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
+              initVal={Number(appCtx.scanCMValue) === 1 ? 'true' : 'false'}
+              val={Number(appCtx.scanCMValue) === 1 ? 'true' : 'false'}
               onPress={onPressCMHandler}
               valueCheck={<Text>C</Text>}
               valueUnCheck={<Text>M</Text>}
@@ -612,7 +625,7 @@ const DetailScreen = ({navigation, route}) => {
             <Toggle
               initVal={Number(appCtx.scanStorageValue) === 1 ? 'true' : 'false'}
               val={Number(appCtx.scanStorageValue) === 1 ? 'true' : 'false'}
-              isDisabled={appCtx.scanPrintValue ? 'true' : 'false'}
+              isDisabled={Number(appCtx.scanPrintValue) === 1 ? 'true' : 'false'}
               onPress={onPressStorageHandler}
               imgScr={imageStorage}
             />
@@ -629,7 +642,6 @@ const DetailScreen = ({navigation, route}) => {
           showMarker={true}
           bottomContent={
             <View style={{flexDirection: 'row'}}>
-
               <TouchableOpacity style={[styles.boxInline, styles.boxInlineBlue, {minWidth: '48%'}]} onPress={() => setScan(false)}>
                 <Text style={styles.buttonText2}>Wróc</Text>
               </TouchableOpacity>

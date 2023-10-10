@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>pl.estrix</groupId>
-  <artifactId>tones</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <artifactId>collector3</artifactId>
+  <version>3.1.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -51,123 +51,146 @@
           </filesets>
         </configuration>
       </plugin>
-
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.7</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
         <executions>
           <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.dependency.classpath" />
-                <if>
-                  <available file=".env" />
-                  <then>
-                    <echo>Deleting old .env file</echo>
-                    <delete file=".env" />
-                  </then>
-                </if>
-                <copy file=".env${env}" tofile=".env" />
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>ant-contrib</groupId>
-            <artifactId>ant-contrib</artifactId>
-            <version>1.0b3</version>
-            <exclusions>
-              <exclusion>
-                <groupId>ant</groupId>
-                <artifactId>ant</artifactId>
-              </exclusion>
-            </exclusions>
-          </dependency>
-        </dependencies>
-      </plugin>
-
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <!-- NB! Set <version> to the latest released version of frontend-maven-plugin, like in README.md -->
-          <version>0.0.26</version>
-          <executions>
-            <execution>
-              <id>install node and npm</id>
-              <goals>
-                <goal>install-node-and-npm</goal>
-              </goals>
-              <configuration>
-                <nodeVersion>v14.17.2</nodeVersion>
-                <npmVersion>9.6.7</npmVersion>
-              </configuration>
-            </execution>
-            <execution>
-              <id>npm install</id>
-              <goals>
-                <goal>npm</goal>
-              </goals>
-              <!-- Optional configuration which provides for running any npm command -->
-              <configuration>
-                <arguments>install</arguments>
-              </configuration>
-            </execution>
-            <!--execution>
-              <id>npm run build</id>
-              <goals>
-                <goal>npm</goal>
-              </goals>
-              <configuration>
-                <arguments>run build${env}</arguments>
-              </configuration>
-            </execution-->
-
-            <execution>
-              <id>npm-set-version</id>
-              <goals>
-                  <goal>npm</goal>
-              </goals>
-              <configuration>
-                  <arguments>run set-version - -unsafe-perm</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>npm run build</id>
-              <goals>
-                <goal>npm</goal>
-              </goals>
-              <configuration>
-                <arguments>run android</arguments>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.1.1</version>
-        <executions>
-          <execution>
+            <!-- Run our version calculation script -->
+            <id>Renaming build artifacts</id>
             <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>exec</goal>
             </goals>
             <configuration>
-              <appendAssemblyId>false</appendAssemblyId>
-              <descriptors>
-                <descriptor>assembly/zip.xml</descriptor>
-              </descriptors>
+              <executable>bash</executable>
+              <commandlineArgs>./libs/package.sh</commandlineArgs>
+              <environmentVariables>
+                <VERSION>${version}</VERSION>
+                <SCRIPT_DIR>${project.basedir}</SCRIPT_DIR>
+              </environmentVariables>
             </configuration>
           </execution>
         </executions>
       </plugin>
+
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-antrun-plugin</artifactId>-->
+<!--        <version>1.7</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <phase>validate</phase>-->
+<!--            <goals>-->
+<!--              <goal>run</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <target>-->
+<!--                <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.dependency.classpath" />-->
+<!--                <if>-->
+<!--                  <available file=".env" />-->
+<!--                  <then>-->
+<!--                    <echo>Deleting old .env file</echo>-->
+<!--                    <delete file=".env" />-->
+<!--                  </then>-->
+<!--                </if>-->
+<!--                <copy file=".env${env}" tofile=".env" />-->
+<!--              </target>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--        <dependencies>-->
+<!--          <dependency>-->
+<!--            <groupId>ant-contrib</groupId>-->
+<!--            <artifactId>ant-contrib</artifactId>-->
+<!--            <version>1.0b3</version>-->
+<!--            <exclusions>-->
+<!--              <exclusion>-->
+<!--                <groupId>ant</groupId>-->
+<!--                <artifactId>ant</artifactId>-->
+<!--              </exclusion>-->
+<!--            </exclusions>-->
+<!--          </dependency>-->
+<!--        </dependencies>-->
+<!--      </plugin>-->
+
+<!--      <plugin>-->
+<!--        <groupId>com.github.eirslett</groupId>-->
+<!--        <artifactId>frontend-maven-plugin</artifactId>-->
+<!--        &lt;!&ndash; NB! Set <version> to the latest released version of frontend-maven-plugin, like in README.md &ndash;&gt;-->
+<!--          <version>0.0.26</version>-->
+<!--          <executions>-->
+<!--            <execution>-->
+<!--              <id>install node and npm</id>-->
+<!--              <goals>-->
+<!--                <goal>install-node-and-npm</goal>-->
+<!--              </goals>-->
+<!--              <configuration>-->
+<!--                <nodeVersion>v14.17.2</nodeVersion>-->
+<!--                <npmVersion>9.6.7</npmVersion>-->
+<!--              </configuration>-->
+<!--            </execution>-->
+<!--            <execution>-->
+<!--              <id>npm install</id>-->
+<!--              <goals>-->
+<!--                <goal>npm</goal>-->
+<!--              </goals>-->
+<!--              &lt;!&ndash; Optional configuration which provides for running any npm command &ndash;&gt;-->
+<!--              <configuration>-->
+<!--                <arguments>install</arguments>-->
+<!--              </configuration>-->
+<!--            </execution>-->
+<!--            &lt;!&ndash;execution>-->
+<!--              <id>npm run build</id>-->
+<!--              <goals>-->
+<!--                <goal>npm</goal>-->
+<!--              </goals>-->
+<!--              <configuration>-->
+<!--                <arguments>run build${env}</arguments>-->
+<!--              </configuration>-->
+<!--            </execution&ndash;&gt;-->
+
+<!--            <execution>-->
+<!--              <id>npm-set-version</id>-->
+<!--              <goals>-->
+<!--                  <goal>npm</goal>-->
+<!--              </goals>-->
+<!--              <configuration>-->
+<!--                  <arguments>run set-version - -unsafe-perm</arguments>-->
+<!--              </configuration>-->
+<!--            </execution>-->
+<!--            <execution>-->
+<!--              <id>npm run build</id>-->
+<!--              <goals>-->
+<!--                <goal>npm</goal>-->
+<!--              </goals>-->
+<!--              <configuration>-->
+<!--                <arguments>run android</arguments>-->
+<!--              </configuration>-->
+<!--            </execution>-->
+<!--          </executions>-->
+<!--        </plugin>-->
+
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-assembly-plugin</artifactId>-->
+<!--        <version>3.1.1</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <phase>package</phase>-->
+<!--            <goals>-->
+<!--              <goal>single</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <appendAssemblyId>false</appendAssemblyId>-->
+<!--              <descriptors>-->
+<!--                <descriptor>assembly/zip.xml</descriptor>-->
+<!--              </descriptors>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
 
       </plugins>
     </build>

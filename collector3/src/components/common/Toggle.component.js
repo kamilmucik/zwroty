@@ -12,12 +12,7 @@ export type ToggleProps = {
 };
 const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal,val, onPress, isDisabled }: ToggleProps) => {
 
-  const [isToggleOn, setToggleOn] = useState(false);
-
-  useEffect(() => {
-    var isTrueSet = (String(isToggleOn).toLowerCase() === 'true');
-    setToggleOn(isTrueSet);
-  }, []);
+  const [isToggleOn, setToggleOn] = useState(initVal === 'true' ? true :false);
 
   function handleClick() {
     setToggleOn(!isToggleOn);
@@ -25,11 +20,11 @@ const Toggle  = ({ imgScr, valueCheck, valueUnCheck,initVal,val, onPress, isDisa
   }
 
   return (
-    <TouchableOpacity style={[styles.boxInline, isToggleOn === true ? styles.boxInlineBlue : styles.boxInlineRed, isDisabled === 'true'? styles.disabled : styles.enabled]}
+    <TouchableOpacity style={[styles.boxInline, val === 'true' ? styles.boxInlineRed : styles.boxInlineBlue , isDisabled === 'true'? styles.disabled : styles.enabled]}
                     disabled={isDisabled === 'true'? true : false}
                       onPress={handleClick}>
       {imgScr && <Image source={imgScr} style={{ width: 32, height: 32 }} />}
-      {isToggleOn ? valueCheck : valueUnCheck}
+      {val === 'true' ? valueCheck : valueUnCheck}
     </TouchableOpacity>
   );
 };

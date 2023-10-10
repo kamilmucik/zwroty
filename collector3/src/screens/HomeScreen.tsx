@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
 
   async function loadProperties() {
     try {
-      console.log("loadProperties: " );
+      // console.log("loadProperties: " );
       appCtx.setIsMobile(0);
       appCtx.setIsDebugMode(0);
       loadSettingsURLData('@storage_sourceUrl');
@@ -89,7 +89,15 @@ const HomeScreen = ({ navigation }) => {
               activeOpacity={0.9}
               onPress={() => navigation.navigate('Shipments')}
               style={[GlobalStyle.AppButton]}>
-              <Text style={[GlobalStyle.AppButtonText]}>Zwroty</Text>
+              <Text style={[GlobalStyle.AppButtonText]}>Skanowanie</Text>
+            </TouchableOpacity>
+          </View>
+          <View >
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => navigation.navigate('Release')}
+              style={[GlobalStyle.AppButton]}>
+              <Text style={[GlobalStyle.AppButtonText]}>Wysyłka</Text>
             </TouchableOpacity>
           </View>
           <View >

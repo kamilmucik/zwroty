@@ -24,6 +24,9 @@ public class Worker {
     @Value("${temporary.dir}")
     private String temporaryDir;
 
+    @Value("${debug}")
+    private String debug;
+
     @Autowired
     private PrinterServie printerServie;
 
@@ -31,14 +34,16 @@ public class Worker {
     public void runTask() {
 //        System.out.println();
 //        System.out.println("Runing at " + new Date());
-//        System.out.println("restAPIUrl " + restAPIUrl);
-//        System.out.println("printerName " + printerName);
-//        System.out.println("temporaryDir " + temporaryDir);
+        if ("true".equals(debug)) {
+            System.out.println("restAPIUrl " + restAPIUrl + "print/download");
+            System.out.println("printerName " + printerName);
+            System.out.println("temporaryDir " + temporaryDir);
 //        System.out.println(restAPIUrl + "print/download");
+        }
 
         //1. sprawdź czy jest jakiś plik
         //2. pobierz plik
-        try {
+//        try {
             try (BufferedInputStream inputStream = new BufferedInputStream(new URL(restAPIUrl + "print/download").openStream());
 //            try (BufferedInputStream inputStream = new BufferedInputStream(new URL("http://localhost:8080/print/download").openStream());
                  FileOutputStream fileOS = new FileOutputStream(temporaryDir+ "/label.pdf")) {
@@ -48,17 +53,22 @@ public class Worker {
                     fileOS.write(data, 0, byteContent);
                 }
 
-//                System.out.println("\t\tdrukuje ");
+                if ("true".equals(debug)) {
+                    System.out.println("\t\tdrukuje: " + printerName);
+                }
 //                printerServie.print("Brother DCP-7057",temporaryDir+ "/label.pdf");
                 printerServie.print(printerName,temporaryDir+ "/label.pdf");
+                if ("true".equals(debug)) {
+                    System.out.println("\t\twydrukował: " + printerName);
+                }
             } catch (IOException e) {
-//                e.printStackTrace();
+                e.printStackTrace();
 //                System.out.println("temporaryDir " + e.toString());
                 // handles IO exceptions
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         //3. drukuj plik
         //4. usun plik tymczasowy

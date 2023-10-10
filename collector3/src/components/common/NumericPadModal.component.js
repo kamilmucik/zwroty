@@ -14,7 +14,7 @@ export type NumericPadModalProps = {
 export const NumericPadModal = ({ title, titleHeader, innerMinWidth, initVal, currentVal,returnValue, onPress, onModalTest }: NumericPadModalProps) => {
 
   const [isVisible, setVisible] = useState(false);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState('');
   const numpadRef = useRef(null);
 
   const [innerTitle, setInnerTitle] = useState('');
@@ -28,7 +28,6 @@ export const NumericPadModal = ({ title, titleHeader, innerMinWidth, initVal, cu
     setVisible(show);
     setInnerTitleHeader(titleHeader);
     setInnerTitle(title);
-  
   };
 
   const innerMinWidth2 = innerMinWidth == 'small' ? '30%' : '48%';
@@ -47,7 +46,7 @@ export const NumericPadModal = ({ title, titleHeader, innerMinWidth, initVal, cu
         transparent = {false}
         visible = {isVisible}
         onModalTest={onModalTest}
-        onRequestClose = {() =>{ 
+        onRequestClose = {() =>{
           console.log("Modal has been closed." + innerTitleHeader);
           setVisible(false);
            } }>
@@ -66,16 +65,16 @@ export const NumericPadModal = ({ title, titleHeader, innerMinWidth, initVal, cu
               selectTextOnFocus={false}
               value={amount}
             />
-            <TouchableOpacity style={styles.amountButton} 
+            <TouchableOpacity style={styles.amountButton}
               // onRequestClose={ () => onModalTest()}
               onPress={() => {
-                  console.log('amount: ' + Number(amount));
+                  // console.log('amount: ' + Number(amount));
                   // if ( amount.lenght )
 
                 onPress(innerTitle, Number(amount));
                 setInnerAmount(Number(amount));
-                displayModal(!isVisible);
-                setVisible(!isVisible);
+                // displayModal(!isVisible);
+                setVisible(false);
             }}>
               <Text style={styles.amountButtonText}>OK</Text>
             </TouchableOpacity>
@@ -113,12 +112,16 @@ export const NumericPadModal = ({ title, titleHeader, innerMinWidth, initVal, cu
       <Pressable
         style={[styles.boxInline, styles.boxInlineBlue, {minWidth: innerMinWidth2}]}
         onPress={() => {
-          console.log('klik: ' + isVisible);
-          displayModal(true, titleHeader, title, initVal, onPress, onModalTest);
+
+          setVisible(true);
+          setInnerTitleHeader(titleHeader);
+          setInnerTitle(title);
+          // console.log('klik: ' + titleHeader + ' ' + title + ' ' + initVal + ' ' + isVisible);
+          // displayModal(true, titleHeader, title, initVal, onPress, onModalTest);
         }}>
         <Text >{title} {currentVal}</Text>
+        {/*{isVisible === true ? <Text>T</Text> : <Text>F</Text>}*/}
       </Pressable>
-
     </View>
   );
 };

@@ -38,13 +38,13 @@ import javax.sql.DataSource;
 //@PropertySource("classpath:filter.properties")
 @PropertySource("file:c:\\\\sortowanie\\filter.properties")
 //@EnableAutoConfiguration
-@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
+//@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
 public class SampleApplication {
 
 	private static Logger LOG = LoggerFactory.getLogger(SampleApplication.class);
 
-	@Autowired
-	DataSource dataSource;
+//	@Autowired
+//	DataSource dataSource;
 
 	public static void main(String[] args) throws Exception  {
 		SpringApplication.run(SampleApplication.class, args);
