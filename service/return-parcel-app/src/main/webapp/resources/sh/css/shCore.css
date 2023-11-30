@@ -93,7 +93,16 @@
     border-bottom-left-radius: 0px;
 }
 .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border: 0px none
+    border: 0px none;
+}
+.ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer {
+    text-align: center;
+    padding: 4px 0px !important;
+}
+
+.ui-datatable-header .ui-widget-header .ui-corner-top {
+    text-align: center;
+    padding: 4px 0px !important;
 }
 
 .ui-datatable-header {
@@ -139,6 +148,28 @@
     width: 150px;
     padding: 6px;
     margin: 10px 0 0px 0;
+}
+
+#form\3A storeTable,
+#form\3A shipmentTable,
+#form\3A userTable,
+#form\3A shipmentTable,
+#form\3A printFileTable,
+#form\3A releaseArticleTable,
+#form\3A releaseArticlePalletTable,
+#form\3A productImageVersionTable,
+#form\3A shipmentEventTable {
+    padding: 10px;
+}
+#form\3A storeTable\3A header,
+#form\3A shipmentTable\3A header,
+#form\3A userTable,
+#form\3A shipmentTable,
+#form\3A printFileTable,
+#form\3A releaseArticleTable,
+#form\3A productImageVersionTable,
+#form\3A shipmentEventTable {
+    padding: 10px;
 }
 
 .appButton {

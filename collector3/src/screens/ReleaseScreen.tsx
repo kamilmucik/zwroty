@@ -39,8 +39,8 @@ const ReleaseScreen = ({navigation, route}) => {
     const eanInputRef = useRef();
     const [eanScannerValue, setEanScannerValue] = useState('');
 
-    // const [eanValue, setEanValue] = useState('20230818200269266736000669C00');
-    const [eanValue, setEanValue] = useState('');
+    const [eanValue, setEanValue] = useState('20230818200269266736000669C00');
+    // const [eanValue, setEanValue] = useState('');
     const [ean2SendedValue, setEan2SendedValue] = useState('');
     const [isLoading, setLoading] = useState(false);
 
@@ -49,33 +49,10 @@ const ReleaseScreen = ({navigation, route}) => {
     const [isFocused, setIsFocused] = useState(false);
 
     useEffect(() => {
-        // let lenCond = eanValue.length > 27;
-        // console.log("ean2SendValue.length: "+ lenCond + " : " + eanValue );
-        // if (lenCond) {
-        // //   setEan2SendValue12345('');
-        //   setEanValue('');
-        //   setEanScannerValue('');
-        //   appCtx.setToastInfoValue('Błąd kodu kreskowego ('+eanValue+'). Posiada ('+eanValue.length+') znaków.', 'info');
-        //   return;
-        // }
-
         let lenCond2 = eanValue.length == 29;
         if (lenCond2) {
             sendDataToServer(eanValue);
         }
-    
-        // if (eanValidate(eanValue) === false) {
-        //   setEan2SendValue(eanValue);
-        // }
-    
-        // let condition = eanValidate(eanValue);
-        // // setEanScannerDebugValue("eanValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(eanValue));
-        // if (condition === true ){
-        //   // setEanScannerDebugValue("eanValue.condition["+condition+"]: " + ean2SendValue + "/" + eanValue + " : " + eanValidate(eanValue));
-        //   sendDataToServer(eanValue);
-        // }
-    
-        // console.log("eanValue.zmiana: " + eanValue + " : " + eanValidate(eanValue));
       }, [eanValue]);
     
     useEffect(() => {
@@ -129,14 +106,11 @@ const ReleaseScreen = ({navigation, route}) => {
             .then((response) => response.json())
             .then(responseData => { return responseData;})
             .then((data) => {
-            //   if (data.status === 500){
-            //     appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
-            //   } else {
-                
-                
-            //   }
-                setEan2SendedValue(ean);
-      
+              if (data.status && data.status !== 200){
+                appCtx.setToastInfoValue('Nie mogę wysłać danych('+data.status+').', 'error');
+              } 
+              
+              setEan2SendedValue(ean);
             })
             .catch((error) => {
               appCtx.setToastInfoValue('Nie można pobrac danych! Możliwy problem z siecią internet.', 'error');

@@ -226,7 +226,8 @@ const DetailScreen = ({navigation, route}) => {
     appCtx.setScanPalletCounterValue(0);
     setEanValue('');
     setEanScannerValue('');
-    setSelectedOption(0);
+    // Mail z dnia 20231128
+    // setSelectedOption(0);
     setLoading(false);
     setDefaultFocus();
   }
