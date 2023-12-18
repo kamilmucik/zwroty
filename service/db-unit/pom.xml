@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>db-unit</artifactId>
-    <version>2.2.0</version>
+    <version>2.2.1</version>
     <name>DB Unit</name>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>pl.estrix</groupId>
         <artifactId>return-parcel</artifactId>
-        <version>2.2.0</version>
+        <version>2.2.1</version>
     </parent>
 
     <properties>

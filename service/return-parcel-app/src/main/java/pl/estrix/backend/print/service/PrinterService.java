@@ -84,9 +84,6 @@ public class PrinterService {
         deleteExecutor.delete(id);
     }
 
-
-
-
     @Transactional
     public ListResponseDto<PrintFileDto> getItems(PrinterSearchCriteriaDto searchCriteria, PagingCriteria pagingCriteria){
         ListResponseDto<PrintFileDto> listResponseDto = readPrintFileExecutor.find(searchCriteria,pagingCriteria);
@@ -98,8 +95,6 @@ public class PrinterService {
     public PrintFileDto saveOrUpdate(PrintFileDto dto){
         PrintFileDto temp = null;
         if (dto.getId() != null){
-//            System.out.println(": " + storeDto.getId());
-//            System.out.println(": " + storeDto.getGroup());
             temp = updatePrintFileExecutor.update(dto);
         } else {
             temp = createPrintFileExecutor.create(dto);
@@ -154,11 +149,7 @@ public class PrinterService {
         }catch (UnsupportedEncodingException | URISyntaxException e){
             e.printStackTrace();
         }
-
     }
-
-
-
 
     public CompletableFuture<PrintLabelDto> printFileByWebServie(PrintLabelDto printLabelDto) {
         CompletableFuture<PrintLabelDto> completableFuture = new CompletableFuture<>();
@@ -221,17 +212,16 @@ public class PrinterService {
              */
             SimpleDateFormat dt1 = new SimpleDateFormat("yyyy.MM.dd");
             SimpleDateFormat dt2 = new SimpleDateFormat("yyyyMMdd");
-            Integer palletCounter = 1;
 
             parameters.put("NRZWROTU", selectedForPrintItem.getArtReturn());
-            parameters.put("NRARTYKULU", "" + selectedForPrintItem.getArtNumber());
+            parameters.put("NRARTYKULU", selectedForPrintItem.getArtNumber().toString());
             parameters.put("ILOSC", "" + selectedForPrintItem.getCounter());
             parameters.put("DATAPRZYGOTOWANIA", "" + dt1.format(new Date()));
             parameters.put("Author", author.getAuthor());
             parameters.put("BARCODE",
                     leftPadZeros(dt2.format(new Date()), 8) +
-                    leftPadZeros(selectedForPrintItem.getArtReturn().trim(), 6) +
-                    leftPadZeros(selectedForPrintItem.getArtNumber().toString().trim(), 6) +
+                    leftPadZeros(selectedForPrintItem.getArtReturn().trim(), 8) +
+                    leftPadZeros(selectedForPrintItem.getArtNumber().toString().trim(), 8) +
                     leftPadZeros(selectedForPrintItem.getCounter().toString().trim(), 6) +
                     (selectedForPrintItem.getPalletOption()!=null?selectedForPrintItem.getPalletOption():"C")+
                     leftPadZeros(""+author.getPalletCounter(), 2)

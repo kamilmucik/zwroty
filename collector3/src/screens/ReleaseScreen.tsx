@@ -39,8 +39,9 @@ const ReleaseScreen = ({navigation, route}) => {
     const eanInputRef = useRef();
     const [eanScannerValue, setEanScannerValue] = useState('');
 
-    const [eanValue, setEanValue] = useState('20230818200269266736000669C00');
-    // const [eanValue, setEanValue] = useState('');
+    // const [eanValue, setEanValue] = useState('20230818200269266736000669C00');
+    // const [eanValue, setEanValue] = useState('202312170020026900276422001171C00');
+    const [eanValue, setEanValue] = useState('');
     const [ean2SendedValue, setEan2SendedValue] = useState('');
     const [isLoading, setLoading] = useState(false);
 
@@ -49,9 +50,11 @@ const ReleaseScreen = ({navigation, route}) => {
     const [isFocused, setIsFocused] = useState(false);
 
     useEffect(() => {
-        let lenCond2 = eanValue.length == 29;
+        let lenCond2 = eanValue.length == 33;
         if (lenCond2) {
-            sendDataToServer(eanValue);
+          sendDataToServer(eanValue);
+        } else if (eanValue.length > 0){
+          appCtx.setToastInfoValue('Aplikacja obsługuje dłuzsze kody', 'error');
         }
       }, [eanValue]);
     

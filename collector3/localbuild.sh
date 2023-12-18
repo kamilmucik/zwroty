@@ -28,7 +28,7 @@ cd $SCRIPT_DIR/android/
 $SCRIPT_DIR/android/gradlew clean assembleDebug
 
 # cd $SCRIPT_DIR
-echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/debug/app-debug.apk ubuntu@e-strix.pl:/var/www/e-strix.pl/public_html/megapack/AZwroty3.1.5.apk'
+echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/debug/app-debug.apk ubuntu@e-strix.pl:/var/www/e-strix.pl/public_html/megapack/AZwroty3.1.6.apk'
 
-sshpass -p 'syjAkywapy1' scp $SCRIPT_DIR/android/app/build/outputs/apk/debug/app-debug.apk ubuntu@e-strix.pl:/var/www/e-strix.pl/public_html/megapack/AZwroty3.1.5.apk
+sshpass -p 'syjAkywapy1' scp $SCRIPT_DIR/android/app/build/outputs/apk/debug/app-debug.apk ubuntu@e-strix.pl:/var/www/e-strix.pl/public_html/megapack/AZwroty3.1.6.apk
 

@@ -30,16 +30,9 @@ public class ShipmentProductRestController {
             @RequestParam(value = "lastUpdate", required = true, defaultValue = "") String lastUpdate,
             @RequestParam(value = "collectorId", required = true, defaultValue = "0") Long collectorId
     ) {
-//        System.out.println("sync.collectorId: " + collectorId);
-//        System.out.println("sync.number: " + shipmentNumber);
-//        System.out.println("sync.lastUpdate: " + lastUpdate);
-
         DeferredResult<GetShipmentDetailsDto> deferredResult = new DeferredResult<>();
         CompletableFuture<GetShipmentDetailsDto> completableFuture = shipmentService.getDetails(shipmentNumber, lastUpdate);
         completableFuture.whenComplete((res, ex) -> {
-
-//            System.out.println("sync.ex: " + ex);
-//            System.out.println("sync.res: " + res);
             if (ex != null) {
                 ex.printStackTrace();
                 deferredResult.setErrorResult(ex);
@@ -60,9 +53,6 @@ public class ShipmentProductRestController {
             @RequestParam(value = "scanLabel", required = true, defaultValue = "0") Long scanLabel,
             @RequestParam(value = "scanUtilization", required = true, defaultValue = "0") Long scanUtilization
     ) {
-
-
-
         DeferredResult<ShipmentProductDto> deferredResult = new DeferredResult<>();
         CompletableFuture<ShipmentProductDto> completableFuture = shipmentService.findProductByEAN(retNumber,ean);
         completableFuture.whenComplete((res, ex) -> {
@@ -130,32 +120,6 @@ public class ShipmentProductRestController {
             @RequestParam(value = "sended", required = true, defaultValue = "0") Boolean sended,
             @RequestParam(value = "shopNr", required = true, defaultValue = "0") Long shopNr
     ) {
-//        System.out.println("shipmentDetails.product: " + artNumber);
-//        Long pageNumber = page;
-
-//    input: {"shipmentProductDtoList":[
-//    {"artNumber":177524,"scanCorrect":137,"scanError":0,"scanLabel":0,"sended":false,"shopNr":808,"shops":[],"returnCode":200}]
-//    ,"shipmentId":15,"returnCode":200}
-//        GetShipmentDetailsDto shipmentDetailsDto = GetShipmentDetailsDto
-//                .builder()
-//                .shipmentProductDtoList(Arrays.asList(
-//                        ShipmentProductDto
-//                                .builder()
-//                                .artNumber(artNumber)
-//                                .scanCorrect(scanCorrect)
-//                                .scanError(scanError)
-//                                .scanLabel(scanLabel)
-//                                .sended(sended)
-//                                .shopNr(shopNr)
-//                                .build()))
-//                .build();
-
-//        System.out.println("shipmentId: " +shipmentId);
-//        System.out.println("artNumber: " +artNumber);
-//        System.out.println("scanCorrect: " +scanCorrect);
-//        System.out.println("scanError: " +scanError);
-//        System.out.println("scanLabel: " +scanLabel);
-//        System.out.println("shopNr: " +shopNr);
         SaveShipmentProductDto shipmentDetailsDto = SaveShipmentProductDto
                 .builder()
                 .shipmentId(shipmentId)
@@ -181,15 +145,12 @@ public class ShipmentProductRestController {
                 deferredResult.setResult(res);
             }
         });
-//        System.out.println("deferredResult: " +deferredResult);
 
         return deferredResult;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public DeferredResult<SaveShipmentProductDto> update(@RequestBody SaveShipmentProductDto shipmentDetailsDto) {
-//        System.out.println("shipmentDetailsDto: " +shipmentDetailsDto);
-
         DeferredResult<SaveShipmentProductDto> deferredResult = new DeferredResult<>();
         CompletableFuture<SaveShipmentProductDto> completableFuture = shipmentService.updateShipmentDetails(shipmentDetailsDto);
         completableFuture.whenComplete((res, ex) -> {
@@ -200,7 +161,6 @@ public class ShipmentProductRestController {
                 deferredResult.setResult(res);
             }
         });
-//        System.out.println("deferredResult: " +deferredResult);
 
         return deferredResult;
     }

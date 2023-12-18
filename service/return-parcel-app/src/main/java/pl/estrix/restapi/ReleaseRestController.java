@@ -25,7 +25,6 @@ public class ReleaseRestController {
     @Autowired
     private ReleaseArticleService releaseService;
 
-
     @Autowired
     private ReadShipmentProductCommandExecutor readShipmentProductExecutor;
 
@@ -35,23 +34,14 @@ public class ReleaseRestController {
             @PathVariable("code")  String code
     ) {
         if (code.startsWith("000000000")) return null;
-//        System.out.println("code: " +code);
-//        System.out.println("data: " +code.substring(0,8));
-//        System.out.println("nr zwrotu: " +code.substring(8,14));
-//        System.out.println("nr artykulu: " +code.substring(14,20));
-//        System.out.println("ilosc: " +code.substring(20,26));
-//        System.out.println("flaga: " +code.substring(26,27));
-//        System.out.println("nr palety: " +code.substring(27,29));
 
-
-        String palletFlag = code.substring(26,27);
-        String artNumber = code.substring(14,20);
-        Long counter = Long.parseLong(code.substring(20,26));
-        Long palletCounter = Long.parseLong(code.substring(27,29));
-//String artReturn, Long artNumber
-        ShipmentProductDto shipmentProductDto = readShipmentProductExecutor.getShipmentProductDto(code.substring(8,14), Long.parseLong(artNumber));
-
-
+        String returnNumber = ""+Long.parseLong(code.substring(8,16));//200269
+        String artNumber =  ""+Long.parseLong(code.substring(16,24));//276382
+        Long counter = Long.parseLong(code.substring(24,30));//5
+        String palletFlag = code.substring(30,31);//C
+        Long palletCounter = Long.parseLong(code.substring(31,33));//0
+        //String returnNumber, Long artNumber
+        ShipmentProductDto shipmentProductDto = readShipmentProductExecutor.getShipmentProductDto(returnNumber, Long.parseLong(artNumber));
 
         ReleaseArticleDto releaseArticleDto = releaseService.getReleaseArticleDtoItem(LocalDate.now());
         if (releaseArticleDto == null){
@@ -65,7 +55,7 @@ public class ReleaseRestController {
                         .builder()
                         .releaseCode(code)
                         .artNumber(artNumber)
-                        .returnNumber(code.substring(8,14))
+                        .returnNumber(returnNumber)
                         .counter(counter)
                         .release(releaseArticleDto)
                         .palletFlag(palletFlag)
@@ -84,7 +74,6 @@ public class ReleaseRestController {
                 deferredResult.setResult(res);
             }
         });
-//        System.out.println("deferredResult: " +deferredResult);
 
         return deferredResult;
     }
