@@ -23,8 +23,18 @@
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://artifactory.parker.site/artifactory/mvn-development/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sencha-myget" />
+      <option name="name" value="sencha-myget" />
+      <option name="url" value="https://sencha.myget.org/F/maven/maven/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jboss.community" />

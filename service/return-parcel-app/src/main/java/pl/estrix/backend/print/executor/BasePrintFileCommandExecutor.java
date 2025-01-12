@@ -27,6 +27,7 @@ public class BasePrintFileCommandExecutor extends BaseCommandExecutor<PrintFile,
         entity.setName(dto.getName());
         entity.setPath(dto.getPath());
         entity.setActive(dto.getActive());
+        entity.setPrinter(dto.getPrinter());
         return entity;
     }
 
@@ -39,6 +40,7 @@ public class BasePrintFileCommandExecutor extends BaseCommandExecutor<PrintFile,
         dto.setName(entity.getName());
         dto.setPath(entity.getPath());
         dto.setActive(entity.getActive());
+        dto.setPrinter(entity.getPrinter());
         return dto;
     }
 }

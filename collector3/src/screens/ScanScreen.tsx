@@ -47,6 +47,7 @@ const DetailScreen = ({navigation, route}) => {
   const eanInputRef = useRef();
   const [artNumber, setArtNumber] = useState(0);
   const [eanValue, setEanValue] = useState('');
+  const [companyValue, setCompanyValue] = useState('');
   const [ean2SendValue, setEan2SendValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [shipmentProduct, setShipmentProduct] = useState([]);
@@ -162,7 +163,7 @@ const DetailScreen = ({navigation, route}) => {
     let condition = eanValidate(ean2SendValue);
     // let zeroPaddEAN = paddingZeros(eanValue,13);
     // let condition2 = eanValidate(zeroPaddEAN);
-    // console.log("ean2SendValue: "+ condition + "/" +condition2 + " : " + ean2SendValue  + " : " + zeroPaddEAN );
+    // console.log("ean2SendValue: "+ condition  );
     // setEanScannerDebugValue("ean2SendValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
     if (condition === true ){
       sendDataToServer(paddingZeros(ean2SendValue,13));
@@ -245,7 +246,10 @@ const DetailScreen = ({navigation, route}) => {
             appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
           } else {
             try {
-              // setShipmentProduct(data);
+              appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
+              // console.log(data);
+              // setEanValue(data.company);
+              setShipmentProduct(data);
               setArtNumber(data.artNumber);
 
               let requestOptions = {
@@ -261,6 +265,7 @@ const DetailScreen = ({navigation, route}) => {
                     "counter": appCtx.scanMultiperValue,
                     "palletCounter":appCtx.scanPalletCounterValue ,
                     "author": appCtx.settingsOperatorValue,
+                    "printer": appCtx.settingsPrinterValue,
                     "returnCode":200
                   }
                 )
@@ -348,6 +353,7 @@ const DetailScreen = ({navigation, route}) => {
         if (data.status === 500){
           appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
         } else {
+          // console.log("ean2SendValue: "+ data.companyName  );
           setShipmentProduct(data);
           setArtNumber(data.artNumber);
         }
@@ -370,7 +376,7 @@ const DetailScreen = ({navigation, route}) => {
 
       appCtx.setScanPrintValue(0);
 
-      appCtx.setScanCMValue(0);
+      appCtx.setScanCMValue(1);
       appCtx.setScanPrintValue(0);
       setSelectedOption(0);
     } catch(e) {
@@ -548,6 +554,24 @@ const DetailScreen = ({navigation, route}) => {
                         color: 'black',
                       }}>
                         {shipmentProduct.ean}
+                      </Text>
+                    </View>
+                  </DataTable.Cell>
+                </DataTable.Row>
+                <DataTable.Row style={styles.dataTableRow}>
+                  <DataTable.Cell style={styles.dataTableCellLeft}>Dostawca</DataTable.Cell>
+                  <DataTable.Cell style={styles.dataTableCell}>
+                    <View style={{ minHeight: 20, maxWidth:180,
+                      alignItems: 'center',
+                      color: 'black',
+                      justifyContent: 'flex-start',
+                      flexDirection: "column",
+                      flexWrap: "wrap-reverse",
+                    }}>
+                      <Text style={{
+                        color: 'black',
+                      }}>
+                        {shipmentProduct.companyName}
                       </Text>
                     </View>
                   </DataTable.Cell>

@@ -84,7 +84,7 @@ public class SettingsEditController extends MainController {
     }
 
     public void refreshPrinter(){
-        printerService.findPrinters();
+//        printerService.findPrinters();
     }
 
     public void addPrinter(){

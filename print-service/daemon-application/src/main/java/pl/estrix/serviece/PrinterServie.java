@@ -2,33 +2,25 @@ package pl.estrix.serviece;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.estrix.model.PrinterDto;
 
-import javax.print.DocFlavor;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.HashPrintServiceAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.PrintServiceAttributeSet;
-import javax.print.attribute.standard.PrinterName;
-import javax.print.attribute.standard.PrinterURI;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class PrinterServie {
+
+    private static Logger LOG = LoggerFactory.getLogger(PrinterServie.class);
 
     public List<PrinterDto> findPrinters(){
         List<PrinterDto> printers = new ArrayList<>();
@@ -51,7 +43,7 @@ public class PrinterServie {
         // loop to get required printer serices
         for (int i = 0; i < count; i++) {
             if (service[i].getName().equalsIgnoreCase(printerNameDesired)) {
-                System.out.println("=====>" + service[i].getName());
+                LOG.info("=====>" + service[i].getName());
                 printer = service[i];
             }
         }

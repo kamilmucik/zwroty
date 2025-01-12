@@ -75,27 +75,34 @@
             </div>
             <div class="ui-g-6">
 
-
+                <h:outputLabel value="Drukarki" />
                 <h:form id="form-printers"  style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top;max-width:720px;margin: 0 auto;">
+                    <f:facet name="header">
+
+<!--                        <p:commandButton action="#{settingController.fetchAllPrinters()}"-->
+<!--                                         icon="pi pi-refresh" update="@form" process="@this"/>-->
+                    </f:facet>
                     <p:dataTable id="printerTable"
                                  var="printer"
                                  currentPageReportTemplate="{currentPage} z {totalPages}"
                                  value="#{settingsEditController.printers}"
                                  rowKey="#{account.id}">
-                        <f:facet name="header">
-                            <p:outputPanel id="tableSearch">
-                                <p:commandButton actionListener="#{settingsEditController.refreshPrinter}"
-                                                 update="@([id$=printerTable])"
-                                                 id="searchButton"
-                                                 icon="ui-icon-search"
-                                                 process="@this"
-                                                 title="Wyszukaj" />
-                            </p:outputPanel>
-                        </f:facet>
-                        <p:column headerText="Drukarki" >
+<!--                        <f:facet name="header">-->
+<!--                            <p:outputPanel id="tableSearch">-->
+<!--                                <p:commandButton actionListener="#{settingsEditController.refreshPrinter}"-->
+<!--                                                 update="@([id$=printerTable])"-->
+<!--                                                 id="searchButton"-->
+<!--                                                 icon="ui-icon-search"-->
+<!--                                                 process="@this"-->
+<!--                                                 title="Wyszukaj" />-->
+<!--                            </p:outputPanel>-->
+<!--                        </f:facet>-->
+                        <p:column headerText="Drukarka" >
                             <h:outputText value="#{printer.name}" />
                         </p:column>
-
+                        <p:column headerText="Aktywna" >
+                            <h:outputText value="#{printer.lastUpdate}" />
+                        </p:column>
                         <p:column headerText="Usuń" style="width: 120px; text-align: center;">
                             <p:commandLink styleClass=""
                                            title="Usuń"
@@ -117,49 +124,6 @@
                         </p:column>
                     </p:dataTable>
                 </h:form>
-
-                <p:accordionPanel activeIndex="-" id="accordion">
-                    <p:tab title="Drukarki">
-                        <h:panelGrid columns="2" cellpadding="10">
-                            <h:form>
-                                <h:outputLabel for="name"  value="Nazwa: " />
-                                <p:inputText id="name"
-                                             style="width: 100%"
-                                             required="true"
-                                             requiredMessage="Pole jest wymagane."
-                                             value="#{settingsEditController.newPrinter.name}"
-                                             label="Nazwa" >
-                                    <p:ajax event="blur" update="nameMsg" />
-                                </p:inputText>
-                                <h:outputText  />
-                                <p:message for="name" id="nameMsg" />
-
-                                <h:outputLabel for="pathName"  value="Ścierzka: " />
-                                <p:inputText id="pathName"
-                                             style="width: 100%"
-                                             required="true"
-                                             requiredMessage="Pole jest wymagane."
-                                             value="#{settingsEditController.newPrinter.path}"
-                                             label="Adres drukarki" >
-                                    <p:ajax event="blur" update="pathNameMsg" />
-                                </p:inputText>
-                                <h:outputText  />
-                                <p:message for="pathName" id="pathNameMsg" />
-
-                                <p:commandButton value="Dodaj"
-                                                 actionListener="#{settingsEditController.addPrinter}"
-                                                 partialSubmit="true"
-                                                 ajax="true"
-                                                 update="@([id$=printerTable])"
-
-                                                 style="display: inline; margin: 0 auto 10px; width: 100px;"
-                                />
-                            </h:form>
-                        </h:panelGrid>
-
-                    </p:tab>
-                </p:accordionPanel>
-
             </div>
         </div>
 

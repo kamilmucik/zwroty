@@ -33,7 +33,8 @@ public class PrinterRepositoryImpl
                 qPrinter.name,
                 qPrinter.active,
                 qPrinter.isDefault,
-                qPrinter.path
+                qPrinter.path,
+                qPrinter.lastUpdate
         ));
     }
 

@@ -12,6 +12,7 @@ public class PrintFileDto extends BaseEntityDto<Long> {
 
     private String name;
     private String path;
+    private String printer;
     private Boolean active;
 
 }

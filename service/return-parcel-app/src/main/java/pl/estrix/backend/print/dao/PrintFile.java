@@ -28,6 +28,9 @@ public class PrintFile extends AuditableEntity {
     @Column(name = "_path", nullable = false)
     private String path;
 
+    @Column(name = "printer", nullable = false)
+    private String printer;
+
     @Column(name = "active", nullable = false)
     private Boolean active;
 
