@@ -72,6 +72,9 @@ public class PrinterService {
     public PrinterDto get(Long id) {
         return readExecutor.findById(id);
     }
+    public PrinterDto findByName(String name) {
+        return readExecutor.findByName(name);
+    }
 
     public PrinterDto update(PrinterDto dto) {
         return updateExecutor.update(dto);
@@ -164,17 +167,12 @@ public class PrinterService {
                     .build();
 
             String fileName = printFile(shipmentProductDto,printLabelDto);
-//            System.out.println("rest:fileName: " + fileName);
-
-            PrinterDto printerDto = getDatefault();
-//            System.out.println("printerDto: " + printerDto.getName());
-//            System.out.println("fileName: " + fileName);
-//            print(printerDto,fileName);
 
             saveOrUpdate(PrintFileDto
                     .builder()
                     .name(fileName)
                     .active(true)
+                    .printer(printLabelDto.getPrinter())
                     .path(settingService.getSetting().getTempDirectory()+fileName)
                     .build());
 
@@ -213,9 +211,11 @@ public class PrinterService {
             SimpleDateFormat dt1 = new SimpleDateFormat("yyyy.MM.dd");
             SimpleDateFormat dt2 = new SimpleDateFormat("yyyyMMdd");
 
+            parameters.put("ORGANIZACJA", selectedForPrintItem.getCompanyName());
             parameters.put("NRZWROTU", selectedForPrintItem.getArtReturn());
             parameters.put("NRARTYKULU", selectedForPrintItem.getArtNumber().toString());
             parameters.put("ILOSC", "" + selectedForPrintItem.getCounter());
+            parameters.put("DOSTAWCA", "" + selectedForPrintItem.getCompanyName());
             parameters.put("DATAPRZYGOTOWANIA", "" + dt1.format(new Date()));
             parameters.put("Author", author.getAuthor());
             parameters.put("BARCODE",
@@ -248,29 +248,29 @@ public class PrinterService {
 
         return printers;
     }
-    public List<PrinterDto> findPrinters(){
-        List<PrinterDto> printers = new ArrayList<>();
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-        for (PrintService printService : printServices) {
-            PrinterDto printerDto = readExecutor.findByName(printService.getName());
-            if (printerDto == null){
-                printerDto = new PrinterDto();
-                printerDto.setName(printService.getName());
-                printerDto.setPath(".");
-                printerDto.setIsDefault(false);
-                printerDto.setActive(true);
-                printerDto = createExecutor.create(printerDto);
-            }
-        }
-
-        ListResponseDto<PrinterDto> printerDtoListResponseDto = readExecutor.find(null,null);
-
-        if (!printerDtoListResponseDto.isEmpty()){
-            printers.addAll(printerDtoListResponseDto.getData());
-        }
-
-        return printers;
-    }
+//    public List<PrinterDto> findPrinters(){
+//        List<PrinterDto> printers = new ArrayList<>();
+//        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+//        for (PrintService printService : printServices) {
+//            PrinterDto printerDto = readExecutor.findByName(printService.getName());
+//            if (printerDto == null){
+//                printerDto = new PrinterDto();
+//                printerDto.setName(printService.getName());
+//                printerDto.setPath(".");
+//                printerDto.setIsDefault(false);
+//                printerDto.setActive(true);
+//                printerDto = createExecutor.create(printerDto);
+//            }
+//        }
+//
+//        ListResponseDto<PrinterDto> printerDtoListResponseDto = readExecutor.find(null,null);
+//
+//        if (!printerDtoListResponseDto.isEmpty()){
+//            printers.addAll(printerDtoListResponseDto.getData());
+//        }
+//
+//        return printers;
+//    }
 
     private PrintService findPrintService(String printerName) {
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);

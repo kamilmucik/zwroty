@@ -23,52 +23,29 @@ public class Worker {
 
     @Value("${temporary.dir}")
     private String temporaryDir;
-
-    @Value("${debug}")
-    private String debug;
+    @Value("${station.name}")
+    private String stationName;
 
     @Autowired
     private PrinterServie printerServie;
 
     @Scheduled(cron="0/5 * * * * *")
     public void runTask() {
-//        System.out.println();
-//        System.out.println("Runing at " + new Date());
-        if ("true".equals(debug)) {
-            System.out.println("restAPIUrl " + restAPIUrl + "print/download");
-            System.out.println("printerName " + printerName);
-            System.out.println("temporaryDir " + temporaryDir);
-//        System.out.println(restAPIUrl + "print/download");
-        }
-
+        System.out.println();
         //1. sprawdź czy jest jakiś plik
         //2. pobierz plik
-//        try {
-            try (BufferedInputStream inputStream = new BufferedInputStream(new URL(restAPIUrl + "print/download").openStream());
-//            try (BufferedInputStream inputStream = new BufferedInputStream(new URL("http://localhost:8080/print/download").openStream());
-                 FileOutputStream fileOS = new FileOutputStream(temporaryDir+ "/label.pdf")) {
-                byte data[] = new byte[1024];
-                int byteContent;
-                while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
-                    fileOS.write(data, 0, byteContent);
-                }
-
-                if ("true".equals(debug)) {
-                    System.out.println("\t\tdrukuje: " + printerName);
-                }
-//                printerServie.print("Brother DCP-7057",temporaryDir+ "/label.pdf");
-                printerServie.print(printerName,temporaryDir+ "/label.pdf");
-                if ("true".equals(debug)) {
-                    System.out.println("\t\twydrukował: " + printerName);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-//                System.out.println("temporaryDir " + e.toString());
-                // handles IO exceptions
+        try (BufferedInputStream inputStream = new BufferedInputStream(new URL(restAPIUrl + "print/download/" + stationName).openStream());
+             FileOutputStream fileOS = new FileOutputStream(temporaryDir+ "/label.pdf")) {
+            byte data[] = new byte[1024];
+            int byteContent;
+            while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
+                fileOS.write(data, 0, byteContent);
             }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
+            printerServie.print(printerName,temporaryDir+ "/label.pdf");
+        } catch (IOException e) {
+            // handles IO exceptions
+        }
 
         //3. drukuj plik
         //4. usun plik tymczasowy

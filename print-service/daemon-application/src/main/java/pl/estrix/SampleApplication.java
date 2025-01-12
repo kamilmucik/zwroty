@@ -16,35 +16,19 @@
 
 package pl.estrix;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
-
-import javax.sql.DataSource;
-
-/**
- * http://localhost:8099/path/
- * http://localhost:8099/path/hello
- */
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "pl.estrix")
-//@PropertySource("classpath:filter.properties")
-@PropertySource("file:c:\\\\sortowanie\\filter.properties")
-//@EnableAutoConfiguration
-//@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
+@PropertySource("file:filter.properties")
+@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
+@EnableScheduling
 public class SampleApplication {
 
-	private static Logger LOG = LoggerFactory.getLogger(SampleApplication.class);
-
-//	@Autowired
-//	DataSource dataSource;
 
 	public static void main(String[] args) throws Exception  {
 		SpringApplication.run(SampleApplication.class, args);

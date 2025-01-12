@@ -18,6 +18,8 @@ public class ShipmentProductDto extends BaseEntityDto<Long> {
 
     private String name;
 
+    private String company;
+
     private Long counter;
 
     private String companyName;

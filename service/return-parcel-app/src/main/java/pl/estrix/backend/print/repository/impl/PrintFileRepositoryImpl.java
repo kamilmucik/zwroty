@@ -34,6 +34,7 @@ public class PrintFileRepositoryImpl
                 qPrintFile.id,
                 qPrintFile.name,
                 qPrintFile.path,
+                qPrintFile.printer,
                 qPrintFile.active
         ));
     }
@@ -48,7 +49,11 @@ public class PrintFileRepositoryImpl
         BooleanBuilder builder = new BooleanBuilder();
         JPQLQuery query = from(qPrintFile);
 
-        query.where(qPrintFile.active.eq(true));
+        builder.and(qPrintFile.active.eq(true));
+
+        if (searchParams.getPrinter() != null) {
+            builder.and(qPrintFile.printer.eq(searchParams.getPrinter()));
+        }
 
         query.where(builder);
         return query;

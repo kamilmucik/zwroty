@@ -5,11 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.estrix.backend.base.AuditableEntity;
+import pl.estrix.backend.converter.LocalDateTimeToStringConverter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "printer",
@@ -33,4 +32,8 @@ public class Printer extends AuditableEntity {
 
     @Column(name = "is_default", nullable = false)
     private Boolean isDefault;
+
+    @Column(name = "last_update")
+    @Convert(converter = LocalDateTimeToStringConverter.class)
+    private LocalDateTime lastUpdate;
 }

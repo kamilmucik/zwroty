@@ -11,10 +11,13 @@ function AppProvider({children}) {
   const [scanPrintValue, setContextScanPrintValue] = useState(0);
   const [scanStorageValue, setContextScanStorageValue] = useState(0);
 
-  const [settingsURLValue, setContextSettingsURLValue] = useState('http://zwroty.e-strix.pl');
-  const [settingsPortValue, setContextSettingsPortValue] = useState('801');
+  const [settingsURLValue, setContextSettingsURLValue] = useState('http://10.0.10.163');
+  const [settingsPortValue, setContextSettingsPortValue] = useState('8881');
+  // const [settingsURLValue, setContextSettingsURLValue] = useState('http://zwroty.e-strix.pl');
+  // const [settingsPortValue, setContextSettingsPortValue] = useState('801');
   const [settingsInstanceValue, setContextSettingsInstanceValue] = useState('1');
   const [settingsOperatorValue, setContextSettingsOperatorValue] = useState('');
+  const [settingsPrinterValue, setContextSettingsPrinterValue] = useState('');
   const [toastInfoValue, setContextToastInfoValue] = useState('');
   const [toastInfoTypeValue, setContextToastInfoTypeValue] = useState('');
   const [isMobile, setContextIsMobile] = useState(0);
@@ -50,6 +53,9 @@ function AppProvider({children}) {
   function setSettingsOperatorValue(val){
     setContextSettingsOperatorValue( val);
   }
+  function setSettingsPrinterValue(val){
+    setContextSettingsPrinterValue( val);
+  }
   function setIsMobile(val){
     setContextIsMobile(val);
   }
@@ -73,6 +79,7 @@ function AppProvider({children}) {
     settingsPortValue: settingsPortValue,
     settingsInstanceValue: settingsInstanceValue,
     settingsOperatorValue: settingsOperatorValue,
+    settingsPrinterValue: settingsPrinterValue,
     toastInfoValue: toastInfoValue,
     toastInfoTypeValue: toastInfoTypeValue,
     isMobile: isMobile,
@@ -87,6 +94,7 @@ function AppProvider({children}) {
     setSettingsPortValue: setSettingsPortValue,
     setSettingsInstanceValue: setSettingsInstanceValue,
     setSettingsOperatorValue: setSettingsOperatorValue,
+    setSettingsPrinterValue: setSettingsPrinterValue,
     setToastInfoValue: setToastInfoValue,
     setIsMobile: setIsMobile,
     setIsDebugMode: setIsDebugMode,

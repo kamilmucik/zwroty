@@ -11,6 +11,7 @@ import org.primefaces.model.SortOrder;
 public class PrinterSearchCriteriaDto {
 
     private String tableSearch;
+    private String printer;
 
     private String sortField;
     private SortOrder sortOrder;
