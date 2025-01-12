@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<h:body>
+
+    <h:form>
+        <p:panelGrid columns="2" layout="grid">
+            <p:panel>
+                <f:facet name="header">
+                    Ustawienia
+                    <p:commandButton action="#{settingController.fetchAll()}"
+                                     icon="pi pi-refresh" update="@form" process="@this"/>
+                </f:facet>
+                <p:dataTable var="setting" value="#{settingController.settings}"
+                             rows="10" paginator="true">
+
+
+                    <p:column headerText="Nazwa">
+                        <h:outputText value="#{setting.name}"/>
+                    </p:column>
+                    <p:column headerText="Opis">
+                        <h:outputText value="#{setting.description}"/>
+                    </p:column>
+
+                    <p:column headerText="Wartość">
+                        <h:outputText value="#{setting.value}"/>
+                    </p:column>
+
+                    <p:column headerText="Wybierz" width="10%">
+                        <p:commandButton icon="pi pi-pencil" action="#{settingController.edit(setting)}"
+                                         update="@form" process="@this"/>
+                        <p:commandButton icon="pi pi-trash" action="#{settingController.delete(setting.id)}"
+                                         update="@form" process="@this"/>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+            <p:panel>
+                <f:facet name="header">
+                    Ustawienie
+                    <p:commandButton action="#{settingController.refresh()}"
+                                     icon="pi pi-refresh" update="@form" process="@this"/>
+                </f:facet>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Nazwa"/>
+                    <p:inputText value="#{settingController.setting.name}"
+                                 disabled="true"/>
+                    <p:outputLabel value="Wartość"/>
+                    <p:inputText value="#{settingController.setting.value}"
+                                 required="true"/>
+                    <p:outputLabel/>
+                    <p:commandButton value="Zapisz" action="#{settingController.save()}"
+                                     update="@form" process="@parent"/>
+
+                </h:panelGrid>
+            </p:panel>
+        </p:panelGrid>
+
+        <p:panelGrid columns="1" layout="grid">
+        <p:panel>
+            <f:facet name="header">
+                Drukarki
+                <p:commandButton action="#{settingController.fetchAllPrinters()}"
+                                 icon="pi pi-refresh" update="@form" process="@this"/>
+            </f:facet>
+            <p:dataTable var="print" value="#{settingController.printers}"
+                         rows="10" paginator="true">
+                <p:column headerText="Nazwa">
+                    <h:outputText value="#{print.name}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+        </p:panelGrid>
+    </h:form>
+
+
+</h:body>
+</html>

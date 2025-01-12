@@ -136,7 +136,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
 					<font fontName="DejaVu Sans" size="60"/>
 				</textElement>
-				<text><![CDATA[MEGA PACK]]></text>
+				<text><![CDATA[PACK-TECH]]></text>
 			</staticText>
 		</band>
 	</detail>

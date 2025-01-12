@@ -34,19 +34,20 @@ services:
       app_zwroty:
         ipv4_address: 10.99.1.3
 
-#  tomcat:
-#    image: estrix/tomcat-mock
-#    container_name: tomcat-mock
-#    build: ./docker/tomcat-mock
-#    environment:
-#      - TOMCAT_USER=root
-#      - TOMCAT_PASSWORD=password
-#    ports:
-#      - 8080:8080
-#      - 9100:9100
-#    networks:
-#      app_zwroty:
-#        ipv4_address: 10.99.1.4
+  parcel-server:
+    image: "registry.hub.docker.com/kamilmucik/return-parcel-server:2.3.0-SNAPSHOT"
+    container_name: parcel-server
+    volumes:
+      - ./logs/server/:/usr/local/tomcat/logs/
+    environment:
+      DEBUG_APP: true # optional: enabled JPDA debug mode/ rebuild is required
+    ports:
+      - 8881:8080
+      - 9100:9100
+    networks:
+      app_zwroty:
+        ipv4_address: 10.99.1.4
+
   prometheus_zwrt:
     image: prom/prometheus:v2.35.0
     container_name: prometheus_zwrt

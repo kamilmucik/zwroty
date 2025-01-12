@@ -94,25 +94,18 @@ public class ScanProductListController extends MainController implements Seriali
             selected = shipmentService.getItem(id).getShipmentDto();
             lazyModel = new ScanProductLazyDataModel(shipmentService, selected.getId(), searchText);
         }
-
-
-
     }
 
     public void printFile() {
-
         String fileName = printerService.printFile(selectedForPrintItem,PrintLabelDto.builder().author("").palletCounter(0).build());
         PrinterDto printerDto = printerService.getDatefault();
-//        System.out.println("printerDto: " + printerDto.getName());
-//        System.out.println("fileName: " + fileName);
-//        System.out.println("ridName: " + settingService.getSetting().getTempDirectory());
-//        printerService.print(printerDto,fileName);
 
         printerService.saveOrUpdate(PrintFileDto
                 .builder()
                 .name(fileName)
                 .active(true)
                 .path(settingService.getSetting().getTempDirectory()+fileName)
+                .printer(printerDto.getName())
                 .build());
 
 

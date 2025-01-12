@@ -1,5 +1,6 @@
 package pl.estrix.backend.print.executor;
 
+import com.mysema.query.types.Predicate;
 import org.springframework.stereotype.Component;
 import pl.estrix.backend.base.PagingCriteria;
 import pl.estrix.backend.print.dao.Printer;
@@ -26,7 +27,6 @@ public class ReadPrinterCommandExecutor extends BasePrinterCommandExecutor{
     public PrinterDto findById(Long id) {
         return mapEntityToDto(repository.findOne(id));
     }
-
     public PrinterDto findByName(String name) {
         return mapEntityToDto(repository.findByName(name));
     }

@@ -5,17 +5,17 @@
     <parent>
         <groupId>pl.estrix</groupId>
         <artifactId>return-parcel</artifactId>
-        <version>2.2.1</version>
+        <version>2.3.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>return-parcel-app</artifactId>
     <packaging>war</packaging>
-    <version>2.2.1</version>
+    <version>2.3.0-SNAPSHOT</version>
     <name>Spring Boot App :: Return Parcel</name>
 
 	<properties>
         <!-- can be 8.0.x also -->
-        <tomcat.version>7.0.62</tomcat.version>
+<!--        <tomcat.version>7.0.62</tomcat.version>-->
 
         <jsf-mojarra.version>2.2.11</jsf-mojarra.version>
         <primefaces.version>6.1</primefaces.version>
@@ -49,7 +49,39 @@
 	<build>
         <finalName>return-parcel-app</finalName>
         <plugins>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${project.build.directory}" />
+                                <tstamp>
+                                    <format property="last.updated" pattern="yyyy.MM.dd HH:mm" />
+                                </tstamp>
+                                <echo file="${basedir}/target/classes/filter.properties" append="false" message="estrix.application.biuld-time=${last.updated}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="scm.commit=${buildNumber}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="scm.branch=${scmBranch}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="env.stage=${profile.stage}" />}" /&gt;
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="estrix.application.name=${project.name}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="estrix.application.version=${project.version}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="${line.separator}" />
+                                <echo file="${basedir}/target/classes/filter.properties" append="true" message="estrix.application.desc=${project.description}" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
@@ -298,7 +330,7 @@
                 <skipTests>true</skipTests>
             </properties>
             <build>
-                <finalName>ROOT</finalName>
+<!--                <finalName>ROOT</finalName>-->
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

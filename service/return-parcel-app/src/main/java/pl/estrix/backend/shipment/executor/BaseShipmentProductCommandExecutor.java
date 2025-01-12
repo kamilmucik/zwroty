@@ -54,6 +54,7 @@ public class BaseShipmentProductCommandExecutor extends BaseCommandExecutor<Ship
         dto.setId(entity.getId());
         dto.setArtNumber(entity.getArtNumber());
         dto.setName(entity.getName());
+        dto.setCompany(entity.getCompany());
         dto.setCounter(entity.getCounter());
         dto.setCompanyName(entity.getCompany());
         dto.setArtReturn(entity.getArtReturn());

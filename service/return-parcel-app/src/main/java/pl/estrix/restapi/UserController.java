@@ -1,7 +1,9 @@
 package pl.estrix.restapi;
 
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequestMapping("/user")
+@Async
 public class UserController {
 
     @Autowired

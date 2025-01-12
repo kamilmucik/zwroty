@@ -18,13 +18,20 @@ package pl.estrix;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
+
+import com.sun.faces.config.ConfigureListener;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+import javax.faces.webapp.FacesServlet;
 
 import javax.sql.DataSource;
 
@@ -34,20 +41,34 @@ import javax.sql.DataSource;
  */
 
 @SpringBootApplication
-@ComponentScan(basePackages = "pl.estrix")
-//@PropertySource("classpath:filter.properties")
-@PropertySource("file:c:\\\\sortowanie\\filter.properties")
-//@EnableAutoConfiguration
-//@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
-public class SampleApplication {
+@EnableScheduling
+public class SampleApplication extends SpringBootServletInitializer {
 
 	private static Logger LOG = LoggerFactory.getLogger(SampleApplication.class);
 
-//	@Autowired
-//	DataSource dataSource;
 
 	public static void main(String[] args) throws Exception  {
 		SpringApplication.run(SampleApplication.class, args);
+	}
+
+	@Bean
+	public ServletRegistrationBean facesServletRegistration() {
+		ServletRegistrationBean registration = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
+		registration.setLoadOnStartup(1);
+		return registration;
+	}
+
+	@Bean
+	public ServletContextInitializer servletContextInitializer() {
+		return servletContext -> {
+			servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
+			servletContext.setInitParameter("primefaces.THEME", "nova-light");
+		};
+	}
+
+	@Bean
+	public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
+		return new ServletListenerRegistrationBean<>(new ConfigureListener());
 	}
 
 }
