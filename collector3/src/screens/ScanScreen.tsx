@@ -163,7 +163,7 @@ const DetailScreen = ({navigation, route}) => {
     let condition = eanValidate(ean2SendValue);
     // let zeroPaddEAN = paddingZeros(eanValue,13);
     // let condition2 = eanValidate(zeroPaddEAN);
-    // console.log("ean2SendValue: "+ condition  );
+    // console.log("ean2SendValue: "+ condition + "/" +condition2 + " : " + ean2SendValue  + " : " + zeroPaddEAN );
     // setEanScannerDebugValue("ean2SendValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
     if (condition === true ){
       sendDataToServer(paddingZeros(ean2SendValue,13));
@@ -246,10 +246,7 @@ const DetailScreen = ({navigation, route}) => {
             appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
           } else {
             try {
-              appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
-              // console.log(data);
-              // setEanValue(data.company);
-              setShipmentProduct(data);
+              // setShipmentProduct(data);
               setArtNumber(data.artNumber);
 
               let requestOptions = {
@@ -353,7 +350,6 @@ const DetailScreen = ({navigation, route}) => {
         if (data.status === 500){
           appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
         } else {
-          // console.log("ean2SendValue: "+ data.companyName  );
           setShipmentProduct(data);
           setArtNumber(data.artNumber);
         }

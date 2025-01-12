@@ -211,7 +211,7 @@ public class PrinterService {
             SimpleDateFormat dt1 = new SimpleDateFormat("yyyy.MM.dd");
             SimpleDateFormat dt2 = new SimpleDateFormat("yyyyMMdd");
 
-//            parameters.put("COMPANY", selectedForPrintItem);
+            parameters.put("ORGANIZACJA", selectedForPrintItem.getCompanyName());
             parameters.put("NRZWROTU", selectedForPrintItem.getArtReturn());
             parameters.put("NRARTYKULU", selectedForPrintItem.getArtNumber().toString());
             parameters.put("ILOSC", "" + selectedForPrintItem.getCounter());

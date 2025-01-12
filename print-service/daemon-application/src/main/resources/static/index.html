@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Ustawienia</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width" />
+    <base href="/" />
+</head>
+
+<body>
+<header>
+    <h1>Ustawienia</h1>
+    <script src="jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+    <script>
+        $(document).ready(function() {
+            // Get all customers on page load
+            getAllPrinters();
+            getAllSettings();
+
+        function getAllSettings() {
+            $.ajax({
+                url: "rest/settings",
+                type: "GET",
+                dataType: "json",
+                success: function(settings) {
+                    displaySettings(settings);
+                },
+                error: function() {
+                    console.log("Error occurred while retrieving customers.");
+                }
+            });
+        }
+
+        function displaySettings(settings) {
+            var settingList = $("#settingItems");
+            settingList.empty();
+
+            settings.forEach(function(setting) {
+                var listItem = $("<li>").text("ID: " + setting.name + " = " + setting.value);
+                settingList.append(listItem);
+            });
+        }
+
+        function getAllPrinters() {
+            $.ajax({
+                url: "rest/printers",
+                type: "GET",
+                dataType: "json",
+                success: function(printers) {
+                    displayPrinters(printers);
+                },
+                error: function() {
+                    console.log("Error occurred while retrieving customers.");
+                }
+            });
+        }
+
+        function displayPrinters(printers) {
+            var printerList = $("#printerItems");
+            printerList.empty();
+
+            printers.forEach(function(printer) {
+                var listItem = $("<li>").text("ID: " + printer.id + ", Name: " + printer.name);
+                printerList.append(listItem);
+            });
+        }
+});
+    </script>
+</header>
+<main>
+    <div class="container">
+        <div id=printerList">
+            <h2>Drukarki:</h2>
+            <ul id="printerItems"></ul>
+        </div>
+        <div id=settingList">
+            <h2>Ustawienia:</h2>
+            <ul id="settingItems"></ul>
+        </div>
+    </div>
+</main>
+
+</body>
+
+</html>

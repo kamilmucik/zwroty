@@ -14,4 +14,6 @@ Run
 mvn spring-boot:run -Plocal -pl :daemon-application
 ```
 
-
+Installation
+1. Run terminal as administrator
+2. 
