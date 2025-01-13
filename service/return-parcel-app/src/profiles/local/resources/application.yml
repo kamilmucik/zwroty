@@ -54,7 +54,7 @@ logging:
         file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
     file: /tmp/application.log
 server:
-    port : 8881
+    port : 8882
     session-timeout : 1800
 
 

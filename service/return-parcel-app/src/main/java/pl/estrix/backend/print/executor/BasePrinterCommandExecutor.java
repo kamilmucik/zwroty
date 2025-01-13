@@ -39,7 +39,6 @@ public class BasePrinterCommandExecutor extends BaseCommandExecutor<Printer, Pri
         dto.setActive(entity.getActive());
         dto.setIsDefault(entity.getIsDefault());
         dto.setPath(entity.getPath());
-        dto.setLastUpdate(entity.getLastUpdate());
         return dto;
     }
 }

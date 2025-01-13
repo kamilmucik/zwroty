@@ -1,5 +1,6 @@
 package pl.estrix.frontend.web.shipment;
 
+import com.mysema.query.sql.types.Null;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;

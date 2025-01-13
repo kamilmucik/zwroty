@@ -210,12 +210,12 @@ public class PrinterService {
              */
             SimpleDateFormat dt1 = new SimpleDateFormat("yyyy.MM.dd");
             SimpleDateFormat dt2 = new SimpleDateFormat("yyyyMMdd");
-
-            parameters.put("ORGANIZACJA", selectedForPrintItem.getCompanyName());
+String printCompanyName = Optional.of(selectedForPrintItem.getPrintCompanyName()).orElse("PACK-TECH");
+            parameters.put("NAZWAFIRMY", printCompanyName);
+            parameters.put("DOSTAWCA", selectedForPrintItem.getCompanyName());
             parameters.put("NRZWROTU", selectedForPrintItem.getArtReturn());
             parameters.put("NRARTYKULU", selectedForPrintItem.getArtNumber().toString());
             parameters.put("ILOSC", "" + selectedForPrintItem.getCounter());
-            parameters.put("DOSTAWCA", "" + selectedForPrintItem.getCompanyName());
             parameters.put("DATAPRZYGOTOWANIA", "" + dt1.format(new Date()));
             parameters.put("Author", author.getAuthor());
             parameters.put("BARCODE",

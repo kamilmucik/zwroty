@@ -40,7 +40,6 @@ public class BasePrintFileCommandExecutor extends BaseCommandExecutor<PrintFile,
         dto.setName(entity.getName());
         dto.setPath(entity.getPath());
         dto.setActive(entity.getActive());
-        dto.setPrinter(entity.getPrinter());
         return dto;
     }
 }

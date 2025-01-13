@@ -18,10 +18,11 @@ public class ShipmentProductDto extends BaseEntityDto<Long> {
 
     private String name;
 
+
     private String company;
 
     private Long counter;
-
+    private String printCompanyName;//nazwa firmy Megapack czy packtech
     private String companyName;
 
     private String artReturn;

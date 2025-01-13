@@ -150,28 +150,6 @@
     margin: 10px 0 0px 0;
 }
 
-#form\3A storeTable,
-#form\3A shipmentTable,
-#form\3A userTable,
-#form\3A shipmentTable,
-#form\3A printFileTable,
-#form\3A releaseArticleTable,
-#form\3A releaseArticlePalletTable,
-#form\3A productImageVersionTable,
-#form\3A shipmentEventTable {
-    padding: 10px;
-}
-#form\3A storeTable\3A header,
-#form\3A shipmentTable\3A header,
-#form\3A userTable,
-#form\3A shipmentTable,
-#form\3A printFileTable,
-#form\3A releaseArticleTable,
-#form\3A productImageVersionTable,
-#form\3A shipmentEventTable {
-    padding: 10px;
-}
-
 .appButton {
         display: inline;
         margin: 0 1px 10px;
