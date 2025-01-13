@@ -11,3 +11,37 @@ Kolektor: 8 godz.
 - czytywanie zawartości pudełka po kodzie kreskowym,
 - sprawdzanie ilości produktów.
 3. Aktualizacja aplikacji poprzez sklep google play.
+
+
+
+Pomysł wersjonowanie etykiet
+
+
+Założenia:
+- osoba pracująca przy wersjonowaniu posiada dostęp do komputera
+- komupter znajduje się w sieci z dostępem do aplikacji zwrotów paczek
+- zdjęcia robione przez osobe i zapisywane na dysku
+- porównywanie treści etykiety z poprzednią przez czytanie
+- porównywanie szaty graficznej
+- etykiety w języku niemieckim
+
+
+Do zrobienia:
+- dodanie zakładki wersjonowania produktów (osobny użytkownik posiadający uprawnienia tylko do tego modułu)
+- aplikacja do robienia zdjęć w zadowalającej rozdzielczości (do testów) i zapisywanie na dysku
+- wykorzystanie bibliotek OCR () do zczytania tekstu z fotografi, w ostateczności wykorzystanie zewnętrznego serwisu
+- dodawania wersji treści produktów do bazy
+- wychwytywanie i wskazywanie zmian pomiędzy wersjami
+- dodanie możliwości tworzenia wersji przez panel
+
+Możliwe problemy:
+- niestandardowe czcionki
+- niewyraźne zdjęcia
+- nierozpoznawanie poprawnie znaków diakretycznych (do sprawdzenia)
+
+java ocr:
+- java-ocr-api -> https://www.youtube.com/watch?v=95INNcQGy-I
+- net.sourceforge.tess4j:tess4j:4.5.1 -> https://danielangel22.medium.com/ocr-with-tesseract-in-java-converting-images-to-text-made-easy-dd27559148d0
+
+zewnetrzne serwisy:
+- https://aws.amazon.com/textract/pricing/?p=pm&c=textract&z=4

@@ -17,6 +17,7 @@ const SettingsScreen = ({navigation, route}) => {
   const appCtxSettingsIsMobile = appCtx.isMobile;
   const appCtxSettingsIsDebugMode = appCtx.isDebugMode;
   const appCtxSettingsPrinterValue = appCtx.settingsPrinterValue;
+  const appCtxSettingsProviderValue = appCtx.settingsProviderValue;
 
   const [loading, setLoading] = useState(false);
   const [sourceUrl, setSourceUrl] = useState(appCtxSettingsURLValue);
@@ -24,13 +25,14 @@ const SettingsScreen = ({navigation, route}) => {
   const [sourceCollectorNo, setSourceCollectorNo] = useState(appCtxSettingsInstanceValue);
   const [sourceOperatorName, setSourceOperatorName] = useState(appCtxSettingsOperatorValue);
   const [sourcePrinterName, setSourcePrinterName] = useState(appCtxSettingsPrinterValue);
+  const [sourceProviderName, setSourceProviderName] = useState(appCtxSettingsProviderValue);
   const [debugInfo, setDebugInfo] = useState('');
   const [switchValue, setSwitchValue] = useState(appCtxSettingsIsMobile ==='true');
   const [isDebugModeSwitchValue, setIsDebugModeSwitchValue] = useState(appCtxSettingsIsDebugMode ==='true');
   const [printers, setPrinters] = useState([]);
 
   useEffect(() => {
-    appCtx.setToastInfoValue('Drukarka: ' + sourcePrinterName, 'info');
+    // appCtx.setToastInfoValue('Drukarka: ' + sourcePrinterName, 'info');
     getPrinters();
   }, []);
 
@@ -67,6 +69,7 @@ const SettingsScreen = ({navigation, route}) => {
       saveData('@storage_sourceCollectorNo', sourceCollectorNo);
       saveData('@storage_sourceOperatorName', sourceOperatorName);
       saveData('@storage_sourcePrinterName', sourcePrinterName);
+      saveData('@storage_sourceProviderName', sourceProviderName);
       saveData('@storage_isMobile', switchValue?'true':'false');
       saveData('@storage_isDebugMode', isDebugModeSwitchValue?'true':'false');
     } catch(e) {
@@ -82,6 +85,7 @@ const SettingsScreen = ({navigation, route}) => {
     appCtx.setSettingsInstanceValue(sourceCollectorNo);
     appCtx.setSettingsOperatorValue(sourceOperatorName);
     appCtx.setSettingsPrinterValue(sourcePrinterName);
+    appCtx.setSettingsProviderValue(sourceProviderName);
     appCtx.setIsMobile(switchValue?'true':'false');
     appCtx.setIsDebugMode(isDebugModeSwitchValue?'true':'false');
 
@@ -142,6 +146,15 @@ const SettingsScreen = ({navigation, route}) => {
                 onChangeText={(text) => setSourceOperatorName(text)}
               />
             </View>
+            <Text>Nazwa firmy</Text>
+            <View style={[GlobalStyle.AppInputSection]}>
+              <TextInput
+                style={[GlobalStyle.AppInput]}
+                placeholder='PACK TECH'
+                value={sourceProviderName}
+                onChangeText={(text) => setSourceProviderName(text)}
+              />
+            </View>
             <Text>Drukarka</Text>
             <View style={[GlobalStyle.AppInputSection]}>
               <SelectDropdown
@@ -150,7 +163,7 @@ const SettingsScreen = ({navigation, route}) => {
                   data={printers}
                   onSelect={(selectedItem, index) => { 
                     setSourcePrinterName(selectedItem.name);
-                    console.log(selectedItem, index); 
+                    // console.log(selectedItem, index); 
                   }}
                   renderCustomizedRowChild={(item, index) => {
                     return (
@@ -162,10 +175,9 @@ const SettingsScreen = ({navigation, route}) => {
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return sourcePrinterName;
                   }}
-                  defaultValueByIndex={1}
+                  // defaultValueByIndex={1}
                   defaultValue={sourcePrinterName}
-                  defaultButtonText={sourcePrinterName}
-                  
+                  defaultButtonText={sourcePrinterName || 'Wybierz'}
                 />
             </View>
 

@@ -58,6 +58,7 @@ public class ScanProductListController extends MainController implements Seriali
     @Autowired
     private PrinterService printerService;
     private String author;
+    private String provider;
 
     private ShipmentDto selected;
 
@@ -131,7 +132,11 @@ public class ScanProductListController extends MainController implements Seriali
     }
     public void printPdf() {
         try {
-            jasperPrint = printerService.printPdf(selectedForPrintItem, PrintLabelDto.builder().author(author).palletCounter(0).build());
+            selectedForPrintItem.setPrintCompanyName(provider);
+            jasperPrint = printerService.printPdf(
+                    selectedForPrintItem,
+                    PrintLabelDto.builder().author(author).palletCounter(0).build()
+            );
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
             response.reset();

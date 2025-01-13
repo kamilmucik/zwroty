@@ -15,7 +15,7 @@
 
 	<properties>
         <!-- can be 8.0.x also -->
-<!--        <tomcat.version>7.0.62</tomcat.version>-->
+        <tomcat.version>7.0.62</tomcat.version>
 
         <jsf-mojarra.version>2.2.11</jsf-mojarra.version>
         <primefaces.version>6.1</primefaces.version>

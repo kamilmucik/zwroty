@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>return-parcel-docker</artifactId>
-<!--    <name>Idemia D3S Gaming NL/Docker</name>-->
     <packaging>pom</packaging>
 
     <modules>
@@ -111,14 +110,14 @@
 
 <!--    <distributionManagement>-->
 <!--        <repository>-->
-<!--            <id>libs-release-artifactory</id>-->
-<!--            <name>libs-release-artifactory</name>-->
-<!--            <url>https://docker-release.artifactory.parker.site/artifactory/docker-release-local</url>-->
+<!--            <id>release</id>-->
+<!--            <name>release</name>-->
+<!--            <url>https://docker-release/artifactory/docker-release-local</url>-->
 <!--        </repository>-->
 <!--        <snapshotRepository>-->
-<!--            <id>libs-snapshot-artifactory</id>-->
-<!--            <name>libs-snapshot-artifactory</name>-->
-<!--            <url>https://docker-snapshot.artifactory.parker.site/artifactory/docker-snapshot-local</url>-->
+<!--            <id>snapshot</id>-->
+<!--            <name>snapshot</name>-->
+<!--            <url>https://docker-snapshot/artifactory/docker-snapshot-local</url>-->
 <!--        </snapshotRepository>-->
 <!--    </distributionManagement>-->
 

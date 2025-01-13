@@ -46,7 +46,7 @@ const DetailScreen = ({navigation, route}) => {
   const [debugInfo, setDebugInfo] = useState('');
   const eanInputRef = useRef();
   const [artNumber, setArtNumber] = useState(0);
-  const [eanValue, setEanValue] = useState('');
+  const [eanValue, setEanValue] = useState('590011603104');
   const [companyValue, setCompanyValue] = useState('');
   const [ean2SendValue, setEan2SendValue] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -163,7 +163,7 @@ const DetailScreen = ({navigation, route}) => {
     let condition = eanValidate(ean2SendValue);
     // let zeroPaddEAN = paddingZeros(eanValue,13);
     // let condition2 = eanValidate(zeroPaddEAN);
-    // console.log("ean2SendValue: "+ condition + "/" +condition2 + " : " + ean2SendValue  + " : " + zeroPaddEAN );
+    // console.log("ean2SendValue: "+ condition  );
     // setEanScannerDebugValue("ean2SendValue.condition["+condition+"]: " + ean2SendValue + " : " + eanValidate(ean2SendValue));
     if (condition === true ){
       sendDataToServer(paddingZeros(ean2SendValue,13));
@@ -246,7 +246,10 @@ const DetailScreen = ({navigation, route}) => {
             appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
           } else {
             try {
-              // setShipmentProduct(data);
+              // appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
+              // console.log(data);
+              // setEanValue(data.company);
+              setShipmentProduct(data);
               setArtNumber(data.artNumber);
 
               let requestOptions = {
@@ -257,12 +260,14 @@ const DetailScreen = ({navigation, route}) => {
                     "id":null,
                     "label": null,
                     "artNumber":data.artNumber,
+                    "company":data.companyName,
                     "returnNumber":retNumber.toString(),
                     "palletOption":Number(appCtx.scanCMValue) === 1 ? 'C' : 'M',
                     "counter": appCtx.scanMultiperValue,
                     "palletCounter":appCtx.scanPalletCounterValue ,
                     "author": appCtx.settingsOperatorValue,
                     "printer": appCtx.settingsPrinterValue,
+                    "provider": appCtx.settingsProviderValue,
                     "returnCode":200
                   }
                 )
@@ -350,6 +355,7 @@ const DetailScreen = ({navigation, route}) => {
         if (data.status === 500){
           appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
         } else {
+          // console.log("ean2SendValue: "+ data.companyName  );
           setShipmentProduct(data);
           setArtNumber(data.artNumber);
         }

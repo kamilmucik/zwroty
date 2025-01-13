@@ -17,6 +17,8 @@ public class PrintLabelDto extends BaseEntityDto<Long> {
     private String returnNumber;
     private Long counter;
     private String author;
+    private String provider;
+    private String company;
     private String printer;
     private Long collectorId;
     private Integer palletCounter = 1;

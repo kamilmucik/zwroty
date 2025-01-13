@@ -18,6 +18,7 @@ function AppProvider({children}) {
   const [settingsInstanceValue, setContextSettingsInstanceValue] = useState('1');
   const [settingsOperatorValue, setContextSettingsOperatorValue] = useState('');
   const [settingsPrinterValue, setContextSettingsPrinterValue] = useState('');
+  const [settingsProviderValue, setContextSettingsProviderValue] = useState('');
   const [toastInfoValue, setContextToastInfoValue] = useState('');
   const [toastInfoTypeValue, setContextToastInfoTypeValue] = useState('');
   const [isMobile, setContextIsMobile] = useState(0);
@@ -56,6 +57,9 @@ function AppProvider({children}) {
   function setSettingsPrinterValue(val){
     setContextSettingsPrinterValue( val);
   }
+  function setSettingsProviderValue(val){
+    setContextSettingsProviderValue( val);
+  }
   function setIsMobile(val){
     setContextIsMobile(val);
   }
@@ -80,6 +84,7 @@ function AppProvider({children}) {
     settingsInstanceValue: settingsInstanceValue,
     settingsOperatorValue: settingsOperatorValue,
     settingsPrinterValue: settingsPrinterValue,
+    settingsProviderValue: settingsProviderValue,
     toastInfoValue: toastInfoValue,
     toastInfoTypeValue: toastInfoTypeValue,
     isMobile: isMobile,
@@ -95,6 +100,7 @@ function AppProvider({children}) {
     setSettingsInstanceValue: setSettingsInstanceValue,
     setSettingsOperatorValue: setSettingsOperatorValue,
     setSettingsPrinterValue: setSettingsPrinterValue,
+    setSettingsProviderValue: setSettingsProviderValue,
     setToastInfoValue: setToastInfoValue,
     setIsMobile: setIsMobile,
     setIsDebugMode: setIsDebugMode,
