@@ -46,7 +46,7 @@ const DetailScreen = ({navigation, route}) => {
   const [debugInfo, setDebugInfo] = useState('');
   const eanInputRef = useRef();
   const [artNumber, setArtNumber] = useState(0);
-  const [eanValue, setEanValue] = useState('');
+  const [eanValue, setEanValue] = useState('590011603104');
   const [companyValue, setCompanyValue] = useState('');
   const [ean2SendValue, setEan2SendValue] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -246,7 +246,7 @@ const DetailScreen = ({navigation, route}) => {
             appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
           } else {
             try {
-              appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
+              // appCtx.setToastInfoValue('Brak produku w bazie.', 'info');
               // console.log(data);
               // setEanValue(data.company);
               setShipmentProduct(data);
@@ -260,12 +260,14 @@ const DetailScreen = ({navigation, route}) => {
                     "id":null,
                     "label": null,
                     "artNumber":data.artNumber,
+                    "company":data.companyName,
                     "returnNumber":retNumber.toString(),
                     "palletOption":Number(appCtx.scanCMValue) === 1 ? 'C' : 'M',
                     "counter": appCtx.scanMultiperValue,
                     "palletCounter":appCtx.scanPalletCounterValue ,
                     "author": appCtx.settingsOperatorValue,
                     "printer": appCtx.settingsPrinterValue,
+                    "provider": appCtx.settingsProviderValue,
                     "returnCode":200
                   }
                 )

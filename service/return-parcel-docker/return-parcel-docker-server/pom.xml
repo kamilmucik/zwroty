@@ -11,7 +11,6 @@
 
     <artifactId>return-parcel-docker-server</artifactId>
     <packaging>pom</packaging>
-    <name>Idemia D3S Gaming NL/Docker/Server</name>
 
     <properties>
         <docker.app.name>return-parcel-server</docker.app.name>

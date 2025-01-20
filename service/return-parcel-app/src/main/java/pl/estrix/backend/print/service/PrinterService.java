@@ -5,6 +5,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.estrix.backend.base.PagingCriteria;
@@ -41,6 +42,13 @@ import java.util.concurrent.Executors;
  */
 @Service
 public class PrinterService {
+
+
+    /**
+     * Passing ReportTitle and Author as parameters
+     */
+    private static final SimpleDateFormat dt1 = new SimpleDateFormat("yyyy.MM.dd");
+    private static final SimpleDateFormat dt2 = new SimpleDateFormat("yyyyMMdd");
 
     @Autowired
     private ReadPrinterCommandExecutor readExecutor;
@@ -164,6 +172,8 @@ public class PrinterService {
                     .artReturn(printLabelDto.getReturnNumber())
                     .counter(printLabelDto.getCounter())
                     .palletOption(printLabelDto.getPalletOption())
+                    .printCompanyName(printLabelDto.getProvider())
+                    .company(printLabelDto.getCompany())
                     .build();
 
             String fileName = printFile(shipmentProductDto,printLabelDto);
@@ -205,17 +215,11 @@ public class PrinterService {
             String reportPath = defaultImage.getPath();
 
             Map parameters = new HashMap();
-            /**
-             * Passing ReportTitle and Author as parameters
-             */
-            SimpleDateFormat dt1 = new SimpleDateFormat("yyyy.MM.dd");
-            SimpleDateFormat dt2 = new SimpleDateFormat("yyyyMMdd");
-
-//            parameters.put("COMPANY", selectedForPrintItem);
+            parameters.put("NAZWAFIRMY", StringUtils.isNotEmpty(selectedForPrintItem.getPrintCompanyName())? selectedForPrintItem.getPrintCompanyName(): "PACK-TECH");
+            parameters.put("DOSTAWCA", selectedForPrintItem.getCompany());
             parameters.put("NRZWROTU", selectedForPrintItem.getArtReturn());
             parameters.put("NRARTYKULU", selectedForPrintItem.getArtNumber().toString());
             parameters.put("ILOSC", "" + selectedForPrintItem.getCounter());
-            parameters.put("DOSTAWCA", "" + selectedForPrintItem.getCompanyName());
             parameters.put("DATAPRZYGOTOWANIA", "" + dt1.format(new Date()));
             parameters.put("Author", author.getAuthor());
             parameters.put("BARCODE",
@@ -248,37 +252,5 @@ public class PrinterService {
 
         return printers;
     }
-//    public List<PrinterDto> findPrinters(){
-//        List<PrinterDto> printers = new ArrayList<>();
-//        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-//        for (PrintService printService : printServices) {
-//            PrinterDto printerDto = readExecutor.findByName(printService.getName());
-//            if (printerDto == null){
-//                printerDto = new PrinterDto();
-//                printerDto.setName(printService.getName());
-//                printerDto.setPath(".");
-//                printerDto.setIsDefault(false);
-//                printerDto.setActive(true);
-//                printerDto = createExecutor.create(printerDto);
-//            }
-//        }
-//
-//        ListResponseDto<PrinterDto> printerDtoListResponseDto = readExecutor.find(null,null);
-//
-//        if (!printerDtoListResponseDto.isEmpty()){
-//            printers.addAll(printerDtoListResponseDto.getData());
-//        }
-//
-//        return printers;
-//    }
 
-    private PrintService findPrintService(String printerName) {
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-        for (PrintService printServiceL : printServices) {
-            if (printServiceL.getName().trim().equals(printerName)) {
-                this.printService = printServiceL;
-            }
-        }
-        return null;
-    }
 }

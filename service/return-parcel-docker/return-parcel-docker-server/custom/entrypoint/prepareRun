@@ -3,4 +3,4 @@ set -e # Exit on failure
 
 source $(dirname $0)/lib/logging
 
-log INFO "Prepare D3S Server"
+log INFO "Prepare Return Parcel Server"

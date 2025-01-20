@@ -32,6 +32,7 @@ mvn clean install -Pmegapack
 ```
 
 Docker
+DOCKER_DEFAULT_PLATFORM="linux/amd64"
 ```bash
 mvn clean install -Pdocker
 ```
@@ -41,4 +42,12 @@ mvn -pl :return-parcel-docker-server install -PdockerBuild,docker-registry
 ```bash
 docker-compose up --force-recreate --no-deps --remove-orphans --build parcel-server 
 ```
+```bash
+docker save -o  parcel-server.tar.gz registry.hub.docker.com/kamilmucik/return-parcel-server:2.3.0-SNAPSHOT
+```
+```bash
+docker load --input  parcel-server.tar.gz 
+```
 
+scp return-parcel-app/target/return-parcel-app.war ubuntu@162.19.227.81:/home/ubuntu/return-parcel/conf/tomcat-mock/target/ROOT.war
+scp db-unit/src/main/resources/db/migration/V2.3.1__printer_update.sql ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/

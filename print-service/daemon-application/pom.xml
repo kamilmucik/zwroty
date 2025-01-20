@@ -44,42 +44,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>2.2.10</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.faces</groupId>
-			<artifactId>jsf-impl</artifactId>
-			<version>2.2.10</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<version>7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-			<version>2.0.SP1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-<!--			<scope>runtime</scope>-->
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
@@ -96,13 +61,13 @@
 			<version>19.0</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>com.sun.winsw</groupId>-->
-<!--			<artifactId>winsw</artifactId>-->
-<!--			<classifier>bin</classifier>-->
-<!--			<type>exe</type>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.sun.winsw</groupId>
+			<artifactId>winsw</artifactId>
+			<classifier>bin</classifier>
+			<type>exe</type>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<profiles>
@@ -119,57 +84,53 @@
 				<estrix.app.resources>src/profiles/local/resources</estrix.app.resources>
 			</properties>
 		</profile>
-<!--		<profile>-->
-<!--			<id>windows</id>-->
-<!--			<activation>-->
-<!--				<property>-->
-<!--					<name>windows</name>-->
-<!--				</property>-->
-<!--				<os>-->
-<!--					<family>Windows</family>-->
-<!--				</os>-->
-<!--			</activation>-->
-<!--			<properties>-->
-<!--				<estrix.stage>produkcja</estrix.stage>-->
-<!--				<estrix.app.resources>src/profiles/windows/resources</estrix.app.resources>-->
-<!--				<maven.test.skip>true</maven.test.skip>-->
-<!--				<skipTests>true</skipTests>-->
-<!--			</properties>-->
-<!--		</profile>-->
+		<profile>
+			<id>windows</id>
+			<activation>
+				<property>
+					<name>windows</name>
+				</property>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<properties>
+				<estrix.stage>produkcja</estrix.stage>
+				<estrix.app.resources>src/profiles/windows/resources</estrix.app.resources>
+				<maven.test.skip>true</maven.test.skip>
+				<skipTests>true</skipTests>
+			</properties>
+		</profile>
 	</profiles>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.sun.winsw</groupId>
+									<artifactId>winsw</artifactId>
+									<classifier>bin</classifier>
+									<type>exe</type>
+									<destFileName>service.exe</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${dist.dir}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-dependency-plugin</artifactId>-->
-<!--				<version>2.10</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>copy</id>-->
-<!--						<phase>package</phase>-->
-<!--						<goals>-->
-<!--							<goal>copy</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<artifactItems>-->
-<!--								<artifactItem>-->
-<!--									<groupId>com.sun.winsw</groupId>-->
-<!--									<artifactId>winsw</artifactId>-->
-<!--									<classifier>bin</classifier>-->
-<!--									<type>exe</type>-->
-<!--									<destFileName>service.exe</destFileName>-->
-<!--								</artifactItem>-->
-<!--							</artifactItems>-->
-<!--							<outputDirectory>${dist.dir}</outputDirectory>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -201,7 +162,7 @@
 				<configuration>
 					<descriptors>
 						<descriptor>src/main/assembly/unix.xml</descriptor>
-<!--						<descriptor>src/main/assembly/windows.xml</descriptor>-->
+						<descriptor>src/main/assembly/windows.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>

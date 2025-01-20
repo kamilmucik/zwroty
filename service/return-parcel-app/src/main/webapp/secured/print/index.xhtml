@@ -51,6 +51,10 @@
                 <p:column headerText="Scieżka">
                     <h:outputText value="#{printFile.path}" />
                 </p:column>
+                <p:column headerText="Wydrukowane" style="width:100px; text-align: center;">
+                    <h:graphicImage library="sh" name="img/#{printFile.active}.png"
+                                    style="width:24px; height:auto;" />
+                </p:column>
                 <p:column headerText="Drukarka">
                     <h:outputText value="#{printFile.printer}" />
                 </p:column>

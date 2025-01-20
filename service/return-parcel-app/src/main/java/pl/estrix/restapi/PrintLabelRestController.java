@@ -52,7 +52,7 @@ public class PrintLabelRestController {
     @RequestMapping(path = "/download/{printer}", method = RequestMethod.GET)
     public ResponseEntity<Resource> download(@PathVariable("printer") String printer) throws IOException {
 
-        LOG.info("Request for printer: {}", printer);
+//        LOG.info("Request for printer: {}", printer);
 
         PrinterDto printerDto = printerService.findByName(printer);
         if (printerDto == null){
@@ -113,17 +113,6 @@ public class PrintLabelRestController {
     @RequestMapping(value = "/label", method = RequestMethod.POST)
     public DeferredResult<PrintLabelDto> update(@RequestBody PrintLabelDto printLabelDto) {
 
-
-//        shipmentEventService.saveOrUpdate(
-//                ShipmentEventDto
-//                        .builder()
-//                        .shipmentNumber(printLabelDto.getReturnNumber())
-//                        .collectorId(printLabelDto.getCollectorId())
-//                        .lastUpdate(LocalDateTime.now())
-//                        .description("Drukuje etykietę.")
-//                        .username("Kolektor:" + printLabelDto.getCollectorId())
-//                        .build()
-//        );
 
         DeferredResult<PrintLabelDto> deferredResult = new DeferredResult<>();
         CompletableFuture<PrintLabelDto> completableFuture = printerService.printFileByWebServie(printLabelDto);
