@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.estrix.backend.imageversion.service.ProductImageVersionService;
+import pl.estrix.backend.imageversion.service.TesseractOCRService;
 import pl.estrix.common.dto.model.ProductImageVersionDto;
 import pl.estrix.common.dto.model.ProductImageVersionRevisionDto;
 import pl.estrix.common.exception.CustomException;
@@ -40,10 +41,14 @@ public class ProductImageVersionRevisionEditController extends MainController im
     private UploadedFile fileRight;
     private UploadedFile fileTop;
     private UploadedFile fileBottom;
-
+    private String ocrRecognizedText;
 
     @Autowired
     private ProductImageVersionService releaseService;
+
+
+    @Autowired
+    private TesseractOCRService tesseractOCRService;
 
     @PostConstruct
     public void init() {
@@ -85,8 +90,9 @@ public class ProductImageVersionRevisionEditController extends MainController im
         facesContext.getExternalContext().redirect("/secured/versions/details.html?id="+versionId+"&table_page=0");
     }
 
-    public void handleFileUploadFront(FileUploadEvent event) {
+    public void handleFileUploadFront(FileUploadEvent event) throws IOException {
         fileFront = event.getFile();
+        ocrRecognizedText =  tesseractOCRService.recognizeText(fileFront.getInputstream());
         selected.setImgFrontBase64(Base64.getEncoder().encodeToString(fileFront.getContents()));
     }
     public void handleFileUploadBack(FileUploadEvent event) {

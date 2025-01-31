@@ -26,14 +26,14 @@
                 <h:panelGrid columns="2" style="vertical-align:top; width: 100%;"  columnClasses="alignTop,alignCenterTop" >
 
                     <h:outputLabel for="reason"  value="Powód: " />
-                    <p:inputText id="reason"
+                    <p:inputTextarea id="reason"
                                  style="width: 100%"
                                  required="true"
                                  requiredMessage="Powód: Pole jest wymagane."
-                                 value="#{productImageVersionRevisionEditController.selected.reason}"
+                                 value="#{productImageVersionRevisionEditController.ocrRecognizedText}"
                                  label="reason">
                         <p:ajax event="blur" update="reasonMsg" />
-                    </p:inputText>
+                    </p:inputTextarea>
                     <h:outputText  />
                     <p:message for="reason" id="reasonMsg" />
 
