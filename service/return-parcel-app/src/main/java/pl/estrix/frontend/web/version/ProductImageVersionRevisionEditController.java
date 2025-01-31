@@ -2,8 +2,11 @@ package pl.estrix.frontend.web.version;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jfree.util.Log;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,7 @@ import pl.estrix.common.dto.model.ProductImageVersionRevisionDto;
 import pl.estrix.common.exception.CustomException;
 import pl.estrix.frontend.jsf.FacesViewScope;
 import pl.estrix.frontend.web.MainController;
+import pl.estrix.restapi.PrintLabelRestController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -30,6 +34,8 @@ import java.util.Base64;
 @Scope(FacesViewScope.NAME)
 public class ProductImageVersionRevisionEditController extends MainController implements Serializable {
 
+
+    private static Logger LOG = LoggerFactory.getLogger(ProductImageVersionRevisionEditController.class);
 
     private ProductImageVersionRevisionDto selected;
     private ProductImageVersionDto selectedVersion;
@@ -92,7 +98,12 @@ public class ProductImageVersionRevisionEditController extends MainController im
 
     public void handleFileUploadFront(FileUploadEvent event) throws IOException {
         fileFront = event.getFile();
-        ocrRecognizedText =  tesseractOCRService.recognizeText(fileFront.getInputstream());
+        try {
+            ocrRecognizedText = tesseractOCRService.recognizeText(fileFront.getInputstream());
+        } catch (Exception e) {
+            ocrRecognizedText = "nie udało się przetłumaczyć";
+        }
+//        LOG.debug("ocrRecognizedText: {}",ocrRecognizedText);
         selected.setImgFrontBase64(Base64.getEncoder().encodeToString(fileFront.getContents()));
     }
     public void handleFileUploadBack(FileUploadEvent event) {

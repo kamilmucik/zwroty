@@ -11,7 +11,8 @@ public class TesseractConfig {
     @Bean
     Tesseract tesseract() {
         Tesseract tesseract = new Tesseract();
-        tesseract.setDatapath("/opt/homebrew/Cellar/tesseract/5.5.0/lib/"); //files of the example : https://github.com/tesseract-ocr/tessdata
+        tesseract.setDatapath("/usr/share/tesseract-ocr/4.00/tessdata"); //files of the example : https://github.com/tesseract-ocr/tessdata
+        tesseract.setLanguage("pol");
         return tesseract;
     }
 }

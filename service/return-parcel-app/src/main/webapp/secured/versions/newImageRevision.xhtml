@@ -26,14 +26,14 @@
                 <h:panelGrid columns="2" style="vertical-align:top; width: 100%;"  columnClasses="alignTop,alignCenterTop" >
 
                     <h:outputLabel for="reason"  value="Powód: " />
-                    <p:inputTextarea id="reason"
+                    <p:inputText id="reason"
                                  style="width: 100%"
                                  required="true"
                                  requiredMessage="Powód: Pole jest wymagane."
-                                 value="#{productImageVersionRevisionEditController.ocrRecognizedText}"
+                                 value="#{productImageVersionRevisionEditController.selected.reason}"
                                  label="reason">
                         <p:ajax event="blur" update="reasonMsg" />
-                    </p:inputTextarea>
+                    </p:inputText>
                     <h:outputText  />
                     <p:message for="reason" id="reasonMsg" />
 
@@ -86,6 +86,11 @@
                     <h:outputText  />
                     <p:panel id="content" style="border:none;">
 
+                        <p:inputTextarea id="reasonOCR"
+                                         style="display: block; width: 100%;"
+                                         value="#{productImageVersionRevisionEditController.ocrRecognizedText}"
+                                         label="reason">
+                        </p:inputTextarea>
                         <h:panelGrid columns="4"  columnClasses="alignTop,alignTop,alignTop"
                                      style="display: block;width: 470px; border: 0px black solid;">
                             <h:outputLabel value="" />
