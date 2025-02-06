@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1021785153995",
+    "project_id": "versionscanner",
+    "storage_bucket": "versionscanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021785153995:android:9edb4d2cb4e6cce972564e",
+        "android_client_info": {
+          "package_name": "pl.estrix.versionscanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArr3ES2aJnkGvS3jK6mUUnCRsKnwpBJTE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

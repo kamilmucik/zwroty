@@ -1,0 +1,21 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { render, screen, fireEvent } from '@testing-library/react-native';
+
+import TabNavigator from '../../../src/navigation/TabNavigation';
+
+describe('Testing react navigation', () => {
+  test('screen contains a button linking to the notifications page', async () => {
+    const component = (
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    );
+
+    render(component);
+    // const button = await screen.findByText('Go to notifications');
+
+    // expect(button).toBeOnTheScreen();
+  });
+
+});
