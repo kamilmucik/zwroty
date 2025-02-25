@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>pl.estrix</groupId>
+  <artifactId>lkequiz-mobile</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.scm.id>my-scm-server</project.scm.id>
+    <env>-dev</env>
+
+    <sonar.java>11</sonar.java>
+    <sonar.scm.disabled>true</sonar.scm.disabled>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.coverage.jacoco.xmlReportPaths>
+      ${project.basedir}/../target/site/jacoco-aggregate/jacoco.xml,${project.basedir}/target/site/jacoco/jacoco.xml
+    </sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.sources>src,pom.xml</sonar.sources>
+    <sonar.language>js</sonar.language>
+    <sonar.exclusions>src/main/content/plugins/**</sonar.exclusions>
+    <sonar.host>localhost:9001</sonar.host>
+    <sonar.host.url>http://${sonar.host}</sonar.host.url>
+    <sonar.projectName>${project.artifactId}</sonar.projectName>
+    <sonar.projectKey>${project.artifactId}</sonar.projectKey>
+    <sonar.buildbreaker.skip>true</sonar.buildbreaker.skip>
+    <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+
+    <sonar.javascript.lcov.reportPaths>/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
+    <!-- <sonar.javascript.file.suffixes>.js,.jsx,</sonar.javascript.file.suffixes>
+    <sonar.lang.patterns.ts>.tsx</sonar.javascript.file.suffixes> -->
+    <!-- <sonar.exclusions /> -->
+    <!-- <sonar.dependencyCheck.htmlReportPath>./target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
+    <sonar.dependencyCheck.jsonReportPath>./target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath> -->
+    <!-- <jacoco.maven.plugin.version>0.8.5</jacoco.maven.plugin.version>
+    <jacoco.reportPath>${project.build.directory}/jacoco.exec</jacoco.reportPath> -->
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0-M6</version>
+        <configuration>
+          <privateKey>~/.ssh/git_rsa</privateKey>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>node/</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>node_modules/</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>etc/</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>coverage/</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>build/</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <!-- Run our version calculation script -->
+            <id>Renaming build artifacts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>bash</executable>
+              <commandlineArgs>./libs/package.sh</commandlineArgs>
+              <environmentVariables>
+                <VERSION>${version}</VERSION>
+                <SCRIPT_DIR>${project.basedir}</SCRIPT_DIR>
+              </environmentVariables>
+            </configuration> 
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>Tests artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>bash</executable>
+              <commandlineArgs>./libs/test.sh</commandlineArgs>
+              <environmentVariables>
+              </environmentVariables>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      </plugins>
+    </build>
+
+    <distributionManagement>
+      <repository>
+        <id>nexus</id>
+        <name>maven-releases</name>
+        <url>file:////tmp/project</url>
+      </repository>
+      <snapshotRepository>
+        <id>nexus</id>
+        <name>maven-snapshots</name>
+        <url>file:////tmp/project</url>
+      </snapshotRepository>
+    </distributionManagement>
+  
+    <scm>
+      <connection>scm:git:https://github.com/kamilmucik/lkequiz.git</connection>
+      <developerConnection>scm:git:ssh://git@github.com:kamilmucik/lkequiz.git</developerConnection>
+      <url>https://github.com/kamilmucik/lkequiz.git</url>
+      <tag>lkequiz-mobile-0.0.1</tag>
+    </scm>
+  
+    <repositories>
+      <repository>
+        <id>Central Maven repository</id>
+        <name>Central Maven repository https</name>
+        <url>https://repo.maven.apache.org/maven2</url>
+      </repository>
+    </repositories>
+  
+    <developers>
+      <developer>
+        <id>kamilmucik</id>
+        <name>Kamil Mucik</name>
+        <email>k.mucik@e-strix.pl</email>
+        <organization>e-strix.pl</organization>
+        <roles>
+          <role>Developer</role>
+        </roles>
+        <timezone>+1</timezone>
+      </developer>
+    </developers>
+    <organization>
+      <name>Kamil Mucik</name>
+      <url>e-strix.pl</url>
+    </organization>
+  
+  </project>
