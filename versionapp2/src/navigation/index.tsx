@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useState,useEffect } from 'react';
 import TabNavigator from './TabNavigation';
 import AppProvider from '../store/AppProvider';
-// import FlashMessage from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 
 const RootNavigator = () => {
 
@@ -13,7 +13,7 @@ const RootNavigator = () => {
         <TabNavigator />
 
       </NavigationContainer>
-      {/* <FlashMessage position="bottom" />  */}
+      <FlashMessage position="bottom" /> 
     </AppProvider>
   );
 };

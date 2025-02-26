@@ -17,7 +17,7 @@ export const postReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 data: [...state.data, ...action.payload],
-                totalPage: action.totalPage,
+                // totalPage: action.totalPage,
                 error: '',
                 loading: false,
                 moreLoading: false

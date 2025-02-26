@@ -3,7 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import HomeStackScreen from './HomeStack';
-import SettingsScreen from '../screens/SettingsScreen';
+
+import ScanScreen from '../screens/version/ScanScreen';
+import OCRTestScreen from '../screens/ocr/OCRTestScreen';
+import SettingsScreen from '../screens/setting/SettingsScreen';
 import GlobalStyle from "../utils/GlobalStyle";
 
 
@@ -30,9 +33,16 @@ const TabNavigator = () => {
           component={HomeStackScreen} 
           options={{
             tabBarLabel: 'Home',
-            tabBarIcon: ({color}) => screenOptions('home', color),
+            tabBarIcon: ({color}) => screenOptions('scan-helper', color),
           }} 
           />
+        <Tab.Screen 
+          name="OCR" 
+          component={OCRTestScreen} 
+          options={{
+            tabBarLabel: 'OCR',
+            tabBarIcon: ({color}) => screenOptions('ocr', color),
+          }}/>
         <Tab.Screen 
           name="Ustawienia" 
           component={SettingsScreen} 

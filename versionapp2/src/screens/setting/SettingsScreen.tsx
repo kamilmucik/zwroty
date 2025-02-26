@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, TextInput} from 'react-native';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
-import AppContext from "../store/AppContext";
-import PackageJson from '../../package.json';
-import GlobalStyle from "../utils/GlobalStyle";
+import AppContext from "../../store/AppContext";
+import PackageJson from '../../../package.json';
+import GlobalStyle from "../../utils/GlobalStyle";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BASE_API_URL } from '../config.tsx';
-import { Button, InputText , InputSwitch }  from '../components/Form.tsx';
+import { BASE_API_URL } from '../../config.tsx';
+import { Button, InputText , InputSwitch }  from '../../components/Form.tsx';
 
 
 const useSettingsFormState = () => {
