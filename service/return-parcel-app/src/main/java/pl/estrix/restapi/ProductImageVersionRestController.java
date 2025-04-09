@@ -1,7 +1,11 @@
 package pl.estrix.restapi;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import pl.estrix.backend.imageversion.service.ProductImageVersionService;
@@ -11,6 +15,9 @@ import pl.estrix.common.dto.RestProductImageVersionRevisionDto;
 import pl.estrix.common.dto.model.ProductImageVersionDto;
 import pl.estrix.common.dto.model.ProductImageVersionRevisionDto;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -46,35 +53,22 @@ public class ProductImageVersionRestController {
         return deferredResult;
     }
 
-    @RequestMapping(value = "/add-version", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value ="/get-image", method = RequestMethod.GET)
     @ResponseBody
-    public DeferredResult<RestProductImageVersionRevisionDto> create(@RequestBody ProductImageVersionRevisionDto dto) {
-        DeferredResult<RestProductImageVersionRevisionDto> deferredResult = new DeferredResult<>();
-        CompletableFuture<RestProductImageVersionRevisionDto> completableFuture = service.addVersion(dto);
-        completableFuture.whenComplete((res, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                deferredResult.setErrorResult(ex);
-            } else {
-                deferredResult.setResult(res);
-            }
-        });
-        return deferredResult;
+    public ResponseEntity<InputStreamResource> getImageDynamicType(
+            @RequestParam(value = "imageHash", required = true, defaultValue = "") String imageHash
+            ) throws IOException {
+        InputStream in = service.getLastImage(imageHash);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(new InputStreamResource(in));
     }
 
-    @RequestMapping(value = "/update-part-version", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Async
+    @RequestMapping(value = "/add-image", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public DeferredResult<RestProductImageVersionRevisionDto> updateImage(@RequestBody ProductImageVersionRevisionDto dto) {
-        DeferredResult<RestProductImageVersionRevisionDto> deferredResult = new DeferredResult<>();
-        CompletableFuture<RestProductImageVersionRevisionDto> completableFuture = service.updateVersion(dto);
-        completableFuture.whenComplete((res, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                deferredResult.setErrorResult(ex);
-            } else {
-                deferredResult.setResult(res);
-            }
-        });
-        return deferredResult;
+    public RestProductImageVersionRevisionDto create(@RequestBody ProductImageVersionRevisionDto dto) {
+        return service.addVersion(dto);
     }
+
 }

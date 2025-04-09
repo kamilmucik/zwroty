@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Text, Switch } from "react-native"
+import { TouchableOpacity, View, Text, Switch, TextInput } from "react-native"
 import GlobalStyle from "../utils/GlobalStyle";
 
 const InputBase = ({ ...props}) => {
@@ -39,6 +39,23 @@ const Input1Column = ({ ...props}) => {
 export const InputText = ({ label, description}) => {
   return (
       <Input2Column label={label} description={description} />
+  )
+}
+
+
+export const InputTextField = ({ label, description, value, onChange}) => {
+  const child = (value, onChange) =>{
+    return (
+      <TextInput
+        placeholder={description}
+        value={value}
+        onChangeText={onChange}
+      />
+    );
+  }
+
+  return (
+      <Input1Column label={label} description={description}  children={child(value,onChange)}/>
   )
 }
 

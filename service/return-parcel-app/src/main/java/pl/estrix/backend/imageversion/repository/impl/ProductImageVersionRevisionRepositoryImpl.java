@@ -4,6 +4,7 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.types.Projections;
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.model.SortOrder;
 import pl.estrix.backend.base.PagingCriteria;
 import pl.estrix.backend.base.QueryDslRepositorySupportBase;
 import pl.estrix.backend.category.dao.Category;
@@ -33,46 +34,20 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
 
     @Override
     public List<ProductImageVersionRevision> find(ProductImageVersionRevisionSearchCriteriaDto searchCriteria, PagingCriteria pagingCriteria) {
-//        final JPAQueryBase<?> query = createQuery();
-//        https://github.com/querydsl/querydsl/issues/1677
-//        JPQLQuery query2 = from(productImageVersionRevision);
-//        Map<Long, ProductImageVersion> transform = query2
-//                .leftJoin(productImageVersionRevision.revisions, productImageVersionRevision)
-//                .transform(GroupBy.groupBy(productImageVersion.id)
-//                        .as(Projections.bean(ProductImageVersion.class,
-//                                productImageVersion.id,
-//                                productImageVersion.ean,
-//                                productImageVersion.title,
-//                                productImageVersion.artNumber,
-//                                GroupBy.list(Projections.bean(ProductImageVersionRevision.class,
-//                                                productImageVersionRevision.id,
-//                                                productImageVersionRevision.reason).skipNulls())
-//                                        .as(productImageVersion.revisions))));
-//    return new ArrayList<ProductImageVersion>(transform.values());
         JPQLQuery query = getQueryForFind(searchCriteria);
-//        query.join(productImageVersion.revisions, productImageVersionRevision);
-        query.orderBy(productImageVersionRevision.id.desc());
+
+        query.orderBy(searchCriteria.getSortOrder().equals(SortOrder.ASCENDING)?productImageVersionRevision.id.asc():productImageVersionRevision.id.desc());
+
         addPagingCriteriaToQuery(query, pagingCriteria);
 
         return query.list(Projections.bean(
                 ProductImageVersionRevision.class,
                 productImageVersionRevision.id,
-                productImageVersionRevision.releaseDate,
-                productImageVersionRevision.reason,
-                productImageVersionRevision.imgFrontBase64,
-                productImageVersionRevision.imgBackBase64,
-                productImageVersionRevision.imgLeftBase64,
-                productImageVersionRevision.imgRightBase64,
-                productImageVersionRevision.imgTopBase64,
-                productImageVersionRevision.imgBottomBase64,
-                productImageVersionRevision.parentId
-//                Projections.bean(
-//                        ProductImageVersion.class,
-//                        productImageVersion.id,
-//                        productImageVersion.ean,
-//                        productImageVersion.title,
-//                        productImageVersion.artNumber
-//                ).as(productImageVersionRevision.productImageVersion)
+                productImageVersionRevision.description,
+                productImageVersionRevision.imgPath,
+                productImageVersionRevision.main,
+                productImageVersionRevision.lastUpdate,
+                productImageVersionRevision.hashGroup
 
             ));
     }
@@ -92,6 +67,12 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
         }
         if (Objects.nonNull(searchParams.getVersionRevisionId()) && searchParams.getVersionRevisionId() > 0) {
             builder.and(productImageVersionRevision.id.eq(searchParams.getVersionRevisionId()));
+        }
+        if (Objects.nonNull(searchParams.getTableSearch())) {
+            builder.and(productImageVersionRevision.hashGroup.eq(searchParams.getTableSearch()));
+        }
+        if (Objects.nonNull(searchParams.getMainOnly()) && searchParams.getMainOnly()) {
+            builder.and(productImageVersionRevision.main.eq(searchParams.getMainOnly()));
         }
         query.where(builder);
         return query;

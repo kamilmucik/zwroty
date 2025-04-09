@@ -1,122 +1,64 @@
-version: '3.7'
+version: '3.3'
 
 services:
-  mysql:
+  rp-db:
     image: mysql:8.0.32
-    container_name: dev_mysql
-    command: mysqld --user=root
-    ports:
-      - 3306:3306
+    container_name: rp-db
+    restart: always
+    #env_file: .env
     environment:
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: zwroty_e_strix_com
+      - MYSQL_DATABASE=zwroty_e_strix_com
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3307:3306
     volumes:
       - ./mysql-dump/:/docker-entrypoint-initdb.d
+      - rp-dbdata8_0_25:/var/lib/mysql
+    command: [mysqld, --default-authentication-plugin=mysql_native_password, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --innodb_monitor_enable=all, --max-connections=1001]
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
     networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.2
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: dev_pma
-    links:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8183:80
-    networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.3
-  tomcat-mock:
+      rp-network:
+        aliases:
+          - db.rp.e-strix.pl
+  rp-mock:
     image: estrix/tomcat-mock
-    container_name: tomcat-mock
+    container_name: rp-mock
     build: ./docker/tomcat
     environment:
+      - DEBUG_APP=true
       - TOMCAT_USER=root
       - TOMCAT_PASSWORD=password
-      - DEBUG_APP=true # optional: enabled JPDA debug mode
-    volumes:
-      - ./logs/mock/:/opt/tomcat/logs/
-    expose:
-      - 8000
-      - 8080
-      - 8009
     ports:
-      - 8000:8000
       - 8080:8080
-      - 8009:8009
+      - 8000:8000
+    volumes:
+      - ./logs/server/:/opt/tomcat/logs/
+      - ./data/server/:/opt/data/
     networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.4
+      rp-network:
+        aliases:
+          - rp.e-strix.pl
   parcel-server:
     image: "registry.hub.docker.com/kamilmucik/return-parcel-server:2.3.0-SNAPSHOT"
     container_name: parcel-server
+    #   platform: linux/x86_64
+    platform: linux/amd64
     volumes:
-      - ./logs/server/:/usr/local/tomcat/logs/
-    environment:
-      DEBUG_APP: true # optional: enabled JPDA debug mode/ rebuild is required
+      - ./logs/server/:/opt/tomcat/logs/
     ports:
       - 8881:8080
       - 9100:9100
     networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.4
-
-  prometheus_zwrt:
-    image: prom/prometheus:v2.35.0
-    container_name: prometheus_zwrt
-    restart: unless-stopped
-    volumes:
-      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
-    expose:
-      - 9090
-    ports:
-      - 9090:9090
-    networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.5
-  grafana_zwrt:
-    image: grafana/grafana:8.2.6
-    container_name: grafana_zwrt
-    expose:
-      - 3000
-    ports:
-      - 3000:3000
-    networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.6
-  loki_zwrt:
-    image: grafana/loki:2.3.0
-    volumes:
-      - ./docker/loki/loki-config.yml:/etc/loki/loki-config.yml
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/loki-config.yml
-    networks:
-      app_zwroty:
-        ipv4_address: 10.99.1.7
+      rp-network:
 
 volumes:
-  prometheus_data: {}
-  grafana_data: {}
+  rp-dbdata8_0_25:
 
 networks:
-  app_zwroty:
-    ipam:
-      driver: default
-      config:
-        - subnet: "10.99.1.0/24"
+  rp-network:
+    driver: bridge

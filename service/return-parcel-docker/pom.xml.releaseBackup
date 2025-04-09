@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>pl.estrix</groupId>
+        <artifactId>return-parcel</artifactId>
+        <version>2.3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>return-parcel-docker</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>return-parcel-docker-server</module>
+    </modules>
+
+    <properties>
+        <docker.namespace>kamilmucik</docker.namespace>
+        <docker.tag>${project.version}</docker.tag>
+        <docker.image.alt>${dockerRegistryAlt}/${docker.namespace}/${docker.app.name}:${docker.tag}</docker.image.alt>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!-- Default profile set the default local registry -->
+        <profile>
+            <id>local-registry</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <dockerRegistry>127.0.0.1:5000</dockerRegistry>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker-registry</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <dockerRegistry>registry.hub.docker.com</dockerRegistry>
+            </properties>
+        </profile>
+        <!-- log on docker registry only when pushing to the ot registry -->
+        <profile>
+            <id>login-registry</id>
+            <activation>
+                <property>
+                    <name>dockerUsername</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>docker-login</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <commandlineArgs>login -u ${dockerUsername} -p ${dockerPassword} ${dockerRegistry}
+                                    </commandlineArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>release</id>-->
+<!--            <name>release</name>-->
+<!--            <url>https://docker-release/artifactory/docker-release-local</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshot</id>-->
+<!--            <name>snapshot</name>-->
+<!--            <url>https://docker-snapshot/artifactory/docker-snapshot-local</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
+</project>

@@ -9,6 +9,7 @@ import pl.estrix.backend.imageversion.dao.ProductImageVersion;
 import pl.estrix.backend.imageversion.dao.ProductImageVersionRevision;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 public interface ProductImageVersionRevisionRepository extends ProductImageVersionRevisionRepositoryCustom,
         JpaRepository<ProductImageVersionRevision, Long>,
@@ -19,17 +20,22 @@ public interface ProductImageVersionRevisionRepository extends ProductImageVersi
     @Query("DELETE FROM ProductImageVersionRevision pivr WHERE pivr.productImageVersion.id = :versionId")
     void deleteByVersionId(@Param("versionId") Long versionId);
 
-    @Query(value = "SELECT * FROM product_image_version_revision WHERE product_image_version_id = :parentId AND img_top IS NOT NULL  ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProductImageVersionRevision findLastImageByTopPosition(@Param("parentId") Long productImageVersionId);
-    @Query(value = "SELECT * FROM product_image_version_revision WHERE product_image_version_id = :parentId AND img_Bottom IS NOT NULL  ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProductImageVersionRevision findLastImageByBottomPosition(@Param("parentId") Long productImageVersionId);
-    @Query(value = "SELECT * FROM product_image_version_revision WHERE product_image_version_id = :parentId AND img_left IS NOT NULL  ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProductImageVersionRevision findLastImageByLeftPosition(@Param("parentId") Long productImageVersionId);
-    @Query(value = "SELECT * FROM product_image_version_revision WHERE product_image_version_id = :parentId AND img_right IS NOT NULL  ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProductImageVersionRevision findLastImageByRightPosition(@Param("parentId") Long productImageVersionId);
-    @Query(value = "SELECT * FROM product_image_version_revision WHERE product_image_version_id = :parentId AND img_front IS NOT NULL  ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProductImageVersionRevision findLastImageByFrontPosition(@Param("parentId") Long productImageVersionId);
-    @Query(value = "SELECT * FROM product_image_version_revision WHERE product_image_version_id = :parentId AND img_back IS NOT NULL  ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProductImageVersionRevision findLastImageByBackPosition(@Param("parentId") Long productImageVersionId);
+    @Transactional
+    @Modifying
+    @Query("UPDATE ProductImageVersionRevision pivr SET pivr.main = false WHERE pivr.hashGroup = :hashGroup")
+    void disableMain(@Param("hashGroup") String hash);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE ProductImageVersionRevision pivr SET pivr.main = true WHERE pivr.id = :id")
+    void setMainImage(@Param("id") Long id);
+    @Transactional
+    @Modifying
+    @Query("UPDATE ProductImageVersionRevision pivr SET pivr.description = :description WHERE pivr.id = :id")
+    void updateDescription(@Param("id") Long id, @Param("description") String description);
+
+
+    @Query("SELECT pivr FROM ProductImageVersionRevision pivr WHERE pivr.hashGroup = :hashGroup ORDER BY pivr.id DESC")
+    List<ProductImageVersionRevision> findLastByHash(@Param("hashGroup") String hash);
 
 }

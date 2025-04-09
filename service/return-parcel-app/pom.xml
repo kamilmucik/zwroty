@@ -5,12 +5,12 @@
     <parent>
         <groupId>pl.estrix</groupId>
         <artifactId>return-parcel</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>2.3.0</version>
     </parent>
 
     <artifactId>return-parcel-app</artifactId>
     <packaging>war</packaging>
-    <version>2.3.0-SNAPSHOT</version>
+    <version>2.3.0</version>
     <name>Spring Boot App :: Return Parcel</name>
 
 	<properties>
@@ -613,9 +613,9 @@
     </repositories>
 
     <scm>
-        <connection>scm:git:file:////Users/kamilmucik/workspace/shopsync/tags/return-parcel-2.2.0/shopsync</connection>
-        <developerConnection>scm:git:file:////Users/kamilmucik/workspace/shopsync/tags/return-parcel-2.2.0/shopsync</developerConnection>
-        <url>https://github.com/kamilmucik/shopsync.git/tags/return-parcel-2.2.0/shopsync.git</url>
+        <connection>scm:git:file:////Users/kamilmucik/workspace/shopsync/tags/return-parcel-2.3.0/shopsync</connection>
+        <developerConnection>scm:git:file:////Users/kamilmucik/workspace/shopsync/tags/return-parcel-2.3.0/shopsync</developerConnection>
+        <url>https://github.com/kamilmucik/shopsync.git/tags/return-parcel-2.3.0/shopsync.git</url>
 <!--        <tag>shopsync-0.0.3</tag>-->
     </scm>
 <!--  <scm>-->

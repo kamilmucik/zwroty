@@ -57,7 +57,11 @@ CREATE TABLE `product_image_version_revision` (
   `version_date` varchar(255) DEFAULT NULL,
   `product_image_version_id` bigint DEFAULT NULL,
   `img_back` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `img_front` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
+  `img_front` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `img_top` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `img_bottom` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `img_left` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `img_right` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --

@@ -31,6 +31,8 @@ public class ScheduledTasks {
 
     private String baseName;
 
+    Pattern databaseFinderPattern = Pattern.compile("[\\d\\w]+[?]");
+
     @Autowired
     private MySqlDumpService mySqlDumpService;
 
@@ -39,7 +41,6 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 60000)
     public void reportCurrentTime() throws ParseException {
-        Pattern databaseFinderPattern = Pattern.compile("[\\d\\w]+[?]");
         final Matcher match = databaseFinderPattern.matcher(url);
         if (match.find()) {
             baseName = match.group(0);

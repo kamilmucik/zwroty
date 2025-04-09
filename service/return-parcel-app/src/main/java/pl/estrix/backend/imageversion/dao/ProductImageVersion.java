@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "product_image_version",
+@Table(name = "product_version",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"id"})
         })
@@ -32,9 +32,7 @@ public class ProductImageVersion extends AuditableEntity {
     @Column(name = "title", length = 4096)
     private String title;
 
-    @Column(name = "last_version_date")
-//    @Convert(converter = LocalDateToStringConverter.class)
-    private String lastVersionDate;
+
 
     @OneToMany(mappedBy="productImageVersion")
     private List<ProductImageVersionRevision> revisions;

@@ -35,25 +35,6 @@ public class ProductImageVersionRepositoryImpl extends QueryDslRepositorySupport
 
     @Override
     public List<ProductImageVersion> find(ProductImageVersionSearchCriteriaDto searchCriteria, PagingCriteria pagingCriteria) {
-//        final JPAQueryBase<?> query = createQuery();
-//        https://github.com/querydsl/querydsl/issues/1677
-//        JPQLQuery query2 = from(productImageVersion);
-//        Map<Long, ProductImageVersion> transform = query2
-//                .leftJoin(productImageVersion.revisions, productImageVersionRevision)
-//                .transform(GroupBy.groupBy(productImageVersion.id)
-//                        .as(Projections.bean(ProductImageVersion.class,
-//                                productImageVersion.id,
-//                                productImageVersion.ean,
-//                                productImageVersion.title,
-//                                productImageVersion.artNumber,
-//                                GroupBy.list(Projections.bean(ProductImageVersionRevision.class,
-//                                                productImageVersionRevision.id,
-//                                                productImageVersionRevision.reason).skipNulls())
-//                                        .as(productImageVersion.revisions))));
-//
-//
-//
-//    return new ArrayList<ProductImageVersion>(transform.values());
         JPQLQuery query = getQueryForFind(searchCriteria);
 
         query.orderBy(productImageVersion.id.desc());
@@ -80,7 +61,6 @@ public class ProductImageVersionRepositoryImpl extends QueryDslRepositorySupport
 
         if (StringUtils.isNotEmpty(searchParams.getTableSearch())){
             builder.and(productImageVersion.ean.like("%"+searchParams.getTableSearch()+"%"))
-                    .or(productImageVersion.lastVersionDate.like("%"+searchParams.getTableSearch()+"%"))
                     .or(productImageVersion.artNumber.like("%"+searchParams.getTableSearch()+"%"))
                     .or(productImageVersion.title.like("%"+searchParams.getTableSearch()+"%"));
         }

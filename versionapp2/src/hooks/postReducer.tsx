@@ -4,6 +4,7 @@ export const INITIAL_STATE = {
     error: null,
     moreError: null,
     data: [],
+    singleResult: null,
     totalPage: 1,
     currentPage: 1,
     isListEnd: false
@@ -17,11 +18,18 @@ export const postReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 data: [...state.data, ...action.payload],
-                // totalPage: action.totalPage,
                 error: '',
                 loading: false,
                 moreLoading: false
             }
+            case "FETCH_SINGLE_SUCCESS":
+                return {
+                    ...state,
+                    singleResult: action.payload,
+                    error: '',
+                    loading: false,
+                    moreLoading: false
+                }
         case "FETCH_ERROR":
             return {
                 ...state,

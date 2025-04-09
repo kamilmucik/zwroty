@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>db-unit</artifactId>
+    <version>2.3.0-SNAPSHOT</version>
+    <name>DB Unit</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>pl.estrix</groupId>
+        <artifactId>return-parcel</artifactId>
+        <version>2.3.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <flyway.version>3.2.1</flyway.version>
+        <env.db.driver>com.mysql.jdbc.Driver</env.db.driver>
+        <env.db.url>jdbc:mysql://127.0.0.1:3306/zwroty_e_strix_com</env.db.url>
+        <env.db.username>root</env.db.username>
+        <env.db.password>root</env.db.password>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+            <version>8.0.16</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-core</artifactId>
+                        <version>${flyway.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>${env.db.driver}</driver>
+                    <url>${env.db.url}</url>
+                    <user>${env.db.username}</user>
+                    <password>${env.db.password}</password>
+<!--                    <outOfOrder>true</outOfOrder>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

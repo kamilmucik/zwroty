@@ -182,6 +182,11 @@
 
 .alignTop {
     vertical-align: top;
+    border-width: 0;
+}
+.alignTop50 {
+    vertical-align: top;
+    width: 50%;
 }
 .posLeft {
     vertical-align: top;
@@ -194,6 +199,7 @@
 #form1\3A panel_content .alignTop {
         vertical-align: top;
         line-height: 28px;
+        border-width: 0;
 }
 #form1\3A panel_content .alignCenterTop {
         vertical-align: top;

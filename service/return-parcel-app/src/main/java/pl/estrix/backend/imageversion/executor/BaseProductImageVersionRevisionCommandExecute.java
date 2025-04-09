@@ -27,17 +27,14 @@ public class BaseProductImageVersionRevisionCommandExecute extends BaseCommandEx
     public ProductImageVersionRevision mapDtoToEntity(ProductImageVersionRevisionDto dto) {
         ProductImageVersionRevision entity = new ProductImageVersionRevision();
         entity.setId(dto.getId());
-        entity.setReason(dto.getReason());
-        entity.setImgBackBase64(dto.getImgBackBase64());
-        entity.setImgFrontBase64(dto.getImgFrontBase64());
-        entity.setImgLeftBase64(dto.getImgLeftBase64());
-        entity.setImgRightBase64(dto.getImgRightBase64());
-        entity.setImgTopBase64(dto.getImgTopBase64());
-        entity.setImgBottomBase64(dto.getImgBottomBase64());
-        entity.setReleaseDate(LocalDate.now());
-        ProductImageVersion productImageVersion = new ProductImageVersion();
-        productImageVersion.setId(dto.getVersionImageId());
-        entity.setProductImageVersion(productImageVersion);
+        entity.setDescription(dto.getDescription());
+        entity.setImgPath(dto.getImgPath());
+        entity.setHashGroup(dto.getHashGroup());
+        entity.setMain(dto.isMain());
+        entity.setLastUpdate(dto.getLastUpdate());
+        ProductImageVersion version = ProductImageVersion.builder().build();
+        version.setId(dto.getVersionId());
+        entity.setProductImageVersion(version);
         return entity;
     }
 
@@ -46,15 +43,12 @@ public class BaseProductImageVersionRevisionCommandExecute extends BaseCommandEx
             return null;
         ProductImageVersionRevisionDto dto = new ProductImageVersionRevisionDto();
         dto.setId(entity.getId());
-        dto.setReason(entity.getReason());
-        dto.setLastUpdate(entity.getReleaseDate());
-        dto.setImgBackBase64(entity.getImgBackBase64());
-        dto.setImgFrontBase64(entity.getImgFrontBase64());
-        dto.setImgLeftBase64(entity.getImgLeftBase64());
-        dto.setImgRightBase64(entity.getImgRightBase64());
-        dto.setImgTopBase64(entity.getImgTopBase64());
-        dto.setImgBottomBase64(entity.getImgBottomBase64());
-        dto.setVersionImageId(entity.getParentId());
+        dto.setDescription(entity.getDescription());
+        dto.setImgPath(entity.getImgPath());
+        dto.setMain(entity.isMain());
+        dto.setHashGroup(entity.getHashGroup());
+        dto.setLastUpdate(entity.getLastUpdate());
+//        dto.setVersionId(entity.getProductImageVersion().getId());
         return dto;
     }
 }

@@ -87,8 +87,26 @@
 		<display-name>secured/versions/index.xhtml</display-name>
 		<from-view-id>/secured/versions/index.xhtml</from-view-id>
 		<navigation-case>
+			<from-outcome>new</from-outcome>
+			<to-view-id>/secured/versions/new.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>details</from-outcome>
 			<to-view-id>/secured/versions/details.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>secured/versions/new.xhtml</display-name>
+		<from-view-id>/secured/versions/new.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>saveAndOut</from-outcome>
+			<to-view-id>/secured/versions/index.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>cancel</from-outcome>
+			<to-view-id>/secured/versions/index.xhtml</to-view-id>
 			<redirect></redirect>
 		</navigation-case>
 	</navigation-rule>
@@ -117,8 +135,9 @@
 		<from-view-id>/secured/versions/newImageRevision.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>cancel</from-outcome>
-			<to-view-id>/secured/versions/index.xhtml</to-view-id>
-			<redirect></redirect>
+			<to-view-id>/secured/versions/details.xhtml</to-view-id>
+			<redirect>
+			</redirect>
 		</navigation-case>
 	</navigation-rule>
 

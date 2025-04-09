@@ -7,6 +7,10 @@ import {
 } from '../../theme';
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: Colors.offWhite,
+  },
   buttonWrapper: {
     // flex: 1,
     
@@ -27,8 +31,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: moderateScale(300), 
-    height: moderateScale(300), 
+    width: moderateScale(400), 
+    height: moderateScale(400), 
   },
   icon: {
     tintColor: Colors.white,

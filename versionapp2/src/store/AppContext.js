@@ -3,9 +3,9 @@ import React from 'react';
 const AppContext = React.createContext({
   cache: [],
   settingsFastQuizDepartment: {},
-  settingsShowCorrectAnswerOnly: false,
+  settingsDestinationURL: "",
+  setSettingsDestinationURL: (val) => {},
   setSettingsFastQuizDepartment: (val) => {},
-  setSettingsOnlyCorrectValue: (val) => {},
   existInCache: (val) => {},
   addToCache: (val) => {},
 });

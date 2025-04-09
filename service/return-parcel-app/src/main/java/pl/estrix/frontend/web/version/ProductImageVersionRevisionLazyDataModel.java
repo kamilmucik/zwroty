@@ -26,16 +26,18 @@ public class ProductImageVersionRevisionLazyDataModel extends LazyDataModel<Prod
     private List<ProductImageVersionRevisionDto> datasource;
 
     private String tableSearch;
+    private Boolean mainOnly;
 
     private Long versionId;
 
     @Autowired
     private ProductImageVersionService productImageVersionService;
 
-    public ProductImageVersionRevisionLazyDataModel(ProductImageVersionService releaseArticleService, Long versionId, String tableSearch) {
+    public ProductImageVersionRevisionLazyDataModel(ProductImageVersionService releaseArticleService, Long versionId, String tableSearch, Boolean mainOnly) {
         this.productImageVersionService = releaseArticleService;
         this.tableSearch = tableSearch;
         this.versionId = versionId;
+        this.mainOnly = mainOnly;
     }
 
     @Override
@@ -68,11 +70,12 @@ public class ProductImageVersionRevisionLazyDataModel extends LazyDataModel<Prod
 
         searchCriteria.setTableSearch(tableSearch);
         searchCriteria.setVersionId(versionId);
+        searchCriteria.setMainOnly(mainOnly);
 
         if (sortField != null) {
             searchCriteria.setSortField(sortField);
-            searchCriteria.setSortOrder(sortOrder);
         }
+        searchCriteria.setSortOrder(SortOrder.DESCENDING);
 
         PagingCriteria pagingCriteria = PagingCriteria
                 .builder()

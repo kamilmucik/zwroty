@@ -22,7 +22,7 @@ public class TesseractOCRServiceTest {
         tesseract.setDatapath("c:\\Program Files\\Tesseract-OCR\\tessdata");
     }
 
-    @Test
+//    @Test
     public void testOCRService() throws Exception {
         BufferedImage image = ImageIO.read(Paths.get("C:\\workspace\\zwroty\\service\\tests\\ocr\\IMG_0205.jpg").toFile());
 

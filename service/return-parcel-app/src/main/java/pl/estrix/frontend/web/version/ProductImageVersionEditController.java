@@ -27,6 +27,7 @@ public class ProductImageVersionEditController extends MainController {
 
     private LazyDataModel<ProductImageVersionDto> lazyModel;
     private Long id;
+    private Long parentId;
 
     private Integer tablePageInx;
 
@@ -59,10 +60,6 @@ public class ProductImageVersionEditController extends MainController {
         }
     }
 
-
-    public void showImage(String base64){
-        selectedImage = base64;
-    }
 
     public void delete() {
 //        service.delete(selected);

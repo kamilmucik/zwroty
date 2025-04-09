@@ -18,4 +18,6 @@ public class SettingsDto {
     private Boolean needBackup;
 
     private String tempDirectory;
+
+    private String versionDirectory;
 }

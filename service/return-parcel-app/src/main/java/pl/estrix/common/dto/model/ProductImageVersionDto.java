@@ -4,6 +4,8 @@ import lombok.*;
 import pl.estrix.backend.base.BaseEntityDto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,22 +14,12 @@ import java.time.LocalDate;
 @Builder
 public class ProductImageVersionDto extends BaseEntityDto<Long> {
 
-    private LocalDate lastUpdate;
-
     private String ean;
 
     private String title;
 
     private Long artNumber;
 
-    private String imgFrontBase64;
-    private String imgBackBase64;
-    private String imgLeftBase64;
-    private String imgRightBase64;
-    private String imgTopBase64;
-    private String imgBottomBase64;
+    private List<ProductImageVersionRevisionDto> revisions = new ArrayList<>();
 
-    private String reason;
-
-    private String lastVersionDate;
 }

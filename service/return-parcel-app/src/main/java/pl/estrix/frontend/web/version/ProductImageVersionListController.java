@@ -2,9 +2,14 @@ package pl.estrix.frontend.web.version;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -13,21 +18,28 @@ import pl.estrix.backend.imageversion.service.ProductImageVersionService;
 import pl.estrix.backend.reports.service.ImageVersionService;
 import pl.estrix.common.base.ListResponseDto;
 import pl.estrix.common.dto.ProductImageVersionSearchCriteriaDto;
+import pl.estrix.common.dto.SaveShipmentDto;
 import pl.estrix.common.dto.model.ProductImageVersionDto;
+import pl.estrix.common.dto.model.ShipmentProductDto;
+import pl.estrix.common.dto.model.ShipmentProductShopDto;
 import pl.estrix.frontend.jsf.FacesViewScope;
 import pl.estrix.frontend.web.MainController;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import java.io.*;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Getter
 @Setter
 @Component("productImageVersionListController")
 @Scope(FacesViewScope.NAME)
 public class ProductImageVersionListController extends MainController implements Serializable {
+
 
     private LazyDataModel<ProductImageVersionDto> lazyModel;
 
@@ -37,11 +49,17 @@ public class ProductImageVersionListController extends MainController implements
 
     private String selectedImage;
 
+    private UploadedFile uploadedFile;
+
     @Autowired
     private ProductImageVersionService releaseService;
 
     @Autowired
     private ImageVersionService imageVersionService;
+
+    private int number;
+    private boolean processing;
+    private List<ProductImageVersionDto> productImageVersionDtoList = new ArrayList<>();
 
 
     @PostConstruct
@@ -67,31 +85,21 @@ public class ProductImageVersionListController extends MainController implements
     public void showImage(String base64){
         selectedImage = base64;
     }
+    public String showImage2(String filePath) throws IOException {
+        byte[] fileContent = FileUtils.readFileToByteArray(new File(filePath));
+        return Base64.getEncoder().encodeToString(fileContent);
+    }
 
     public void delete() {
         releaseService.delete(selectedItem);
     }
 
-    public void downloadZipFile() throws IOException {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ExternalContext ec = fc.getExternalContext();
-        ec.responseReset();
-
-
-        List<ProductImageVersionDto> data = this.getData();
-        File outputZipFile = imageVersionService.prepareImageVersions(searchText, data);
-
-        ec.setResponseContentLength((int)outputZipFile.length());
-        String attachmentName = "attachment; filename=\""+ outputZipFile.getName() + "\"";
-        ec.setResponseHeader("Content-Disposition", attachmentName);
-        try (InputStream input = new FileInputStream(outputZipFile);
-             OutputStream output = ec.getResponseOutputStream()){
-            IOUtils.copy(input, output);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        fc.responseComplete();
+    public void handleFileUpload(FileUploadEvent event) {
+        uploadedFile = event.getFile();
+        FacesMessage msg = new FacesMessage("Import", "Załadowano plik " + event.getFile().getFileName() + ".");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+
 
     private List<ProductImageVersionDto> getData(){
 
@@ -111,7 +119,97 @@ public class ProductImageVersionListController extends MainController implements
 
         ListResponseDto<ProductImageVersionDto> revisionDto = releaseService.getItems(searchCriteriaDto, pCriteria);
 
-
         return revisionDto.getData();
+    }
+
+
+
+    public void loadData() {
+        processing = true;
+        productImageVersionDtoList.clear();
+        try {
+            InputStream input = uploadedFile.getInputstream();
+            Workbook wb = WorkbookFactory.create(input);
+            for (int sheetIndx = 0; sheetIndx < 1; sheetIndx++){
+                Sheet currSheet = wb.getSheetAt(sheetIndx);
+
+                Iterator<Row> rowIter = currSheet.rowIterator();
+                boolean first = true;
+                while(rowIter.hasNext()) {
+                    if (first) {
+                        first = false;
+                        rowIter.next();
+                    }
+                    Row row = rowIter.next();
+
+                    ProductImageVersionDto inputDto = new ProductImageVersionDto();
+                    inputDto.setArtNumber(getNumberValueFromCell(row.getCell(1)));
+                    inputDto.setTitle(getValueFromCell(row.getCell(2)));
+                    inputDto.setEan(getValueFromCell(row.getCell(4)));
+                    number++;
+                    productImageVersionDtoList.add(inputDto);
+                }
+            }
+        } catch (IOException | InvalidFormatException e) {
+            e.printStackTrace();
+        } finally {
+            processing = false;
+        }
+    }
+
+
+    public void saveDetail() throws IOException {
+        processing = true;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        productImageVersionDtoList.forEach(prod -> {
+            releaseService.saveOrUpdate(prod);
+        });
+
+        processing = false;
+        productImageVersionDtoList.clear();
+
+        Flash flash = facesContext.getExternalContext().getFlash();
+        flash.setKeepMessages(true);
+        flash.setRedirect(true);
+
+        facesContext.getExternalContext().redirect("/secured/versions/index.html");
+    }
+
+    private Long getNumberValueFromCell(Cell cell) {
+        String result = "0";
+        try {
+            if (cell.getCellTypeEnum().equals(CellType.NUMERIC)) {
+                result = "" + ((Double) cell.getNumericCellValue()).longValue();
+            } else if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                result = cell.getStringCellValue();
+            }
+            if ("".equals(result)){
+                result = "0";
+            }
+
+            return Long.parseLong(result);
+        } catch (NumberFormatException e) {
+//            e.printStackTrace();
+            return 0L;
+        }
+    }
+
+    private String getValueFromCell(Cell cell) {
+        String result = "";
+        try {
+            if (cell.getCellTypeEnum().equals(CellType.NUMERIC)) {
+                result = "" + ((Double)cell.getNumericCellValue()).longValue();
+            } else if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                result = cell.getStringCellValue();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String leftPadZeros(String str, int num) {
+        return String.format("%1$" + num + "s", str).replace(' ', '0');
     }
 }

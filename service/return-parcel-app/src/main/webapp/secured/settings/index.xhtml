@@ -59,6 +59,17 @@
                             <h:outputText  />
                             <p:message for="tempDirectory" id="tempDirectoryMsg" />
 
+                            <h:outputLabel for="versionDirectory"  value="Katalog warsji produktów: " />
+                            <p:inputText id="versionDirectory" style="width: 100%"
+                                         required="true"
+                                         requiredMessage="Katalog warsji produktów: Pole jest wymagane."
+                                         value="#{settingsEditController.selected.versionDirectory}"
+                                         label="versionDirectory">
+                                <p:ajax event="blur" update="versionDirectoryMsg" />
+                            </p:inputText>
+                            <h:outputText  />
+                            <p:message for="versionDirectory" id="versionDirectoryMsg" />
+
                         </h:panelGrid>
 
                         <p:commandButton value="Zapisz"

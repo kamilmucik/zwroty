@@ -30,32 +30,8 @@ public class ReadProductImageVersionRevisionCommandExecutor extends BaseProductI
         return mapEntityToDto(repository.findOne(id));
     }
 
-    public String findImageByPosition(Long productImageVersionId,String position){
-        String img = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
-        try {
-            switch (position) {
-                case "img_front":
-                    img = repository.findLastImageByFrontPosition(productImageVersionId).getImgFrontBase64();
-                    break;
-                case "img_back":
-                    img = repository.findLastImageByBackPosition(productImageVersionId).getImgBackBase64();
-                    break;
-                case "img_left":
-                    img = repository.findLastImageByLeftPosition(productImageVersionId).getImgLeftBase64();
-                    break;
-                case "img_right":
-                    img = repository.findLastImageByRightPosition(productImageVersionId).getImgRightBase64();
-                    break;
-                case "img_top":
-                    img = repository.findLastImageByTopPosition(productImageVersionId).getImgTopBase64();
-                    break;
-                case "img_Bottom":
-                    img = repository.findLastImageByBottomPosition(productImageVersionId).getImgBottomBase64();
-                    break;
-            }
-        }catch (NullPointerException e){
-            // could be null
-        }
-        return img;
+    public ProductImageVersionRevisionDto findByHash(String  hash) {
+        return mapEntityToDto(repository.findLastByHash(hash).get(0));
     }
+
 }

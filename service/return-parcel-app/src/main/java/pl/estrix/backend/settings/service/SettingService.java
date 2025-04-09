@@ -37,6 +37,15 @@ public class SettingService {
                     .build());
         }
         result.setTempDirectory(tempDirectorySettingDto.getValue());
+        SettingDto versionDirectorySettingDto = readExecutor.findByName("versionDirectory");
+        if (versionDirectorySettingDto == null) {
+            versionDirectorySettingDto = createExecutor.create(SettingDto
+                    .builder()
+                    .name("versionDirectory")
+                    .value("C:/temp/")
+                    .build());
+        }
+        result.setVersionDirectory(versionDirectorySettingDto.getValue());
 
         SettingDto pathSettingDto = readExecutor.findByName("path");
         if (pathSettingDto == null) {
@@ -77,6 +86,17 @@ public class SettingService {
         if (tempDirectorySettingDto != null) {
             tempDirectorySettingDto.setValue(settingsDto.getTempDirectory());
             updateExecutor.update(tempDirectorySettingDto);
+        }
+        SettingDto versionDirectorySettingDto = readExecutor.findByName("versionDirectory");
+        if (versionDirectorySettingDto != null) {
+            versionDirectorySettingDto.setValue(settingsDto.getVersionDirectory());
+            updateExecutor.update(versionDirectorySettingDto);
+        } else {
+            createExecutor.create(SettingDto
+                   .builder()
+                   .name("versionDirectory")
+                   .value(settingsDto.getVersionDirectory())
+                   .build());
         }
 
         SettingDto pathSettingDto = readExecutor.findByName("path");

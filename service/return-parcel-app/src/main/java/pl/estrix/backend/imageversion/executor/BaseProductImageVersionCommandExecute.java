@@ -25,7 +25,6 @@ public class BaseProductImageVersionCommandExecute extends BaseCommandExecutor<P
         entity.setArtNumber(dto.getArtNumber());
         entity.setEan(dto.getEan());
         entity.setTitle(dto.getTitle());
-        entity.setLastVersionDate(dto.getLastVersionDate());
         return entity;
     }
 
@@ -37,9 +36,6 @@ public class BaseProductImageVersionCommandExecute extends BaseCommandExecutor<P
         dto.setArtNumber(entity.getArtNumber());
         dto.setEan(entity.getEan());
         dto.setTitle(entity.getTitle());
-        dto.setLastVersionDate(entity.getLastVersionDate());
-
-
         return dto;
     }
 }

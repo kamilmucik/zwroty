@@ -17,7 +17,7 @@
             <p:dataTable var="imageVersion"
                          value="#{productImageVersionListController.lazyModel}"
                          paginator="true"
-                         rows="10"
+                         rows="15"
                          currentPageReportTemplate="{currentPage} z {totalPages}"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          rowsPerPageTemplate="5,10,15"
@@ -32,17 +32,24 @@
                 <p:ajax event="rowSelect" listener="#{productImageVersionListController.onRowSelect}" />
 
                 <f:facet name="header">
-                    <h:link title="Dodaj" styleClass="tableAddButton" outcome="details">
+                    <h:link title="Dodaj" styleClass="tableAddButton" outcome="new">
                         <h:graphicImage library="sh" name="img/new.png" />
                         <f:param name="id" value="0" />
                         <f:param name="table_page" value="#{dtLazyView.tablePageInx}" />
                     </h:link>
-                    <p:commandLink style="float: left;margin-left: 14px;margin-top: 0px;"
-                                   title="Pobierz najnowsze wersje"
-                                   ajax="false"
-                                   actionListener="#{productImageVersionListController.downloadZipFile}">
-                        <h:graphicImage library="sh" name="img/zip.png" />
-                    </p:commandLink>
+
+<!--                    <p:commandLink style="float: left;margin-left: 14px;margin-top: 0px;"-->
+<!--                                   title="Pobierz najnowsze wersje"-->
+<!--                                   ajax="false"-->
+<!--                                   actionListener="#{productImageVersionListController.downloadZipFile}">-->
+<!--                        <h:graphicImage library="sh" name="img/zip.png" />-->
+<!--                    </p:commandLink>-->
+<!--                    <p:commandLink style="float: left;margin-left: 14px;margin-top: 0px;"-->
+<!--                                   title="Aktualizuj bazę danych"-->
+<!--                                   ajax="false"-->
+<!--                                   actionListener="#{productImageVersionListController.updateSourceDirectory}">-->
+<!--                        <h:graphicImage library="sh" name="img/folder.png" />-->
+<!--                    </p:commandLink>-->
 
                     <h:outputLabel styleClass="module-table-header"
                                    value=" #{msg['admin.tile.list.heder']}" />
@@ -58,113 +65,30 @@
                                          title="Wyszukaj" />
                     </p:outputPanel>
                 </f:facet>
-                <p:column headerText="Wersja z dnia" style="width:100px; text-align: center;">
-                    <h:outputText value="#{imageVersion.lastUpdate}" />
-                </p:column>
                 <p:column headerText="Numer artykułu" style="width:100px; text-align: center;">
                     <h:outputText value="#{imageVersion.artNumber}" />
                 </p:column>
-                <p:column headerText="EAN" style="width:100px; text-align: center;">
+                <p:column headerText="EAN" style="width:300px; text-align: left;">
                     <h:outputText value="#{imageVersion.ean}" />
                 </p:column>
-                <p:column headerText="Nazwa">
+                <p:column headerText="Nazwa"  style="text-align: left;">
                     <h:outputText value="#{imageVersion.title}" />
                 </p:column>
-                <p:column headerText="Powód"  style="width:200px; text-align: center;">
-                    <h:outputText value="#{imageVersion.reason}" />
-                </p:column>
-                <p:column headerText="Przód"  style="width:100px; text-align: center;">
-                    <p:commandLink styleClass=""
-                                   title="Obrazek"
-                                   action="#{productImageVersionListController.showImage(imageVersion.imgFrontBase64)}"
-                                   update="@([id$=displayImage])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('showImageDialogW').show();">
-                        <h:graphicImage
-                                rendered="#{imageVersion.imgFrontBase64 ne null}"
-                                style="max-width: 100px; max-height: 100px;"
-                                value="data:image/jpg;base64,#{imageVersion.imgFrontBase64}" />
-                    </p:commandLink>
-                </p:column>
-                <p:column headerText="Tył"  style="width:100px; text-align: center;">
-                    <p:commandLink styleClass=""
-                                   title="Obrazek"
-                                   action="#{productImageVersionListController.showImage(imageVersion.imgBackBase64)}"
-                                   update="@([id$=displayImage])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('showImageDialogW').show();">
-                        <h:graphicImage
-                                rendered="#{imageVersion.imgBackBase64 ne null}"
-                                style="max-width: 100px; max-height: 100px;"
-                                value="data:image/jpg;base64,#{imageVersion.imgBackBase64}" />
-                    </p:commandLink>
-                </p:column>
-                <p:column headerText="Lewy"  style="width:100px; text-align: center;">
-                    <p:commandLink styleClass=""
-                                   title="Obrazek"
-                                   action="#{productImageVersionListController.showImage(imageVersion.imgLeftBase64)}"
-                                   update="@([id$=displayImage])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('showImageDialogW').show();">
-                        <h:graphicImage
-                                rendered="#{imageVersion.imgLeftBase64 ne null}"
-                                style="max-width: 100px; max-height: 100px;"
-                                value="data:image/jpg;base64,#{imageVersion.imgLeftBase64}" />
-                    </p:commandLink>
-                </p:column>
-                <p:column headerText="Prawy"  style="width:100px; text-align: center;">
-                    <p:commandLink styleClass=""
-                                   title="Obrazek"
-                                   action="#{productImageVersionListController.showImage(imageVersion.imgRightBase64)}"
-                                   update="@([id$=displayImage])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('showImageDialogW').show();">
-                        <h:graphicImage
-                                rendered="#{imageVersion.imgRightBase64 ne null}"
-                                style="max-width: 100px; max-height: 100px;"
-                                value="data:image/jpg;base64,#{imageVersion.imgRightBase64}" />
-                    </p:commandLink>
-                </p:column>
-                <p:column headerText="Góra"  style="width:100px; text-align: center;">
-                    <p:commandLink styleClass=""
-                                   title="Obrazek"
-                                   action="#{productImageVersionListController.showImage(imageVersion.imgTopBase64)}"
-                                   update="@([id$=displayImage])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('showImageDialogW').show();">
-                        <h:graphicImage
-                                rendered="#{imageVersion.imgTopBase64 ne null}"
-                                style="max-width: 100px; max-height: 100px;"
-                                value="data:image/jpg;base64,#{imageVersion.imgTopBase64}" />
-                    </p:commandLink>
-                </p:column>
-                <p:column headerText="Dół"  style="width:100px; text-align: center;">
-                    <p:commandLink styleClass=""
-                                   title="Obrazek"
-                                   action="#{productImageVersionListController.showImage(imageVersion.imgBottomBase64)}"
-                                   update="@([id$=displayImage])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('showImageDialogW').show();">
-                        <h:graphicImage
-                                rendered="#{imageVersion.imgBottomBase64 ne null}"
-                                style="max-width: 100px; max-height: 100px;"
-                                value="data:image/jpg;base64,#{imageVersion.imgBottomBase64}" />
-                    </p:commandLink>
-                </p:column>
+
                 <p:column headerText="" style="width:140px; text-align: center;">
                     <h:link title="Edycja" outcome="details">
                         <h:graphicImage library="sh" name="img/edit.png" />
                         <f:param name="id" value="#{imageVersion.id}" />
                         <f:param name="table_page" value="#{productImageVersionListController.tablePageInx}" />
                     </h:link>
-                    <p:commandLink styleClass=""
-                                   title="Usuń"
-                                   action="#{productImageVersionListController.edit(imageVersion.id)}"
-                                   update="@([id$=display])"
-                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"
-                                   oncomplete="PF('deleteDialogW').show();">
-                        <h:graphicImage library="sh" name="img/delete.png" />
-                    </p:commandLink>
+<!--                    <p:commandLink styleClass=""-->
+<!--                                   title="Usuń"-->
+<!--                                   action="#{productImageVersionListController.edit(imageVersion.id)}"-->
+<!--                                   update="@([id$=display])"-->
+<!--                                   rendered="#{p:ifGranted('ROLE_ADMIN')}"-->
+<!--                                   oncomplete="PF('deleteDialogW').show();">-->
+<!--                        <h:graphicImage library="sh" name="img/delete.png" />-->
+<!--                    </p:commandLink>-->
                 </p:column>
             </p:dataTable>
 

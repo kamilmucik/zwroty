@@ -3,153 +3,100 @@
 <ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui"
-                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <ui:define name="content">
         <h:form style="overflow:none; padding-top: 10px !important;">
             <h:link title="Powrót" outcome="cancel"  >
-                <f:param name="table_page" value="#{productImageVersionEditController.tablePageInx}" />
+                <f:param name="table_page" value="#{productImageVersionRevisionEditController.tablePageInx}" />
+                <f:param name="id" value="#{productImageVersionRevisionEditController.parentId}" />
                 <h:outputLabel value="Powrót" style="cursor: pointer !important;" />
             </h:link>
             <p:messages id="messages" showDetail="true" escape="false" />
         </h:form>
 
-        <h1>Dodaj wersje produktu</h1>
+        <h1>Wersje produktu</h1>
 
         <h:form id="form1">
-            <p:panel id="panel" header="" style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top;max-width:720px;margin: 0 auto;">
+            <p:panel id="panel" header="" style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top;margin: 0 auto;">
                 <h:inputHidden value="#{productImageVersionRevisionEditController.id}" id="id" />
                 <h:inputHidden value="#{productImageVersionRevisionEditController.versionId}" id="idVersion" />
-                <h:panelGrid columns="2" style="vertical-align:top; width: 100%;"  columnClasses="alignTop,alignCenterTop" >
 
-                    <h:outputLabel for="reason"  value="Powód: " />
-                    <p:inputText id="reason"
-                                 style="width: 100%"
-                                 required="true"
-                                 requiredMessage="Powód: Pole jest wymagane."
-                                 value="#{productImageVersionRevisionEditController.selected.reason}"
-                                 label="reason">
-                        <p:ajax event="blur" update="reasonMsg" />
-                    </p:inputText>
-                    <h:outputText  />
-                    <p:message for="reason" id="reasonMsg" />
+                <c:if test="#{productImageVersionRevisionEditController.id!=0}">
+                    <p:dataTable var="imageVersionRevision"
+                                 value="#{productImageVersionRevisionEditController.lazyModel}"
+                                 paginator="true"
+                                 rows="10"
+                                 currentPageReportTemplate="{currentPage} z {totalPages}"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 rowsPerPageTemplate="5,10,15"
+                                 id="imageVersionRevisionTable"
+                                 lazy="true"
+                                 disabledTextSelection="false"
+                                 paginatorPosition="bottom"
+                    >
+                        <f:facet name="header">
+                            <h:panelGrid columns="7" id="display" rendered="#{productImageVersionRevisionEditController.renderCompareForm}" columnClasses="alignTop,alignTop,alignTop,alignTop,alignTop,alignTop,alignTop" style="display: contents;width: 500px; border: 0px black solid;">
+                                <h:outputLabel value="Czy prównać " />
+                                <h:outputLabel style="color: red;" value="#{productImageVersionRevisionEditController.compareModal.firstDate}" />
+                                <h:outputLabel value=" z " />
+                                <h:outputLabel style="color: red;" value="#{productImageVersionRevisionEditController.compareModal.secondDate}" />
+                                <h:outputLabel value="?" />
+                                <p:commandLink style="border-width: 0px;" styleClass=""
+                                               title="Porównaj"
+                                               action="#{productImageVersionRevisionEditController.compare}"
+                                               update="@([id$=displayCompare])"
+                                               oncomplete="PF('compareRevisionDialogW').show();">
+                                    <h:graphicImage library="sh" name="img/compare.png" width="32" />
+                                </p:commandLink>
+                                <p:commandLink style="border-width: 0px;" styleClass=""
+                                               title="Reset"
+                                               action="#{productImageVersionRevisionEditController.clearCompareValue}"
+                                               update="@([id$=imageVersionRevisionTable])">
+                                    <h:graphicImage library="sh" name="img/clear.png" width="32" />
+                                </p:commandLink>
+                            </h:panelGrid>
+                        </f:facet>
+                        <p:column headerText="Aktualizacja"  style="width:100px; text-align: center;">
+                            <h:outputText value="#{imageVersionRevision.lastUpdate}" />
+                        </p:column>
+                        <p:column headerText="Obrazek"  style="width:200px; text-align: center;">
+                            <h:graphicImage
+                                    rendered="#{imageVersionRevision.imgPath ne null}"
+                                    style="max-height: 300px;"
+                                    value="data:image/jpg;base64,#{productImageVersionRevisionListController.showImage2(imageVersionRevision.imgPath)}" />
+                        </p:column>
+                        <p:column headerText="Opis"  style="width:300px; text-align: center;">
+                            <h:outputText escape="false"  value="#{imageVersionRevision.description}" />
+                        </p:column>
+                        <p:column headerText="" style="width:140px; text-align: center;">
 
-                    <h:outputLabel   value="Zdjęcia: " />
-                    <p:panel id="display" header="Import pliku " style="margin-bottom:20px">
+                            <p:commandLink styleClass=""
+                                           title="Opis"
+                                           action="#{productImageVersionRevisionEditController.editItem(imageVersionRevision.id)}"
+                                           update="@([id$=dialogEditId])"
+                                           oncomplete="PF('showImageDialogW').show();">
+                                <h:graphicImage library="sh" name="img/folder.png" />
+                            </p:commandLink>
+                            <p:commandLink styleClass=""
+                                           title="Oznacz do porównania"
+                                           action="#{productImageVersionRevisionEditController.selectToCompare(imageVersionRevision.id)}"
+                                           update="@([id$=imageVersionRevisionTable])">
+                                <h:graphicImage library="sh" name="img/choose.png" width="32" />
+                            </p:commandLink>
 
-
-                        <h:panelGrid columns="4" id="shipmentProductShopListDisplay" columnClasses="alignTop,alignTop,alignTop"
-                                     style="display: block;width: 470px; border: 0px black solid;">
-                            <h:outputLabel value="" />
-                            <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadTop}"
-                                          mode="advanced"
-                                          update="content"
-                                          auto="true"
-                                          label="Góra" />
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" />
-                            <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadLeft}"
-                                  mode="advanced"
-                                  update="content"
-                                  auto="true"
-                                  label="Lewy" />
-                            <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadFront}"
-                                          mode="advanced"
-                                          update="content"
-                                          auto="true"
-                                          label="Przód" />
-                            <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadRight}"
-                                          mode="advanced"
-                                          update="content"
-                                          auto="true"
-                                          label="Prawy" />
-                            <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadBack}"
-                                          mode="advanced"
-                                          update="content"
-                                          auto="true"
-                                          label="Tył" />
-                            <h:outputLabel value="" />
-                            <p:fileUpload fileUploadListener="#{productImageVersionRevisionEditController.handleFileUploadBottom}"
-                                          mode="advanced"
-                                          update="content"
-                                          auto="true"
-                                          label="Dół" />
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" />
-                        </h:panelGrid>
-                        <p:growl  showDetail="true" />
-                    </p:panel>
-
-                    <h:outputText  />
-                    <p:panel id="content" style="border:none;">
-
-                        <p:inputTextarea id="reasonOCR"
-                                         style="display: block; width: 100%;"
-                                         value="#{productImageVersionRevisionEditController.ocrRecognizedText}"
-                                         label="reason">
-                        </p:inputTextarea>
-                        <h:panelGrid columns="4"  columnClasses="alignTop,alignTop,alignTop"
-                                     style="display: block;width: 470px; border: 0px black solid;">
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" rendered="#{productImageVersionRevisionEditController.selected.imgTopBase64 eq null}"/>
-                            <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgTopBase64 ne null}">
-                                <h4>Góra:</h4>
-                                <h:graphicImage
-                                        id="displayFileTopBase64"
-                                        style="max-width: 300px; max-height: 300px;"
-                                        value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgTopBase64}" />
-                            </p:outputPanel>
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" rendered="#{productImageVersionRevisionEditController.selected.imgLeftBase64 eq null}"/>
-                            <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgLeftBase64 ne null}">
-                                <h4>Lewy:</h4>
-                                <h:graphicImage
-                                        id="displayFileLeftBase64"
-                                        style="max-width: 300px; max-height: 300px;"
-                                        value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgLeftBase64}" />
-                            </p:outputPanel>
-                            <h:outputLabel value="" rendered="#{productImageVersionRevisionEditController.selected.imgFrontBase64 eq null}"/>
-                            <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgFrontBase64 ne null}">
-                                <h4>Przód:</h4>
-                                <h:graphicImage
-                                        id="displayFileFrontBase64"
-                                        style="max-width: 300px; max-height: 300px;"
-                                        value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgFrontBase64}" />
-                            </p:outputPanel>
-                            <h:outputLabel value="" rendered="#{productImageVersionRevisionEditController.selected.imgRightBase64 eq null}"/>
-                            <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgRightBase64 ne null}">
-                                <h4>Prawy:</h4>
-                                <h:graphicImage
-                                        id="displayFileRightBase64"
-                                        style="max-width: 300px; max-height: 300px;"
-                                        value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgRightBase64}" />
-                            </p:outputPanel>
-                            <h:outputLabel value="" rendered="#{productImageVersionRevisionEditController.selected.imgBackBase64 eq null}"/>
-                            <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgBackBase64 ne null}">
-                                <h4>Tył:</h4>
-                                <h:graphicImage
-                                        id="displayFileBackBase64"
-                                        style="max-width: 300px; max-height: 300px;"
-                                        value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgBackBase64}" />
-                            </p:outputPanel>
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" rendered="#{productImageVersionRevisionEditController.selected.imgBottomBase64 eq null}"/>
-                            <p:outputPanel rendered="#{productImageVersionRevisionEditController.selected.imgBottomBase64 ne null}">
-                                <h4>Dół:</h4>
-                                <h:graphicImage
-                                        id="displayFileBottomBase64"
-                                        style="max-width: 300px; max-height: 300px;"
-                                        value="data:image/jpg;base64,#{productImageVersionRevisionEditController.selected.imgBottomBase64}" />
-                            </p:outputPanel>
-                            <h:outputLabel value="" />
-                            <h:outputLabel value="" />
-                        </h:panelGrid>
-                    </p:panel>
-                </h:panelGrid>
+                            <p:commandLink styleClass=""
+                                           title="Usuń"
+                                           action="#{productImageVersionRevisionEditController.edit(imageVersionRevision.id)}"
+                                           update="@([id$=displayDelete])"
+                                           oncomplete="PF('deleteDialogW').show();">
+                                <h:graphicImage library="sh" name="img/delete.png" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </c:if>
 
                 <p:commandButton value="Zapisz"
                                  actionListener="#{productImageVersionRevisionEditController.saveDetail()}"
@@ -159,10 +106,116 @@
                                  update=""/>
                 <h:link title="Anuluj" outcome="cancel"   >
                     <f:param name="table_page" value="#{productImageVersionRevisionEditController.tablePageInx}" />
+                    <f:param name="id" value="#{productImageVersionRevisionEditController.parentId}" />
                     <h:outputLabel value="Anuluj" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only appButton fakeButton" style="" />
                 </h:link>
             </p:panel>
+
+
+
+            <p:dialog id="deleteDialog"
+                      widgetVar="deleteDialogW"
+                      header="Usuń"
+                      modal="true"
+                      resizable="false"
+                      minHeight="200"
+                      appendTo="@(body)"
+                      width="400">
+                <h:panelGrid columns="3" id="displayDelete" columnClasses="alignTop,alignTop,alignTop"
+                             style="display: block;width: 270px; border: 0px black solid;">
+                    <h:outputLabel value="Czy usunąć '" />
+                    <h:outputLabel value="#{productImageVersionRevisionEditController.selectedItem.lastUpdate}" />
+                    <h:outputLabel value="'?" />
+                </h:panelGrid>
+                <p:separator />
+                <p:commandButton value="OK"
+                                 actionListener="#{productImageVersionRevisionEditController.delete}"
+                                 partialSubmit="true"
+                                 ajax="true"
+                                 rendered="#{p:ifGranted('ROLE_ADMIN')}"
+                                 oncomplete="PF('deleteDialogW').hide();"
+                                 process="@this"
+                                 style="display: inline; margin: 0 auto 10px; width: 100px;"
+                                 update="@([id$=imageVersionRevisionTable])" />
+            </p:dialog>
+
+            <p:dialog id="compareRevisionDialog"
+                      widgetVar="compareRevisionDialogW"
+                      header="Porównaj"
+                      modal="true"
+                      resizable="false"
+                      maxHeight="600"
+                      appendTo="@(body)"
+                      maxWidth="800">
+                <p:scrollPanel style="width:800px;height:500px; border: 0px black solid;" >
+                    <h:panelGrid columns="2" id="displayCompare" columnClasses="alignTop,alignTop"
+                                 style="display: block;max-width: 800px; border: 0px black solid;"
+
+                    >
+                        <h:outputLabel value="#{productImageVersionRevisionEditController.compareModal.firstDate}" />
+                        <h:outputLabel value="#{productImageVersionRevisionEditController.compareModal.secondDate}" />
+
+                        <h:graphicImage
+                                rendered="#{productImageVersionRevisionEditController.compareModal.firstImage ne null}"
+                                style="max-width: 500px; max-height: 500px;"
+                                value="data:image/jpg;base64,#{productImageVersionRevisionListController.showImage2(productImageVersionRevisionEditController.compareModal.firstImage)}" />
+                        <h:graphicImage
+                                rendered="#{productImageVersionRevisionEditController.compareModal.secondImage ne null}"
+                                style="max-width: 500px; max-height: 500px;"
+                                value="data:image/jpg;base64,#{productImageVersionRevisionListController.showImage2(productImageVersionRevisionEditController.compareModal.secondImage)}" />
+
+                        <h:outputText escape="false"  value="#{productImageVersionRevisionEditController.compareModal.firstDescription}" />
+                        <h:outputText escape="false"  value="#{productImageVersionRevisionEditController.compareModal.secondDescription}" />
+                    </h:panelGrid>
+                </p:scrollPanel>
+
+                <p:separator />
+                <p:commandButton value="OK"
+                                 actionListener="#{productImageVersionRevisionEditController.clearCompareValue()}"
+                                 oncomplete="PF('compareRevisionDialogW').hide();"
+                                 partialSubmit="true"
+                                 ajax="true"
+                                 process="@this"
+                                 styleClass="appButton"
+                                 update="@([id$=imageVersionRevisionTable])"/>
+            </p:dialog>
+
         </h:form>
+
+        <p:dialog id="showImageDialog"
+                  widgetVar="showImageDialogW"
+                  header="Obrazek"
+                  modal="true"
+                  resizable="false"
+                  maxHeight="600"
+                  appendTo="@(body)"
+                  maxWidth="1000">
+
+            <h:form id="dialogEditId">
+            <p:scrollPanel style="width:800px;height:500px; border: 0px black solid;" >
+                <h:panelGrid columns="2" id="displayEdit" columnClasses="alignTop50,alignTop50"
+                             style="display: block;max-width: 800px; border: 0px black solid;">
+                    <h:graphicImage  style="width: 100%"
+                                     rendered="#{productImageVersionRevisionEditController.updateVersionDialog.selectedImage ne null}"
+                                     value="data:image/jpg;base64,#{productImageVersionRevisionListController.showImage2(productImageVersionRevisionEditController.updateVersionDialog.selectedImage)}" />
+                    <p:inputTextarea
+                            style="width: 100%"
+                            value="#{productImageVersionRevisionEditController.updateVersionDialog.selectedDescription}">
+                    </p:inputTextarea>
+
+                </h:panelGrid>
+            </p:scrollPanel>
+
+            <p:separator />
+            <p:commandButton value="Zapisz"
+                             action="#{productImageVersionRevisionEditController.updateDescription()}"
+                             oncomplete="PF('showImageDialogW').hide();"
+                             ajax="true"
+                             styleClass="appButton"
+                             update="@([id$=form1])" />
+        </h:form>
+        </p:dialog>
+
 
     </ui:define>
 </ui:composition>

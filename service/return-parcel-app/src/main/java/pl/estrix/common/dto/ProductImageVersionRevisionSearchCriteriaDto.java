@@ -13,6 +13,7 @@ public class ProductImageVersionRevisionSearchCriteriaDto {
     private String tableSearch;
 
     private Long versionId;
+    private Boolean mainOnly;
     private Long versionRevisionId;
 
     private String sortField;

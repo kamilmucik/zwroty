@@ -33,8 +33,7 @@ const OCRTestScreen = ({ navigation }) => {
             setIsLoading(false);
             // console.log(error);
             showMessage({
-              message: "Błąd",
-              description: "Rozpoznawanie tekstu z obrazka",
+              message: "Rozpoznawanie tekstu z obrazka",
               type: "warning",
             });
           }
@@ -45,8 +44,8 @@ const OCRTestScreen = ({ navigation }) => {
         const options = {
           mediaType: 'photo',
           includeBase64: true,
-          maxHeight: 2000,
-          maxWidth: 2000,
+          maxHeight: 1920,
+          maxWidth: 1080,
         };
     
         launchImageLibrary(options, handleResponse);
@@ -56,8 +55,8 @@ const OCRTestScreen = ({ navigation }) => {
         const options = {
           mediaType: 'photo',
           includeBase64: true,
-          maxHeight: 2000,
-          maxWidth: 2000,
+          maxHeight: 1920,
+          maxWidth: 1080,
         };
     
         launchCamera(options, handleResponse);
@@ -67,14 +66,12 @@ const OCRTestScreen = ({ navigation }) => {
         if (response.didCancel) {
           console.log('User cancelled image picker');
           showMessage({
-            message: "Info",
-            description: "Przerwanie procesu rozpoznawania",
-            type: "info",
+            message: "Przerwanie procesu rozpoznawania",
+            type: "warn",
           });
         } else if (response.error) {
           showMessage({
-            message: "Błąd",
-            description: "Rozpoznawanie tekstu z obrazka: " + response.error,
+            message: "Rozpoznawanie tekstu z obrazka: " + response.error,
             type: "warning",
           });
         } else {
@@ -86,8 +83,8 @@ const OCRTestScreen = ({ navigation }) => {
       };
     
       return (
-        <View>
-          <ScrollView>
+        <ScrollView  >
+          <View  style={styles.mainContainer}>
           <View style={styles.buttonWrapper}>
             <View style={styles.rowContainer}>
               <TouchableOpacity
@@ -96,7 +93,6 @@ const OCRTestScreen = ({ navigation }) => {
                 <MaterialCommunityIcons name="camera" style={styles.icon} />
               </TouchableOpacity>
               <TouchableOpacity onPress={openImagePicker}
-                
                 style={styles.button}>
                 <MaterialCommunityIcons name="camera-image" style={styles.icon} />
               </TouchableOpacity>
@@ -109,6 +105,7 @@ const OCRTestScreen = ({ navigation }) => {
                 source={{
                   uri: 'data:image/jpeg;base64,' + fileBase64Front,
                 }}
+                resizeMode="contain"
                 style={styles.image} 
               />
           </View>
@@ -124,13 +121,12 @@ const OCRTestScreen = ({ navigation }) => {
               })}
             </View>
           ) : isLoading ? (
-            <Text style={styles.titleResult}>Czekaj...</Text>
+            <Text style={styles.titleResult}></Text>
           ) : (
             <Text style={styles.titleResult}>Nie rozpoznałem tekstu... 🙁</Text>
           )}
-          </ScrollView>
         </View>
-        
+      </ScrollView>
       );
 };
 

@@ -3,14 +3,15 @@ import AppContext from "./AppContext";
 
 function AppProvider({children}) {
   const cache = useRef([]);
+
   const [settingsFastQuizDepartment, setContextSettingsFastQuizDepartment] = useState({});
-  const [settingsShowCorrectAnswerOnly, setContextSettingsOnlyCorrectValue] = useState(false);
+  const [settingsDestinationURL, setContextSettingsDestinationURL] = useState('');
 
   function setSettingsFastQuizDepartment(val){
     setContextSettingsFastQuizDepartment( val);
   }
-  function setSettingsOnlyCorrectValue(val){
-    setContextSettingsOnlyCorrectValue( val);
+  function setSettingsDestinationURL(val){
+    setContextSettingsDestinationURL( val);
   }
   function addToCache(query, data){
     cache.current[query] = {
@@ -24,10 +25,10 @@ function AppProvider({children}) {
   const value = {
     cache: cache,
     settingsFastQuizDepartment: settingsFastQuizDepartment,
-    settingsShowCorrectAnswerOnly: settingsShowCorrectAnswerOnly,
+    settingsDestinationURL: settingsDestinationURL,
 
     setSettingsFastQuizDepartment: setSettingsFastQuizDepartment,
-    setSettingsOnlyCorrectValue: setSettingsOnlyCorrectValue,
+    setSettingsDestinationURL: setSettingsDestinationURL,
     existInCache: existInCache,
     addToCache: addToCache,
   }

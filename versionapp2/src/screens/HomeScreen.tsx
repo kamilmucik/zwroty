@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native";
 import GlobalStyle from "../utils/GlobalStyle";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { QUIZ_ID, PAGE_SIZE } from '../config';
 import CustomList from '../components/CustomList';
-import {useCustomFetch} from '../hooks/useCustomFetch'
-import HomeMenuTile from '../components/HomeMenuTile';
 
 const HomeScreen = ({ navigation }) => {
+
+  async function loadProperties() {
+    const value = await AsyncStorage.getItem('@storage_lkequiz3');
+    let parsed = JSON.parse(value);
+    console.log("load.destinationURL: " + JSON.stringify(parsed));
+    if(value !== null && parsed !==null) {
+      appCtx.setSettingsDestinationURL(parsed.destinationURL);
+    }
+  }
+
+useEffect(() => {
+    loadProperties();
+  }, []);
   
 
   return (

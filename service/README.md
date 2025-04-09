@@ -1,7 +1,7 @@
 Ikony: http://www.iconarchive.com/show/trainee-icons-by-emey87.html
 http://www.iconarchive.com/show/lcd-boxes-icons-by-musett/Stamp-Clean-icon.html
 
-mvn release:clean release:prepare release:perform  -DreleaseVersion=2.2.0 -DdevelopmentVersion=2.2.1-SNAPSHOT
+mvn release:clean release:prepare release:perform  -DreleaseVersion=2.3.0 -DdevelopmentVersion=2.3.1-SNAPSHOT
 
 scp /Users/kamilmuc/ws/test/20230425/zwroty/service/return-parcel-app/target/return-parcel-app.war ubuntu@51.83.132.174:/var/www/e-strix.pl/public_html/megapack/ROOT_2.2.2.war
 scp /Users/kamilmuc/ws/test/20230425/zwroty/service/return-parcel-app/target/ROOT.war ubuntu@51.83.132.174:/var/www/e-strix.pl/public_html/megapack/ROOT_2.2.2-RC.war
@@ -49,5 +49,6 @@ docker save -o  parcel-server.tar.gz registry.hub.docker.com/kamilmucik/return-p
 docker load --input  parcel-server.tar.gz 
 ```
 
-scp return-parcel-app/target/return-parcel-app.war ubuntu@162.19.227.81:/home/ubuntu/return-parcel/conf/tomcat-mock/target/ROOT.war
+cp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.3.0-SNAPSHOT.war docker/docker/tomcat/ROOT.war
+scp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.3.0-SNAPSHOT.war ubuntu@162.19.227.81:/home/ubuntu/return-parcel/conf/tomcat-mock/target/ROOT.war
 scp db-unit/src/main/resources/db/migration/V2.3.1__printer_update.sql ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/

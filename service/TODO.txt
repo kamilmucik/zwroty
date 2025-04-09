@@ -45,3 +45,11 @@ java ocr:
 
 zewnetrzne serwisy:
 - https://aws.amazon.com/textract/pricing/?p=pm&c=textract&z=4
+
+
+UPDATE 20250328
+- wystawić fv 2000 netto
+- szukanie po opisach cy taki produkt pojawił się już w przeszłości
+- odwrócenie kolejności wyświetlania produktów
+- możliwość porównywania 2 dowolnych produktów
+- usuwanie wersji
