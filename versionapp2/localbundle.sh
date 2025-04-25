@@ -40,7 +40,7 @@ $SCRIPT_DIR/android/gradlew bundleRelease
 # cd $SCRIPT_DIR
 echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/version-release.apk'
 
-sshpass -p 'syjAkywapy1' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/version-release.apk
+sshpass -p '' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/version-release.apk
 
 
 echo "Wrzutka zakończona"
