@@ -38,9 +38,9 @@ $SCRIPT_DIR/android/gradlew bundleRelease
 
 # scp /Users/kamilmuc/ws/lkequiz/mobileapp/android/app/build/outputs/apk/release/app-release.apk
 # cd $SCRIPT_DIR
-echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/version-release.apk'
+echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.4.0/version-release.apk'
 
-sshpass -p '' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/version-release.apk
+sshpass -p 'xxx' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.4.0/version-release.apk
 
 
 echo "Wrzutka zakończona"

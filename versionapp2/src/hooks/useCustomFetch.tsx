@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useContext } from 'react';
 import { ACTION_TYPE } from './postActionTypes';
 import { INITIAL_STATE, postReducer } from './postReducer'
-import { BASE_API_URL, API_KEY } from '../config.tsx';
+import { BASE_API_URL} from '../config.tsx';
 import AppContext from "../store/AppContext";
 
 export const useCustomFetch = (query: string, cached = true, stataticData = []) => {
@@ -14,7 +14,7 @@ export const useCustomFetch = (query: string, cached = true, stataticData = []) 
     dispach({type: ACTION_TYPE.FETCH_START, loading: true, moreLoading: true });
 
     const fetchData = () => {
-        fetch(appCtx.settingsDestinationURL+"/"+query, {
+        fetch(BASE_API_URL+"/"+query, {
             method: 'GET'
           })
           .then( (response) => {

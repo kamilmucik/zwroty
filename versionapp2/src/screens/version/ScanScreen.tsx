@@ -38,13 +38,13 @@ const ScanScreen = () => {
     }
 
   async function loadProperties() {
-    const value = await AsyncStorage.getItem('@storage_versions2');
-    let parsed = JSON.parse(value);
-    if(value !== null && parsed !==null) {
-      appCtx.setSettingsDestinationURL(parsed.destinationURL);
-    } else {
+    // const value = await AsyncStorage.getItem('@storage_versions2');
+    // let parsed = JSON.parse(value);
+    // if(value !== null && parsed !==null) {
+    //   appCtx.setSettingsDestinationURL(parsed.destinationURL);
+    // } else {
       appCtx.setSettingsDestinationURL(BASE_API_URL);
-    }
+    // }
   }
 
   useEffect(() => {
@@ -147,9 +147,16 @@ const ScanScreen = () => {
                 </TouchableOpacity>
               </View>
           </View>
+          <View>
+
+          <Text>{appCtx.settingsDestinationURL}/{query}</Text>
+          </View>
 
           <View >
-          {loading && <ActivityIndicator size='large'/>}
+          {loading && 
+          <View>
+            <ActivityIndicator size='large'/>
+          </View>}
           {/* <Text>debouncedValue: {debouncedValue} </Text>
           <Text>eanValue: {eanValue}</Text>
           <Text>ean2SendValue: {ean2SendValue}</Text>
