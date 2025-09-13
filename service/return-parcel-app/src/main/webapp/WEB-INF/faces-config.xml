@@ -128,11 +128,26 @@
 			<to-view-id>/secured/versions/newImageRevision.xhtml</to-view-id>
 			<redirect></redirect>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>mergeDetails</from-outcome>
+			<to-view-id>/secured/versions/mergeDetails.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
 	</navigation-rule>
 
 	<navigation-rule>
 		<display-name>secured/versions/newImageRevision.xhtml</display-name>
 		<from-view-id>/secured/versions/newImageRevision.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>cancel</from-outcome>
+			<to-view-id>/secured/versions/details.xhtml</to-view-id>
+			<redirect>
+			</redirect>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>secured/versions/mergeDetails.xhtml</display-name>
+		<from-view-id>/secured/versions/mergeDetails.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>cancel</from-outcome>
 			<to-view-id>/secured/versions/details.xhtml</to-view-id>

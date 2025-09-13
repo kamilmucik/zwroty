@@ -116,6 +116,14 @@
                             <f:param name="id" value="#{imageVersionRevision.id}" />
                             <f:param name="table_page" value="#{productImageVersionListController.tablePageInx}" />
                         </h:link>
+                        <h:link title="Merge" outcome="mergeDetails">
+                            <h:graphicImage library="sh" name="img/folder.png" />
+                            <f:param name="parentId" value="#{productImageVersionEditController.selected.id}" />
+                            <f:param name="idVersion" value="#{productImageVersionEditController.selected.id}" />
+                            <f:param name="hash" value="#{imageVersionRevision.hashGroup}" />
+                            <f:param name="id" value="#{imageVersionRevision.id}" />
+                            <f:param name="table_page" value="#{productImageVersionListController.tablePageInx}" />
+                        </h:link>
 
                         <p:commandLink styleClass=""
                                        title="Opis"

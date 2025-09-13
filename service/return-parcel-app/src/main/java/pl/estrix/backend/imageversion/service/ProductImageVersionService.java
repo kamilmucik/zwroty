@@ -1,8 +1,10 @@
 package pl.estrix.backend.imageversion.service;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jfree.util.Log;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,29 @@ public class ProductImageVersionService {
     @Autowired
     private ReadSettingCommandExecutor readSettingCommandExecutor;
     private String filePath;
+
+    @Getter
+    private Map<String, List<ProductImageVersionRevisionDto>> concatenateMap = new HashMap<>();
+
+    public List getConcatenateList(String ean){
+        return concatenateMap.get(ean);
+    }
+
+    public ProductImageVersionRevisionDto addToConcatenateList(ProductImageVersionRevisionDto imageVersion){
+        List tmpList = concatenateMap.getOrDefault(imageVersion.getEan(), new ArrayList<>());
+
+        imageVersion.setLastUpdate(LocalDateTime.now());
+        imageVersion.setId(tmpList.size() + 1L);
+        tmpList.add(imageVersion);
+        concatenateMap.put(imageVersion.getEan(), tmpList);
+
+        //Todo proba łączenia
+        return imageVersion;
+    }
+
+    public void clearList(String ean){
+        concatenateMap.getOrDefault(ean, new ArrayList<>()).clear();
+    }
 
 
     public ListResponseDto<ProductImageVersionDto> getItems(ProductImageVersionSearchCriteriaDto searchCriteria, PagingCriteria pagingCriteria){
@@ -136,25 +161,14 @@ public class ProductImageVersionService {
         return temp;
     }
 
-//    @Transactional
+
     public void setMainImage(Long id){
         updateRevisionExecutor.setMainImage(id);
     }
 
-    public CompletableFuture<RestProductImageVersionDto> findByEAN(String ean) {
-        CompletableFuture<RestProductImageVersionDto> completableFuture = new CompletableFuture<>();
-        Executors.newCachedThreadPool().submit(() -> {
-            ListResponseDto<ProductImageVersionDto> revisionDto = getProductImageVersionDtoListResponseDto(ean);
-
-            if (revisionDto.getData() == null) {
-                completableFuture.cancel(false);
-            } else {
-                RestProductImageVersionDto results = new RestProductImageVersionDto(revisionDto.getData());
-                completableFuture.complete(results);
-            }
-        });
-
-        return completableFuture;
+    public RestProductImageVersionDto findByEAN(String ean) {
+        ListResponseDto<ProductImageVersionDto> revisionDto = getProductImageVersionDtoListResponseDto(ean);
+        return new RestProductImageVersionDto(revisionDto.getData());
     }
 
     private ListResponseDto<ProductImageVersionDto> getProductImageVersionDtoListResponseDto(String ean) {
@@ -229,23 +243,42 @@ public class ProductImageVersionService {
         dto.setMain(true);
 
         boolean changesDetected = false;
-        if (!StringUtils.isEmpty(dto.getHashGroup())) {
-            ProductImageVersionRevisionDto lastVersion = readRevisionExecutor.findByHash(dto.getHashGroup());
-
-            String noHTML = CustomStringUtils.prepareStringToCompare(lastVersion.getDescription());
-
-            changesDetected = CustomStringUtils.isTextIsSame(noHTML, dto.getDescription());
-
-            dto.setDescription(
-                    CustomStringUtils.markDifferencesInText(lastVersion.getDescription(), dto.getDescription())
-                            .stream()
-                            .collect(Collectors.joining(" "))
-            );
-        }
-
         dto.setHashGroup(dto.getHashGroup() != null? dto.getHashGroup() : UUID.randomUUID().toString());
         ProductImageVersionRevisionDto selected = mapWithBas64Img(createRevisionExecutor.create(dto));
         selected.setChangesDetected(changesDetected);
+
+
+        if (!StringUtils.isEmpty(dto.getHashGroup())) {
+            ProductImageVersionRevisionDto lastVersion = readRevisionExecutor.findByHash(dto.getHashGroup());
+
+//            String prevNoHTML = CustomStringUtils.prepareStringToCompare(lastVersion.getDescription());
+            String currNoHTML = CustomStringUtils.prepareStringToCompare(dto.getDescription());
+//            String currDicValidatio = CustomStringUtils.checkWordsInDictionary(dto.getDescription(), true);
+
+//            changesDetected = CustomStringUtils.isTextIsSame(prevNoHTML, currNoHTML);
+
+            dto.setDescription(currNoHTML);
+            selected.setDescription(currNoHTML);
+//            dto.setDescription(
+//                    CustomStringUtils.markDifferencesInText(lastVersion.getDescription(), dto.getDescription())
+//                            .stream()
+//                            .collect(Collectors.joining(" "))
+//            );
+        }
+
+
+
+        //mergowanie obrazkow
+//        if (dto.isMerge()){
+//            List tmpList = concatenateMap.getOrDefault(dto.getEan(), new ArrayList<>());
+//
+//            dto.setLastUpdate(LocalDateTime.now());
+//            dto.setId(tmpList.size() + 1L);
+//            tmpList.add(dto);
+//            concatenateMap.put(dto.getEan(), tmpList);
+//        }
+
+
         return RestProductImageVersionRevisionDto
                     .builder()
                     .message("Dodano wersję produktu")
@@ -282,45 +315,4 @@ public class ProductImageVersionService {
         return Files.newInputStream(Paths.get(filePath,path));
     }
 
-//    private boolean isTextIsSame(String oldText, String newText){
-//        boolean isDifferent = false;
-//        boolean isDifferent2 = newText.equals(oldText);
-//
-//        String[] words1Old = oldText.split(" ");
-//        String[] words2New = newText.split(" ");
-//
-//        int maxLength = Math.max(words1Old.length, words2New.length);
-//
-//        for (int i = 0; i < maxLength; i++) {
-//            String word1 = (i < words1Old.length) ? words1Old[i] : "";
-//            String word2 = (i < words2New.length) ? words2New[i] : "";
-//
-//            if (!word1.equals(word2)) {
-//                isDifferent = true;
-//            }
-//        }
-//        return isDifferent;
-//    }
-//
-//    public static List<String> markDifferencesInText(String oldText, String newText) {
-//        List<String> differences = new ArrayList<>();
-//
-//        String[] words1Old = oldText.split(" ");
-//        String[] words2New = newText.split(" ");
-//
-//        int maxLength = Math.max(words1Old.length, words2New.length);
-//
-//        for (int i = 0; i < maxLength; i++) {
-//            String word1 = (i < words1Old.length) ? words1Old[i] : "";
-//            String word2 = (i < words2New.length) ? words2New[i] : "";
-//
-//            if (!word1.equals(word2)) {
-//                differences.add("<b style='color: red;'>" + word2 + "</b>");
-//            } else {
-//                differences.add(word2);
-//            }
-//        }
-//
-//        return differences;
-//    }
 }

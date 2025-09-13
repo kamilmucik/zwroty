@@ -20,6 +20,7 @@ public class ProductImageVersionRevisionDto extends BaseEntityDto<Long> {
     private String description;
     private String imgPath;
     private boolean main;
+    private boolean merge;
     private String imgBas64;
     private String hashGroup;
     private LocalDateTime lastUpdate;

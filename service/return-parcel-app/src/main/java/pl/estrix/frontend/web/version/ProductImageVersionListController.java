@@ -10,6 +10,8 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import pl.estrix.common.dto.SaveShipmentDto;
 import pl.estrix.common.dto.model.ProductImageVersionDto;
 import pl.estrix.common.dto.model.ShipmentProductDto;
 import pl.estrix.common.dto.model.ShipmentProductShopDto;
+import pl.estrix.common.exception.CustomException;
 import pl.estrix.frontend.jsf.FacesViewScope;
 import pl.estrix.frontend.web.MainController;
 
@@ -40,6 +43,7 @@ import java.util.*;
 @Scope(FacesViewScope.NAME)
 public class ProductImageVersionListController extends MainController implements Serializable {
 
+    private static Logger LOG = LoggerFactory.getLogger(ProductImageVersionListController.class);
 
     private LazyDataModel<ProductImageVersionDto> lazyModel;
 
@@ -76,18 +80,13 @@ public class ProductImageVersionListController extends MainController implements
 
     public void edit(Long id) {
         if (id == null || id == 0) {
-
+            selectedItem = new ProductImageVersionDto();
+            selectedItem.setEan("EAN");
+            selectedItem.setArtNumber(0L);
+            selectedItem.setTitle("Nazwa");
         } else {
             selectedItem = releaseService.getItem(id);
         }
-    }
-
-    public void showImage(String base64){
-        selectedImage = base64;
-    }
-    public String showImage2(String filePath) throws IOException {
-        byte[] fileContent = FileUtils.readFileToByteArray(new File(filePath));
-        return Base64.getEncoder().encodeToString(fileContent);
     }
 
     public void delete() {
@@ -142,16 +141,22 @@ public class ProductImageVersionListController extends MainController implements
                     }
                     Row row = rowIter.next();
 
+
+                    Long artNumberCandidate = getNumberValueFromCell(row.getCell(0));
+
+                    if (artNumberCandidate <= 0) { continue;}
+                    LOG.debug("processing row[{}] {}", number, artNumberCandidate);
+
                     ProductImageVersionDto inputDto = new ProductImageVersionDto();
-                    inputDto.setArtNumber(getNumberValueFromCell(row.getCell(1)));
-                    inputDto.setTitle(getValueFromCell(row.getCell(2)));
-                    inputDto.setEan(getValueFromCell(row.getCell(4)));
+                    inputDto.setArtNumber(artNumberCandidate);
+                    inputDto.setTitle(getValueFromCell(row.getCell(1)));
+                    inputDto.setEan(getValueFromCell(row.getCell(2)));
                     number++;
                     productImageVersionDtoList.add(inputDto);
                 }
             }
-        } catch (IOException | InvalidFormatException e) {
-            e.printStackTrace();
+        } catch (IOException | InvalidFormatException | NullPointerException e) {
+            throw new CustomException(e.toString(), e.getStackTrace(),"/secured/shipment/index.xhtml");
         } finally {
             processing = false;
         }
@@ -190,7 +195,8 @@ public class ProductImageVersionListController extends MainController implements
 
             return Long.parseLong(result);
         } catch (NumberFormatException e) {
-//            e.printStackTrace();
+            return 0L;
+        } catch (NullPointerException e) {
             return 0L;
         }
     }
@@ -204,7 +210,7 @@ public class ProductImageVersionListController extends MainController implements
                 result = cell.getStringCellValue();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // empty
         }
         return result;
     }

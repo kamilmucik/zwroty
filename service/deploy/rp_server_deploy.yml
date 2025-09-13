@@ -1,0 +1,34 @@
+---
+- name: Deploy service package
+  hosts: webserver
+  become_user: root
+  tasks:
+    - name: Delete content & directory
+      ansible.builtin.file:
+        state: absent
+        path: /tmp/rp/
+    - name: Creates directory
+      file:
+        path: /tmp/rp
+        state: directory
+        mode: 0775
+    - name: Transfer the script
+      copy: src=rp_server_deploy.sh dest=/tmp/rp/ mode=0777
+      tags: lsout
+      register: myshell_output
+    - name: Copy Docker image
+      copy: src={{filename}} dest=/tmp/rp mode=0755
+      tags: lsout
+      register: myshell_output
+    - name: Execute the script
+      command: timeout 240 sh /tmp/rp/rp_server_deploy.sh {{filename}} {{module}} {{version}}
+      become: yes
+      become_method: sudo
+      become_user: root
+      tags: lsout
+      register: myshell_output
+    - name: Copy the output to a local file
+      copy:
+        content: "{{ myshell_output.stdout }}"
+        dest: "/Users/kamilmuc/ws/zwroty/service/deploy/report_env_{{ ansible_host }}_{{ inventory_hostname }}.txt"
+      delegate_to: localhost

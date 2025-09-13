@@ -217,7 +217,6 @@ public class ShipmentEditController extends MainController {
                             }
 
                             productMap.put(shipmentProductDto.getArtNumber(),shipmentProductDto);
-//                            System.out.println();
                         } else if (sheetIndx == 2){
                             Long productNumber = getNumberValueFromCell(row.getCell(0));
                             ShipmentProductDto shipmentProductDto = productMap.get(productNumber);
@@ -233,7 +232,6 @@ public class ShipmentEditController extends MainController {
                                     default: break;
                                 }
                             }
-//                            System.out.println("shopDto: " + shopDto);
                             shipmentProductDto.addShop(shopDto);
                             productMap.put(shipmentProductDto.getArtNumber(),shipmentProductDto);
                         }

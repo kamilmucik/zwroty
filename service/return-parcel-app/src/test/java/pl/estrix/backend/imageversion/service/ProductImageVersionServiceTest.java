@@ -1,9 +1,11 @@
 package pl.estrix.backend.imageversion.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import pl.estrix.common.util.CustomStringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -19,5 +21,13 @@ public class ProductImageVersionServiceTest {
         for (String diff : differences) {
             System.out.println(diff);
         }
+    }
+
+    @Test
+    public void markDifferencesInHtml() {
+
+        String result = CustomStringUtils.checkWordsInDictionary("dupianska raus", false);
+
+        assertEquals("<b style='color: yellow;'>dupianska</b> raus", result);
     }
 }

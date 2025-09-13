@@ -2,7 +2,6 @@ package pl.estrix.frontend.web.version;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.FileUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,30 +9,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.estrix.backend.base.PagingCriteria;
 import pl.estrix.backend.imageversion.service.ProductImageVersionService;
-import pl.estrix.backend.reports.service.ExcelReportService;
-import pl.estrix.backend.settings.executor.ReadSettingCommandExecutor;
 import pl.estrix.common.base.ListResponseDto;
-import pl.estrix.common.dto.PrinterSearchCriteriaDto;
 import pl.estrix.common.dto.ProductImageVersionRevisionSearchCriteriaDto;
-import pl.estrix.common.dto.model.PrintFileDto;
-import pl.estrix.common.dto.model.ProductImageVersionDto;
 import pl.estrix.common.dto.model.ProductImageVersionRevisionDto;
-import pl.estrix.common.dto.model.SettingDto;
 import pl.estrix.frontend.jsf.FacesViewScope;
 import pl.estrix.frontend.web.MainController;
 
 import javax.annotation.PostConstruct;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.ValueChangeListener;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Base64;
-import java.util.Date;
 
 @Getter
 @Setter

@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/basicLayout.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:pp="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form style="overflow:none; padding-top: 10px !important;">
+            <h:link title="Powrót" outcome="cancel"  >
+                <h:outputLabel value="Powrót" style="cursor: pointer !important;" />
+            </h:link>
+            <p:messages id="messages" showDetail="true" escape="false" />
+        </h:form>
+        <h1>Merguj produkty</h1>
+        <h:form id="form1">
+            <p:poll interval="1" listener="#{productImageVersionMergeController.increment}" update="panel" />
+
+            <p:panel id="panel" header="Szczegóły" style="margin-bottom:10px; display: block; font-size: 18px; padding: 8px; vertical-align:text-top;">
+
+                <p:dataTable var="product" value="#{productImageVersionMergeController.datasource}">
+                    <p:column headerText="id" style="max-width: 150px;">
+                        <h:outputText value="#{product.id}" /><br/>
+                        <h:outputText value="#{product.lastUpdate}" />
+                    </p:column>
+                    <p:column headerText="imgBas64">
+                        <h:graphicImage style="max-width: 300px; max-height: 300px;"
+                                value="data:image/jpg;base64,#{product.imgBas64}" />
+                    </p:column>
+                    <p:column headerText="description">
+                        <h:outputText value="#{product.description}" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:commandButton value="Zapisz"
+                                 actionListener="#{productImageVersionListController.saveDetail()}"
+                                 partialSubmit="true"
+                                 ajax="false"
+                                 process="@this"
+                                 styleClass="appButton"
+                                 update=""/>
+                <h:link title="Anuluj" outcome="cancel"   >
+                    <f:param name="table_page" value="0" />
+                    <h:outputLabel value="Anuluj" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only appButton fakeButton" style="" />
+                </h:link>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

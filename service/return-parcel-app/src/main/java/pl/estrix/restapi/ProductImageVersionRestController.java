@@ -34,23 +34,13 @@ public class ProductImageVersionRestController {
     @Autowired
     private ProductImageVersionService service;
 
+    @Async
     @RequestMapping(value = "/findbyean", method = RequestMethod.GET)
     @ResponseBody
-    public DeferredResult<RestProductImageVersionDto> updateByEAN(
-            @RequestParam(value = "retNumber", required = true, defaultValue = "0") String retNumber,
+    public RestProductImageVersionDto findByEAN(
             @RequestParam(value = "ean", required = true, defaultValue = "") String ean
     ) {
-        DeferredResult<RestProductImageVersionDto> deferredResult = new DeferredResult<>();
-        CompletableFuture<RestProductImageVersionDto> completableFuture = service.findByEAN(ean);
-        completableFuture.whenComplete((res, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                deferredResult.setErrorResult(ex);
-            } else {
-                deferredResult.setResult(res);
-            }
-        });
-        return deferredResult;
+        return service.findByEAN(ean);
     }
 
     @RequestMapping(value ="/get-image", method = RequestMethod.GET)
@@ -69,6 +59,17 @@ public class ProductImageVersionRestController {
     @ResponseBody
     public RestProductImageVersionRevisionDto create(@RequestBody ProductImageVersionRevisionDto dto) {
         return service.addVersion(dto);
+    }
+
+    @Async
+    @RequestMapping(value = "/merge-test", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public RestProductImageVersionRevisionDto merge(@RequestBody ProductImageVersionRevisionDto dto) {
+        return RestProductImageVersionRevisionDto
+                .builder()
+                .dto(service.addToConcatenateList(dto))
+                .message("Merguje")
+                .build();
     }
 
 }

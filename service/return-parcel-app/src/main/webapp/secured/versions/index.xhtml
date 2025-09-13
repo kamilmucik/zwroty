@@ -32,8 +32,14 @@
                 <p:ajax event="rowSelect" listener="#{productImageVersionListController.onRowSelect}" />
 
                 <f:facet name="header">
-                    <h:link title="Dodaj" styleClass="tableAddButton" outcome="new">
+
+                    <h:link title="Dodaj produkt" styleClass="tableAddButton" outcome="details">
                         <h:graphicImage library="sh" name="img/new.png" />
+                        <f:param name="id" value="0" />
+                        <f:param name="table_page" value="#{dtLazyView.tablePageInx}" />
+                    </h:link>
+                    <h:link title="Dodaj plik" styleClass="tableAddButton" outcome="new">
+                        <h:graphicImage library="sh" name="img/import.png" />
                         <f:param name="id" value="0" />
                         <f:param name="table_page" value="#{dtLazyView.tablePageInx}" />
                     </h:link>

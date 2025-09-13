@@ -36,7 +36,7 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
     public List<ProductImageVersionRevision> find(ProductImageVersionRevisionSearchCriteriaDto searchCriteria, PagingCriteria pagingCriteria) {
         JPQLQuery query = getQueryForFind(searchCriteria);
 
-        query.orderBy(searchCriteria.getSortOrder().equals(SortOrder.ASCENDING)?productImageVersionRevision.id.asc():productImageVersionRevision.id.desc());
+        query.orderBy(SortOrder.ASCENDING.equals(searchCriteria.getSortOrder())?productImageVersionRevision.id.asc():productImageVersionRevision.id.desc());
 
         addPagingCriteriaToQuery(query, pagingCriteria);
 

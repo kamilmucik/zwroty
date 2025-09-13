@@ -28,7 +28,7 @@ spring:
         hibernate:
             ddl-auto: update
     datasource:
-        url: jdbc:mysql://db.rp.e-strix.pl:3307/zwroty_e_strix_com?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3307/zwroty_e_strix_com?useUnicode=yes&characterEncoding=UTF-8
         username: user
         password: user
         driver-class-name: com.mysql.jdbc.Driver
@@ -54,7 +54,7 @@ logging:
         file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
     file: /tmp/application.log
 server:
-    port : 8882
+    port : 8080
     session-timeout : 1800
 
 

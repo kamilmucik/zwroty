@@ -1,7 +1,7 @@
 package pl.estrix.backend.reports.service;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lingala.zip4j.ZipFile;
+//import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -133,7 +133,7 @@ public class ImageVersionService {
         } catch (IOException e) {
 //                throw new RuntimeException(e);
         }
-        new ZipFile(OUTPUT_ZIP).addFolder(new File(ZIP_DIR));
+//        new ZipFile(OUTPUT_ZIP).addFolder(new File(ZIP_DIR));
 
         return Paths.get(OUTPUT_ZIP).toFile();
     }

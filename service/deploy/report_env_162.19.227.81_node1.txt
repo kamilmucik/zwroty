@@ -1,0 +1,19 @@
+
+1. Docker Deploy Front rp-server.tar return-parcel-server 2.5.0
+return-parcel-server
+return-parcel-server
+Loaded image: registry.hub.docker.com/kamilmucik/return-parcel-server:2.5.0
+
+3. Docker images
+REPOSITORY                                                TAG              IMAGE ID       CREATED         SIZE
+registry.hub.docker.com/kamilmucik/return-parcel-server   2.5.0            6660ecce7765   7 minutes ago   755MB
+registry.hub.docker.com/kamilmucik/return-parcel-server   2.3.0            0b4964c026a2   7 weeks ago     755MB
+registry.hub.docker.com/kamilmucik/d3s-ui                 0.0.1-SNAPSHOT   d1b4162817d2   2 months ago    645MB
+registry.hub.docker.com/kamilmucik/d3s-tools              0.0.1-SNAPSHOT   fc00ad6ac949   3 months ago    1.02GB
+postgres                                                  17-alpine        ab968645bafb   7 months ago    278MB
+kamilmucik/proxy/nginx                                    1.1.1            da2b98036b2c   2 years ago     629MB
+mysql                                                     8.0.25           5c62e459e087   4 years ago     556MB
+CONTAINER ID   IMAGE                          COMMAND                  CREATED        STATUS                 PORTS                                                                      NAMES
+f073bb7fb141   postgres:17-alpine             "docker-entrypoint.s…"   6 months ago   Up 2 weeks             0.0.0.0:5432->5432/tcp, :::5432->5432/tcp                                  d3s-db2
+c108a06b9fed   mysql:8.0.25                   "docker-entrypoint.s…"   6 months ago   Up 2 weeks (healthy)   33060/tcp, 0.0.0.0:3307->3306/tcp, :::3307->3306/tcp                       rp-db
+1d84abca78ab   kamilmucik/proxy/nginx:1.1.1   "nginx -g 'daemon of…"   7 months ago   Up 2 weeks             0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp   nginx
