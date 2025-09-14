@@ -6,12 +6,12 @@ import CustomList from '../components/CustomList';
 const HomeScreen = ({ navigation }) => {
 
   async function loadProperties() {
-    // const value = await AsyncStorage.getItem('@storage_lkequiz3');
-    // let parsed = JSON.parse(value);
+    const value = await AsyncStorage.getItem('@storage_lkequiz3');
+    let parsed = JSON.parse(value);
     console.log("load.destinationURL: " + JSON.stringify(parsed));
-    // if(value !== null && parsed !==null) {
+    if(value !== null && parsed !==null) {
       appCtx.setSettingsDestinationURL("http://10.17.0.4:8080");
-    // }
+    }
   }
 
 useEffect(() => {

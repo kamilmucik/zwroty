@@ -17,7 +17,7 @@ export const postReducer = (state = INITIAL_STATE, action) => {
         case "FETCH_SUCCESS":
             return {
                 ...state,
-                data: [...state.data, ...action.payload],
+                data: [ ...action.payload],
                 error: '',
                 loading: false,
                 moreLoading: false

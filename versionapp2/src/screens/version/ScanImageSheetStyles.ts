@@ -31,9 +31,23 @@ const styles = StyleSheet.create({
     height: moderateScale(100),
   },
 
+  resultWrapper: {
+    marginTop: moderateScale(20),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#e1f5fe',
+  },
+  imageBig: {
+    backgroundColor: '#fff',
+    width: moderateScale(500), 
+    height: moderateScale(500), 
+  },
   image: {
-    width: moderateScale(300), 
-    height: moderateScale(300), 
+    flex: 0.8,
+    borderStyle: 'dashed',
+    borderBlockColor: 'black',
+    width: moderateScale(500), 
+    height: moderateScale(500), 
   },
   icon: {
     tintColor: Colors.white,
@@ -58,6 +72,9 @@ const styles = StyleSheet.create({
   textStyleWarn: {
     color: 'red',
     fontSize: 24,
+  },
+  dictionaryErrorText: {
+    color: 'yellow',
   }
 });
 

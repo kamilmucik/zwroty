@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { showMessage } from "react-native-flash-message";
 import {recognizeImage} from '../../utils/ImageDetailsUtils';
-import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Modal, Pressable, StyleSheet } from 'react-native';
 import { Button, InputText , InputSwitch }  from '../../components/Form.tsx';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AppContext from "../../store/AppContext";
+import { useNavigation } from '@react-navigation/native';
 
 import {useCustomPost} from '../../hooks/useCustomPost'
 import styles from './ScanImageSheetStyles';
@@ -12,20 +14,39 @@ let launchImageLibrary = _launchImageLibrary;
 let launchCamera = _launchCamera;
 
 const ScanImageScreen = ({navigation, route}) => {
-    const { versionId, hash, ean, artNumber } = route.params;
+    // const navigation = useNavigation();
+    const { versionId, hash, ean, artNumber, imgPath } = route.params;
     const [isLoading, setIsLoading] = useState(true);
     const [changesDetected, setChangesDetected] = useState(false);
+    const [mergeVerImages, setMergeVerImages] = useState(false);
     const [fileBase64Front, setFileBase64Front] = useState('');
     const [mergeResponse, setMergeResponse] = useState('Nie rozpoznałem tekstu.');
     const [uri, setURI] = useState('');
     const [formData, setFormData] = useState(null);
     const {loading, singleResult} = useCustomPost('productimageversion/add-image', formData);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalImg, setModalImg] = useState("test");
+
+
+    
+    const appCtx = useContext(AppContext);
+
+    useEffect(()=>{
+      navigation.addListener("blur",()=>{
+        navigation.navigate("Scan", {itemId: (new Date()).getTime()});
+      })
+    },[])
 
     useEffect(() => {
         if (uri) {
             processImage(uri);
         }
     }, [uri]);
+
+    const onPressZoom= () =>{
+      // setModalImg(url);
+      setModalVisible(true);
+    }
 
     const processImage = async (url: string) => {
         if (url) {
@@ -45,7 +66,7 @@ const ScanImageScreen = ({navigation, route}) => {
             // console.log(error);
             showMessage({
                 message: "Błąd",
-                description: "Rozpoznawanie tekstu z obrazka",
+                description: "Rozpoznawanie tekstu z obrazka",  
                 type: "warning",
             });
             }
@@ -96,6 +117,10 @@ const ScanImageScreen = ({navigation, route}) => {
     }
     };
 
+    const handleMergeVerImages = () => {
+      setMergeVerImages(!mergeVerImages);
+    }
+
     const handleImageVersion =  () => {
         setIsLoading(true);
         setFormData({
@@ -104,7 +129,8 @@ const ScanImageScreen = ({navigation, route}) => {
             hashGroup: hash,
             artNumber: artNumber,
             description: mergeResponse,
-            imgBas64: fileBase64Front
+            imgBas64: fileBase64Front,
+            merge: mergeVerImages
         });
         showMessage({
             message: "Aktualizuje wersje",
@@ -116,6 +142,7 @@ const ScanImageScreen = ({navigation, route}) => {
       // console.log("singleResult: " + JSON.stringify(singleResult));
       if (singleResult?.changesDetected !== undefined){
         setChangesDetected(singleResult?.changesDetected);
+        setMergeResponse(singleResult?.description);
       }
       
     }, [singleResult]);
@@ -138,23 +165,46 @@ const ScanImageScreen = ({navigation, route}) => {
           </View>
           {loading && <ActivityIndicator size='large'/>}
           {changesDetected && <Text style={styles.textStyleWarn}>Uwaga, zmiany w treści!</Text>}
+
+          <InputSwitch 
+            description="Połącz" 
+            onChange={handleMergeVerImages} 
+            value={mergeVerImages}
+            />
           
           <View style={styles.resultWrapper}>
-            <Image
+
+          {fileBase64Front?.length === 0 ? (
+              <ScrollView horizontal={true} style={styles.viewTest1}>
+                <Image source={{
+                  uri: appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+imgPath
+                }}
+                resizeMode="stretch"
+                style={styles.imageBig} 
+              />
+              </ScrollView>
+              
+            ) : (
+              
+              <Image
                 source={{
                   uri: 'data:image/jpeg;base64,' + fileBase64Front,
                 }}
                 resizeMode="contain"
-                style={styles.image} 
+                style={styles.imageBig} 
               />
+
+            )}
           </View>
           
           {mergeResponse?.length !== 0 ? (
+          <View>
             <View style={styles.resultWrapper}>
                 <Text style={styles.textStyle}>
                   {mergeResponse}
                 </Text>
             </View>
+          </View>
           ) : isLoading ? (
             <Text style={styles.titleResult}>Czekaj...</Text>
           ) : (
@@ -169,5 +219,50 @@ const ScanImageScreen = ({navigation, route}) => {
       </ScrollView>
     );
 };
+
+
+const stylesModal = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 5,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    margin: 15,
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});
 
 export default ScanImageScreen;

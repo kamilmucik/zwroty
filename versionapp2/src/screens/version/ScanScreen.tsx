@@ -1,7 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, ActivityIndicator, ScrollView, RefreshControl, Modal , Pressable, StyleSheet, Dimensions, ImageBackground} from 'react-native';
 import { DataTable } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import { showMessage } from "react-native-flash-message";
 import styles from './ScanSheetStyles';
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -14,8 +13,14 @@ import  AsyncStorage  from '@react-native-async-storage/async-storage';
 import AppContext from "../../store/AppContext";
 import { BASE_API_URL } from '../../config.tsx';
 
-const ScanScreen = () => {
-    const navigation = useNavigation();
+
+
+
+const ScanScreen = ({navigation, route}) => {
+
+    // const  {itemId}  = route.params;
+
+    
     const eanInputRef = useRef();
     const scanner = useRef(null);
     const appCtx = useContext(AppContext);
@@ -23,6 +28,7 @@ const ScanScreen = () => {
     const [scan, setScan] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [shouldRefresh, setShouldRefresh] = useState();
     const [eanValue, setEanValue] = useState('');
     const [eanScannerValue, setEanScannerValue] = useState('');
     const [ean2SendValue, setEan2SendValue] = useState('');
@@ -32,20 +38,20 @@ const ScanScreen = () => {
     const {loading, singleResult} = useCustomFetch(query);
     const {eanValid} = useCustomEANValidator(debouncedValue);
     const [eanValidValue, setEanValidValue] = useState('false');
+    const [images, setImages] = useState([]);
+
+
+  const [modalImg, setModalImg] = useState("test");
+  const [modalVisible, setModalVisible] = useState(false);
 
     const fetchProduct = async (ean) => {
       setQuery('productimageversion/findbyean?ean='+ean);
     }
 
   async function loadProperties() {
-    // const value = await AsyncStorage.getItem('@storage_versions2');
-    // let parsed = JSON.parse(value);
-    // if(value !== null && parsed !==null) {
-    //   appCtx.setSettingsDestinationURL(parsed.destinationURL);
-    // } else {
       appCtx.setSettingsDestinationURL(BASE_API_URL);
-    // }
   }
+
 
   useEffect(() => {
       loadProperties();
@@ -64,22 +70,27 @@ const ScanScreen = () => {
     }, [ean2SendValue]);
 
   useEffect(() => {
-      setEan2SendValue(eanScannerValue);
-  }, [eanScannerValue]);
+    setEan2SendValue(eanScannerValue);
+}, [eanScannerValue]);
+
+
+  useEffect(() => {
+    setQuery('productimageversion/findbyean?ean='+singleResult?.ean+'&ts='+Date.now());
+  }, [route.params?.itemId]);
+
+  
+
+  const handleRefresh = () => {
+    // console.log("refresh: " + singleResult?.ean);
+    setQuery('productimageversion/findbyean?ean='+singleResult?.ean+'&ts='+Date.now());
+  }
 
   const handleSetEAN =  () => {
     setEan2SendValue(eanValue);
     setEanValue('');
     setEanScannerValue('');
+    setImages([]);
   };
-
-  // useEffect(() => {
-  //   // console.log("debouncedValue: " + debouncedValue + " - " + debouncedValue.length + " - " + eanValid);
-  //   // if (eanValid === true  && debouncedValue.length > 6){
-  //     setEan2SendValue(debouncedValue);
-  //   // }
-    
-  // }, [debouncedValue]);
 
   useEffect(() => {
     if (singleResult?.ean === undefined){
@@ -94,24 +105,15 @@ const ScanScreen = () => {
         });
 
     } else {
-
+      
       setEanValue('');
       setEanScannerValue('');
       setEan2SendValue('');
     }
+    setImages(singleResult?.revisions);
+    console.log(singleResult?.revisions.imgPath)
     
   }, [singleResult]);
-
-
-    // useEffect(() => {
-    // if (isFocused === false){
-    //     setDefaultFocus();
-    // }
-    // }, [isFocused]);
-
-    // const setDefaultFocus = () => {
-    //     eanInputRef.current.focus();
-    // };
 
     const launchScannerCamera = () => {
       setScan(true);
@@ -121,8 +123,62 @@ const ScanScreen = () => {
       setScan(false);
     }
 
+    const onPressZoom= (url) =>{
+      setModalImg(url);
+      setModalVisible(true);
+    }
+    const onPressPosUp= (url) =>{
+      showMessage({
+        message: "Funkcjonalność w trakcie przygotowania",
+        type: "info",
+        statusBarHeight: 40
+      });
+    }
+    const onPressDelete= (url) =>{
+      showMessage({
+        message: "Funkcjonalność w trakcie przygotowania",
+        type: "info",
+        statusBarHeight: 40
+      });
+    }
+
     return !scan ? (
-      <ScrollView  >
+      <ScrollView  refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={handleRefresh} />
+      }>
+
+
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={stylesModal.centeredView}>
+            <View style={stylesModal.modalView}>
+
+                <ScrollView style={styles.viewTest1}>
+                  <ScrollView horizontal={true} style={styles.viewTest2}>
+                    <Image source={{ uri: modalImg }} 
+                          resizeMode="stretch"
+                          style={styles.imageBig}
+                    /> 
+                  </ScrollView>
+                </ScrollView>
+
+              <Pressable
+                style={[stylesModal.button, stylesModal.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={stylesModal.textStyle}>Zamknij</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
+
+
         <View  style={styles.mainContainer}>
             <View style={styles.rowContainer} >
               <View style={[styles.inputSection]}>
@@ -148,8 +204,13 @@ const ScanScreen = () => {
               </View>
           </View>
           <View>
-
+          {appCtx.isDebugMode === true ?
+          <View>
           <Text>{appCtx.settingsDestinationURL}/{query}</Text>
+            <Text>{shouldRefresh}</Text>
+          </View>
+          :<View></View>}
+          
           </View>
 
           <View >
@@ -157,10 +218,6 @@ const ScanScreen = () => {
           <View>
             <ActivityIndicator size='large'/>
           </View>}
-          {/* <Text>debouncedValue: {debouncedValue} </Text>
-          <Text>eanValue: {eanValue}</Text>
-          <Text>ean2SendValue: {ean2SendValue}</Text>
-          <Text>eanValidValue: {eanValidValue}</Text> */}
           
           <DataTable  >
             <DataTable.Row >
@@ -207,15 +264,20 @@ const ScanScreen = () => {
 
           {isLoaded ? (
             <View >
-              {singleResult?.revisions.map(d => (
+              {images.map(d => (
                 <CustomImage 
                   label={d.hashGroup} 
                   hash={d.imgPath} 
+                  refreshTs={shouldRefresh}
+                  onPressZoom={onPressZoom}
+                  onPressPosUp={onPressPosUp}
+                  onPressDelete={onPressDelete}
                   onPress={() =>
                     navigation.navigate('ScanImage', {
                       hash: d.hashGroup,
                       versionId: singleResult?.id,
                       ean: singleResult?.ean,
+                      imgPath: d.imgPath,
                       artNumber: singleResult?.artNumber
                     })
                   }
@@ -265,5 +327,50 @@ const ScanScreen = () => {
     </SafeAreaView>
   );
 };
+
+
+const stylesModal = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 5,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    margin: 15,
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});
 
 export default ScanScreen;

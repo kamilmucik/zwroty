@@ -6,6 +6,9 @@
 # https://www.youtube.com/watch?v=A3--3Ozxz6o
 #
 
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.16.1.jdk/Contents/Home
+
+
 # generujemy klucz
 #sudo keytool -genkey -v -keystore lkequiz3.keystore -alias lkequiz3 -keyalg RSA -keysize 2048 -validity 10000
 #pass: 123qweasdzxc
@@ -40,7 +43,8 @@ $SCRIPT_DIR/android/gradlew bundleRelease
 # cd $SCRIPT_DIR
 echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.4.0/version-release.apk'
 
-sshpass -p 'xxx' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.4.0/version-release.apk
+# sshpass -p 'syjAkywapy1' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.4.0/version-release.apk
+sshpass -p 'syjAkywapy1' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/version-rc.apk
 
 
 echo "Wrzutka zakończona"

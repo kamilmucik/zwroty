@@ -14,11 +14,17 @@ const HomeStackNavigator = () => {
                       options={({ navigation, route }) => ({
                         headerShown: false,
                         title: '' ,
-                      })}/>
+                        
+                      })}
+                      initialParams={{ itemId: 422 }}
+
+                      />
     <HomeStack.Screen name="ScanImage" component={ScanImageScreen}
                         options={({ navigation }) => ({
                           title: 'Skanowanie'
-                        })}/>
+                        })}
+                        initialParams={{timestap: "321"}}
+                        />
     </HomeStack.Navigator>
   );
 };

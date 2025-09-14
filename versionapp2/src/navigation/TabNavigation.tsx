@@ -16,7 +16,7 @@ const screenOptions = (iconName, color) => {
   return <MaterialCommunityIcons name={iconName} color={color} size={24} />
  };
 
-const TabNavigator = () => {
+const TabNavigator = ({route, navigation}) => {
 
   return (
     <Tab.Navigator 
@@ -35,6 +35,7 @@ const TabNavigator = () => {
             tabBarLabel: 'Home',
             tabBarIcon: ({color}) => screenOptions('scan-helper', color),
           }} 
+          
           />
         <Tab.Screen 
           name="OCR" 
