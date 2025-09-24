@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: '#fff',
     width: moderateScale(1200), 
-    height: moderateScale(1200), 
+    height: moderateScale(1600), 
   },
   viewTest1: {
     // flex: 1,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1f5fe',
     // width: moderateScale(1200),
     // height: 'auto',
-    height: moderateScale(1200),
+    height: moderateScale(1600),
   },
   eanTextInput: {
     color: 'black',

@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, Image, ScrollView, Modal, ImageBackground } from 'react-native';
 import { showMessage } from "react-native-flash-message";
 import {recognizeImage} from '../../utils/ImageDetailsUtils';
 import styles from './OCRTestSheetStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 import { launchImageLibrary as _launchImageLibrary, launchCamera as _launchCamera } from 'react-native-image-picker';
 let launchImageLibrary = _launchImageLibrary;
@@ -14,6 +15,9 @@ const OCRTestScreen = ({ navigation }) => {
       const [isLoading, setIsLoading] = useState(true);
       const [fileBase64Front, setFileBase64Front] = useState('');
       const [uri, setURI] = useState('');
+      const [modalVisible, setModalVisible] = useState(false);
+      const [selectedImage, setSelectedImage] = useState({});
+    
 
       useEffect(() => {
         if (uri) {
@@ -81,9 +85,22 @@ const OCRTestScreen = ({ navigation }) => {
           setURI(imageUri);
         }
       };
+
+
+    const onPressZoom= (url) =>{
+      setSelectedImage([{url: url,}]);
+      setModalVisible(true);
+    }
     
       return (
         <ScrollView  >
+          <Modal
+            visible={modalVisible}
+            transparent={false}
+            onRequestClose={() => setModalVisible(!modalVisible)}>
+              <ImageViewer imageUrls={selectedImage} />
+          </Modal>
+
           <View  style={styles.mainContainer}>
           <View style={styles.buttonWrapper}>
             <View style={styles.rowContainer}>
@@ -101,13 +118,24 @@ const OCRTestScreen = ({ navigation }) => {
           <Text style={styles.titleResult}>Wyniki:</Text>
           
           <View style={styles.rowContainer}>
-            <Image
+            {/* <Image
                 source={{
                   uri: 'data:image/jpeg;base64,' + fileBase64Front,
                 }}
                 resizeMode="contain"
                 style={styles.image} 
-              />
+              /> */}
+
+
+              <TouchableOpacity
+                  onPress={ () => onPressZoom('data:image/jpeg;base64,' + fileBase64Front)} 
+                   >
+                  <ImageBackground 
+                      source={{ uri: 'data:image/jpeg;base64,' + fileBase64Front }}  
+                      resizeMode="contain" 
+                      style={styles.image}>
+                  </ImageBackground>
+                </TouchableOpacity>
           </View>
           
           {response?.length !== 0 ? (

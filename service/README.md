@@ -53,5 +53,6 @@ cp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-p
 scp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.3.0-SNAPSHOT.war ubuntu@162.19.227.81:/home/ubuntu/return-parcel/conf/tomcat-mock/target/ROOT.war
 scp db-unit/src/main/resources/db/migration/V2.3.1__printer_update.sql ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/202501/
 
-scp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.3.0.war ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/ROOT-RC.war
+scp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.5.0.war ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/ROOT.war
+scp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.5.0.war ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/ROOT-RC.war
 scp return-parcel-docker/return-parcel-docker-server/target/dependencies/return-parcel-app-2.3.0.war ubuntu@162.19.227.81:/home/ubuntu/return-parcel/conf/tomcat-mock/target/ROOT.war

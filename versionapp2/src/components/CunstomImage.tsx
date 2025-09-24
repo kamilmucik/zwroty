@@ -1,5 +1,5 @@
 import  React, {useContext, useState, useEffect}from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, ImageBackground, Pressable} from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, ImageBackground, Alert} from 'react-native';
 import {
   moderateScale,Colors,
 } from '../theme';
@@ -10,7 +10,9 @@ import { Modal } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 interface CustomImageProps {
+    id: number;
     hash: string;
+    hashGroup: string;
     label: string;
     refreshTs: string;
     onPress: any;
@@ -37,10 +39,18 @@ const CustomImage = (props : RowViewProps) => {
     props.onPressZoom(BASE_API_URL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+Date.now());
   };
   const handlePosUpClick = () => {
-    props.onPressPosUp(BASE_API_URL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+Date.now());
+    props.onPressPosUp(props.hashGroup);
   };
   const handleDeleteClick = () => {
-    props.onPressDelete(BASE_API_URL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+Date.now());
+    Alert.alert('Usuwanie', 'Czy na pewno usunąć wersję?', [
+      {
+        text: 'Anuluj',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Usuń', onPress: () => props.onPressDelete(props.hashGroup)},
+    ]);
+    
   };
 
   useEffect(() => {
@@ -62,6 +72,8 @@ const CustomImage = (props : RowViewProps) => {
         setLoadImage(false);
       }
     };
+
+
     
     return (
 <>
@@ -104,7 +116,7 @@ const CustomImage = (props : RowViewProps) => {
                   </View>
                   <View style={styles.pressableIcon}>
                     <TouchableOpacity onPress={handlePosUpClick}  >
-                      <Icon name="arrow-up" size={40} color="#900" />
+                      <Icon name="level-up" size={40} color="#900" />
                     </TouchableOpacity>
                   </View>
                   <View style={styles.pressableIcon}>
@@ -115,7 +127,7 @@ const CustomImage = (props : RowViewProps) => {
                 </View> 
               </View>
             ) : (
-              <Text>{imagePlace}</Text>
+              <View></View>
             )} 
           </View>
 </>
@@ -143,7 +155,9 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(30),
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#e1f5fe',
+    // borderBottomColor: '#e1f5fe',
+    // borderBottomWidth: 1,
+    // backgroundColor: '#e1f5fe',
   },
   text: {
     ctintColor: Colors.redThemeColor,

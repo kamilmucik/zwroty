@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import pl.estrix.common.dto.model.ProductImageVersionRevisionDto;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Component
 public class UpdateProductImageVersionRevisionCommandExecutor extends BaseProductImageVersionRevisionCommandExecute {
@@ -16,6 +18,10 @@ public class UpdateProductImageVersionRevisionCommandExecutor extends BaseProduc
 
     public void setMainImage(Long id){
         repository.setMainImage(id);
+    }
+
+    public void setTopOrder(String hashGroup){
+        repository.setTopOrder(hashGroup, new Date().getTime());
     }
 
     public void updateDescription (Long id, String description){

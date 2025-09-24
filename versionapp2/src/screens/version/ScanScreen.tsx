@@ -12,15 +12,14 @@ import { Button, InputText , InputSwitch }  from '../../components/Form.tsx';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
 import AppContext from "../../store/AppContext";
 import { BASE_API_URL } from '../../config.tsx';
+import {useCustomPost} from '../../hooks/useCustomPost'
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 
 
 
 const ScanScreen = ({navigation, route}) => {
 
-    // const  {itemId}  = route.params;
-
-    
     const eanInputRef = useRef();
     const scanner = useRef(null);
     const appCtx = useContext(AppContext);
@@ -39,10 +38,14 @@ const ScanScreen = ({navigation, route}) => {
     const {eanValid} = useCustomEANValidator(debouncedValue);
     const [eanValidValue, setEanValidValue] = useState('false');
     const [images, setImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState({});
 
+    const [deleteData, setDeleteData] = useState(null);
+    const {deleteResult} = useCustomPost('productimageversion/delete-image', deleteData, 'DELETE', "FETCH_DELETE_SUCCESS");
+    const [posUpData, setPosUpData] = useState(null);
+    const {posUpResult} = useCustomPost('productimageversion/change-order', posUpData, 'POST', "FETCH_POSUP_SUCCESS");
 
-  const [modalImg, setModalImg] = useState("test");
-  const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const fetchProduct = async (ean) => {
       setQuery('productimageversion/findbyean?ean='+ean);
@@ -103,17 +106,23 @@ const ScanScreen = ({navigation, route}) => {
         message: "Brak w bazie!",
         type: "warning",
         });
-
     } else {
-      
       setEanValue('');
       setEanScannerValue('');
       setEan2SendValue('');
     }
-    setImages(singleResult?.revisions);
-    console.log(singleResult?.revisions.imgPath)
     
+    setImages(singleResult?.revisions);
+    // console.log(singleResult?.revisions.imgPath)
   }, [singleResult]);
+
+  useEffect(() => {
+    // console.log("deleteResult: " + JSON.stringify(deleteResult));
+    // console.log("posUpResult: " + JSON.stringify(posUpResult));
+  //   // console.log("singleResult: " + JSON.stringify(singleResult?.ean));
+    handleRefresh();
+  }, [ deleteResult?.dto?.orderTimestamp, posUpResult?.dto?.orderTimestamp]);
+  
 
     const launchScannerCamera = () => {
       setScan(true);
@@ -124,21 +133,17 @@ const ScanScreen = ({navigation, route}) => {
     }
 
     const onPressZoom= (url) =>{
-      setModalImg(url);
+      setSelectedImage([{url: url,}]);
       setModalVisible(true);
     }
-    const onPressPosUp= (url) =>{
-      showMessage({
-        message: "Funkcjonalność w trakcie przygotowania",
-        type: "info",
-        statusBarHeight: 40
+    const onPressPosUp= (hashGroup) =>{
+      setPosUpData({
+        hashGroup: hashGroup,
       });
     }
-    const onPressDelete= (url) =>{
-      showMessage({
-        message: "Funkcjonalność w trakcie przygotowania",
-        type: "info",
-        statusBarHeight: 40
+    const onPressDelete= (hashGroup) =>{
+      setDeleteData({
+        hashGroup: hashGroup,
       });
     }
 
@@ -147,35 +152,16 @@ const ScanScreen = ({navigation, route}) => {
         <RefreshControl refreshing={loading} onRefresh={handleRefresh} />
       }>
 
+<View>
 
-      <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={stylesModal.centeredView}>
-            <View style={stylesModal.modalView}>
+<Modal
+  visible={modalVisible}
+  transparent={false}
+  onRequestClose={() => setModalVisible(!modalVisible)}>
+    <ImageViewer imageUrls={selectedImage} />
+</Modal>
+</View>
 
-                <ScrollView style={styles.viewTest1}>
-                  <ScrollView horizontal={true} style={styles.viewTest2}>
-                    <Image source={{ uri: modalImg }} 
-                          resizeMode="stretch"
-                          style={styles.imageBig}
-                    /> 
-                  </ScrollView>
-                </ScrollView>
-
-              <Pressable
-                style={[stylesModal.button, stylesModal.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={stylesModal.textStyle}>Zamknij</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
 
 
 
@@ -267,7 +253,9 @@ const ScanScreen = ({navigation, route}) => {
               {images.map(d => (
                 <CustomImage 
                   label={d.hashGroup} 
+                  hashGroup={d.hashGroup} 
                   hash={d.imgPath} 
+                  id={d.id} 
                   refreshTs={shouldRefresh}
                   onPressZoom={onPressZoom}
                   onPressPosUp={onPressPosUp}

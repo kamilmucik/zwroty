@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(20),
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#e1f5fe',
+    // backgroundColor: '#e1f5fe',
   },
   imageBig: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     width: moderateScale(500), 
     height: moderateScale(500), 
   },

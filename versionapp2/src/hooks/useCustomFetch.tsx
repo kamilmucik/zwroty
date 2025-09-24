@@ -21,6 +21,8 @@ export const useCustomFetch = (query: string, cached = true, stataticData = []) 
             return response.json();
           })
           .then( (data) => {
+
+            // console.log("useCustomFetch: " + JSON.stringify(data));
             dispach({type: ACTION_TYPE.FETCH_SINGLE_SUCCESS, payload: data.results[0] });
           })
           .catch( (error) => {

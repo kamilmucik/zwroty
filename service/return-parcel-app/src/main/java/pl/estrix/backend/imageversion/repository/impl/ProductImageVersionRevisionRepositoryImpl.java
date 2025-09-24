@@ -47,8 +47,8 @@ public class ProductImageVersionRevisionRepositoryImpl extends QueryDslRepositor
                 productImageVersionRevision.imgPath,
                 productImageVersionRevision.main,
                 productImageVersionRevision.lastUpdate,
-                productImageVersionRevision.hashGroup
-
+                productImageVersionRevision.hashGroup,
+                productImageVersionRevision.orderTimestamp
             ));
     }
 

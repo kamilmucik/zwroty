@@ -6,6 +6,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.util.Log;
 import org.primefaces.model.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.estrix.backend.base.PagingCriteria;
@@ -17,6 +19,7 @@ import pl.estrix.common.dto.*;
 import pl.estrix.common.dto.model.*;
 import pl.estrix.common.exception.CustomException;
 import pl.estrix.common.util.CustomStringUtils;
+import pl.estrix.restapi.PrintLabelRestController;
 
 import javax.transaction.Transactional;
 import java.io.File;
@@ -34,6 +37,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ProductImageVersionService {
+
+
+    private static Logger LOG = LoggerFactory.getLogger(ProductImageVersionService.class);
 
 
     private static final String PATH_IDENTIFIER = "%s/%s";
@@ -204,6 +210,10 @@ public class ProductImageVersionService {
                     .getData()
                     .stream()
                     .map(this::mapWithBas64Img)
+                    .sorted(
+                            Comparator.comparing(ProductImageVersionRevisionDto::getOrderTimestamp).reversed()
+                                    .thenComparing(Comparator.comparing(ProductImageVersionRevisionDto::getId).reversed())
+                    )
                     .collect(Collectors.toList());
             image.getRevisions().addAll(baseList);
         });
@@ -219,6 +229,48 @@ public class ProductImageVersionService {
                 .main(dto.isMain())
                 .description(dto.getDescription())
                 .hashGroup(dto.getHashGroup())
+                .orderTimestamp(dto.getOrderTimestamp())
+                .build();
+    }
+
+    public RestProductImageVersionRevisionDto deleteVersion(ProductImageVersionRevisionDto dto) {
+        SettingDto versionDirectorySettingDto = readSettingCommandExecutor.findByName("versionDirectory");
+        if (versionDirectorySettingDto != null){
+            filePath = versionDirectorySettingDto.getValue();
+        }
+
+        try {
+            ProductImageVersionRevisionDto dtoToDelete = readRevisionExecutor.findByHash(dto.getHashGroup());
+            LOG.debug("deleteVersion[{}]: {}", dto.getHashGroup(), dtoToDelete.getId());
+            File file = new File(String.format(PATH_IDENTIFIER,filePath,readRevisionExecutor.findById(dtoToDelete.getId()).getImgPath()));
+            Files.deleteIfExists(file.toPath());
+            deleteRevisionExecutor.delete(dtoToDelete);
+            ProductImageVersionRevisionDto mainCandidate = readRevisionExecutor.findByHash(dto.getHashGroup());
+
+            if (mainCandidate != null){
+                LOG.debug("mainCandidate[{}]: {}", dto.getHashGroup(), mainCandidate.getId());
+                updateRevisionExecutor.setMainImage(mainCandidate.getId());
+            }
+        } catch (IOException e) {
+            return RestProductImageVersionRevisionDto
+                    .builder()
+                    .message("Błąd usuwania obrazka")
+                    .dto(ProductImageVersionRevisionDto.builder().orderTimestamp(new Date().getTime()).build())
+                    .build();
+        }
+        return RestProductImageVersionRevisionDto
+                .builder()
+                .message("Usuwam wersję produktu")
+                .dto(ProductImageVersionRevisionDto.builder().orderTimestamp(new Date().getTime()).build())
+                .build();
+    }
+
+    public RestProductImageVersionRevisionDto changeOrder(ProductImageVersionRevisionDto dto) {
+        updateRevisionExecutor.setTopOrder(dto.getHashGroup());
+        return RestProductImageVersionRevisionDto
+                .builder()
+                .message("Zmiana kolejności")
+                .dto(ProductImageVersionRevisionDto.builder().orderTimestamp(new Date().getTime()).build())
                 .build();
     }
 
@@ -239,6 +291,7 @@ public class ProductImageVersionService {
         }
 
         dto.setLastUpdate(LocalDateTime.now());
+        dto.setOrderTimestamp(new Date().getTime());
         dto.setImgPath(path);
         dto.setMain(true);
 

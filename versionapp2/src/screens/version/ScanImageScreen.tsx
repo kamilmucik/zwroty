@@ -1,11 +1,13 @@
 import React, {useEffect, useState, useContext} from "react";
 import { showMessage } from "react-native-flash-message";
 import {recognizeImage} from '../../utils/ImageDetailsUtils';
-import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Modal, Pressable, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Modal, Pressable, StyleSheet, ImageBackground } from 'react-native';
 import { Button, InputText , InputSwitch }  from '../../components/Form.tsx';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppContext from "../../store/AppContext";
 import { useNavigation } from '@react-navigation/native';
+import ImageViewer from 'react-native-image-zoom-viewer';
+
 
 import {useCustomPost} from '../../hooks/useCustomPost'
 import styles from './ScanImageSheetStyles';
@@ -22,10 +24,11 @@ const ScanImageScreen = ({navigation, route}) => {
     const [fileBase64Front, setFileBase64Front] = useState('');
     const [mergeResponse, setMergeResponse] = useState('Nie rozpoznałem tekstu.');
     const [uri, setURI] = useState('');
+    
     const [formData, setFormData] = useState(null);
-    const {loading, singleResult} = useCustomPost('productimageversion/add-image', formData);
+    const {loading, singleResult} = useCustomPost('productimageversion/add-image', formData, 'POST', 'FETCH_SINGLE_SUCCESS');
     const [modalVisible, setModalVisible] = useState(false);
-    const [modalImg, setModalImg] = useState("test");
+    const [selectedImage, setSelectedImage] = useState({});
 
 
     
@@ -43,10 +46,6 @@ const ScanImageScreen = ({navigation, route}) => {
         }
     }, [uri]);
 
-    const onPressZoom= () =>{
-      // setModalImg(url);
-      setModalVisible(true);
-    }
 
     const processImage = async (url: string) => {
         if (url) {
@@ -147,8 +146,20 @@ const ScanImageScreen = ({navigation, route}) => {
       
     }, [singleResult]);
 
+    const onPressZoom= (url) =>{
+      setSelectedImage([{url: url,}]);
+      setModalVisible(true);
+    }
+
+
     return (
       <ScrollView  >
+        <Modal
+          visible={modalVisible}
+          transparent={false}
+          onRequestClose={() => setModalVisible(!modalVisible)}>
+            <ImageViewer imageUrls={selectedImage} />
+        </Modal>
         <View  style={styles.mainContainer}>
           <View style={styles.buttonWrapper}>
             <View style={styles.rowContainer}>
@@ -176,23 +187,27 @@ const ScanImageScreen = ({navigation, route}) => {
 
           {fileBase64Front?.length === 0 ? (
               <ScrollView horizontal={true} style={styles.viewTest1}>
-                <Image source={{
-                  uri: appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+imgPath
-                }}
-                resizeMode="stretch"
-                style={styles.imageBig} 
-              />
+                <TouchableOpacity
+                  onPress={ () => onPressZoom(appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+imgPath)} 
+                  >
+                  <ImageBackground 
+                      source={{ uri: appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+imgPath }}  
+                      resizeMode="contain" 
+                      style={styles.imageBig}>
+                  </ImageBackground>
+                </TouchableOpacity>
               </ScrollView>
               
             ) : (
-              
-              <Image
-                source={{
-                  uri: 'data:image/jpeg;base64,' + fileBase64Front,
-                }}
-                resizeMode="contain"
-                style={styles.imageBig} 
-              />
+              <TouchableOpacity
+                  onPress={ () => onPressZoom('data:image/jpeg;base64,' + fileBase64Front)} 
+                  >
+                  <ImageBackground 
+                      source={{ uri: 'data:image/jpeg;base64,' + fileBase64Front }}  
+                      resizeMode="contain" 
+                      style={styles.imageBig}>
+                  </ImageBackground>
+                </TouchableOpacity>
 
             )}
           </View>

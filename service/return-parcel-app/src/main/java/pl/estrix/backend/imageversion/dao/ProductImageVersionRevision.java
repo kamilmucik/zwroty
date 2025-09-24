@@ -38,6 +38,9 @@ public class ProductImageVersionRevision extends AuditableEntity {
     @Column(name = "hash_group", length = 32)
     private String hashGroup;
 
+    @Column(name = "order_timestamp")
+    private Long orderTimestamp;
+
     @Column(name = "description", length = 420000)
     private String description;
 

@@ -5,6 +5,8 @@ export const INITIAL_STATE = {
     moreError: null,
     data: [],
     singleResult: null,
+    deleteResult: null,
+    posUpResult: null,
     totalPage: 1,
     currentPage: 1,
     isListEnd: false
@@ -22,14 +24,30 @@ export const postReducer = (state = INITIAL_STATE, action) => {
                 loading: false,
                 moreLoading: false
             }
-            case "FETCH_SINGLE_SUCCESS":
-                return {
-                    ...state,
-                    singleResult: action.payload,
-                    error: '',
-                    loading: false,
-                    moreLoading: false
-                }
+        case "FETCH_SINGLE_SUCCESS":
+            return {
+                ...state,
+                singleResult: action.payload,
+                error: '',
+                loading: false,
+                moreLoading: false
+            }
+        case "FETCH_DELETE_SUCCESS":
+            return {
+                ...state,
+                deleteResult: action.payload,
+                error: '',
+                loading: false,
+                moreLoading: false
+            }
+        case "FETCH_POSUP_SUCCESS":
+            return {
+                ...state,
+                posUpResult: action.payload,
+                error: '',
+                loading: false,
+                moreLoading: false
+            }
         case "FETCH_ERROR":
             return {
                 ...state,

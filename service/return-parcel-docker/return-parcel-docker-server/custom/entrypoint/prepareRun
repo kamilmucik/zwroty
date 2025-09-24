@@ -4,3 +4,32 @@ set -e # Exit on failure
 source $(dirname $0)/lib/logging
 
 log INFO "Prepare Return Parcel Server"
+
+
+if [ -d "/opt/artifacts" ]; then
+  cp -ar /opt/artifacts /usr/local
+  cp -ar /opt/artifacts/tomcat/bin/setenv.sh /usr/local/tomcat/bin/
+fi
+
+
+
+log INFO "Finish Return Parcel Server"
+
+
+#if [ "${DEBUG_APP}" != "true" ]; then
+#  echo "Uruchamiam Zwrot Paczek"
+#/usr/local/tomcat/bin/catalina.sh run
+#else
+#  echo "Uruchamiam Zwrot Paczek w trybie debug JPDA"
+#/usr/local/tomcat/bin/catalina.sh jpda run
+#fi
+CATALINA_OPTS="$CATALINA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"
+/usr/local/tomcat/bin/catalina.sh run
+#
+#/usr/local/tomcat/bin/catalina.sh jpda start &
+#pid="$!"
+#echo "Starting ${pid}  "
+#while true
+#do
+#  tail -f /dev/null & wait ${!}
+#done

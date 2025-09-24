@@ -7,10 +7,10 @@ if (width > height) {
 
 //Guideline sizes are based on standard ~5" screen mobile device
 
-const guidelineBaseWidth = 375;
+const guidelineBaseWidth = 1080;
 // const guidelineBaseWidth = 500;
 
-const guidelineBaseHeight = 812;
+const guidelineBaseHeight = 2340;
 
 const horizontalScale = (size: number) => (width / guidelineBaseWidth) * size;
 

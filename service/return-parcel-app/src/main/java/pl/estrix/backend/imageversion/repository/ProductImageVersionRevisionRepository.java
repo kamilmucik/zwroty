@@ -29,6 +29,12 @@ public interface ProductImageVersionRevisionRepository extends ProductImageVersi
     @Modifying
     @Query("UPDATE ProductImageVersionRevision pivr SET pivr.main = true WHERE pivr.id = :id")
     void setMainImage(@Param("id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE ProductImageVersionRevision pivr SET pivr.orderTimestamp = :orderTimestamp WHERE pivr.hashGroup = :hashGroup")
+    void setTopOrder(@Param("hashGroup") String hashGroup, @Param("orderTimestamp") Long orderTimestamp);
+
     @Transactional
     @Modifying
     @Query("UPDATE ProductImageVersionRevision pivr SET pivr.description = :description WHERE pivr.id = :id")

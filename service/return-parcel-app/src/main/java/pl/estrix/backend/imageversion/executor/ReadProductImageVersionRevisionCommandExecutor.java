@@ -31,7 +31,7 @@ public class ReadProductImageVersionRevisionCommandExecutor extends BaseProductI
     }
 
     public ProductImageVersionRevisionDto findByHash(String  hash) {
-        return mapEntityToDto(repository.findLastByHash(hash).get(0));
+        return mapEntityToDto(repository.findLastByHash(hash).stream().findFirst().orElse(null));
     }
 
 }

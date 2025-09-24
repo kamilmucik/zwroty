@@ -234,7 +234,7 @@
                                 </goals>
                                 <configuration>
                                     <executable>docker</executable>
-                                    <commandlineArgs>build --build-arg VERSION=${app.version} --build-arg MODULE=${app.module} -t ${docker.image} .
+                                    <commandlineArgs>build --platform="linux/amd64" --build-arg VERSION=${app.version} --build-arg MODULE=${app.module} -t ${docker.image} .
                                     </commandlineArgs>
                                 </configuration>
                             </execution>

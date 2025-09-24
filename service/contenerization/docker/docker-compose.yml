@@ -29,9 +29,17 @@ services:
     container_name: rp-server
     #   platform: linux/x86_64
 #    platform: linux/amd64
+    environment:
+      DEBUG_APP: 'true'
     volumes:
+      - ./config/server/artifacts/:/opt/artifacts/
       - ./logs/server/:/usr/local/tomcat/logs/
+    expose:
+      - 8000
+      - 8080
+      - 9100
     ports:
+      - 8000:8000
       - 8080:8080
       - 9100:9100
     networks:

@@ -62,6 +62,21 @@ public class ProductImageVersionRestController {
     }
 
     @Async
+    @RequestMapping(value = "/delete-image", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public RestProductImageVersionRevisionDto delete(@RequestBody ProductImageVersionRevisionDto dto) {
+        return service.deleteVersion(dto);
+    }
+
+    @Async
+    @RequestMapping(value = "/change-order", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public RestProductImageVersionRevisionDto chnageOrder(@RequestBody ProductImageVersionRevisionDto dto) {
+        return service.changeOrder(dto);
+    }
+
+
+    @Async
     @RequestMapping(value = "/merge-test", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public RestProductImageVersionRevisionDto merge(@RequestBody ProductImageVersionRevisionDto dto) {
