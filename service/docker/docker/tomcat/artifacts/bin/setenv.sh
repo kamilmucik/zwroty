@@ -51,7 +51,6 @@ export CATALINA_OPTS
 #UMASK="0002"
 #export UMASK
 #
-#echo "Using D3S_HOME: $D3S_HOME"
 #echo "Using CATALINA_OPTS: $CATALINA_OPTS"
 #echo "Using umask $(umask)"
 

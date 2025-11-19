@@ -97,7 +97,7 @@
                     <p:column headerText="Aktualizacja"  style="width:100px; text-align: center;">
                         <h:outputText value="#{imageVersionRevision.lastUpdate}" />
                     </p:column>
-                    <p:column headerText="Obrazek"  style="width:120px; text-align: center;">
+                    <p:column headerText="Obrazek"  style="width:100px; text-align: center;">
                         <h:graphicImage
                                 rendered="#{imageVersionRevision.imgPath ne null}"
                                 style="max-width: 300px; max-height: 300px;"
@@ -105,6 +105,9 @@
                     </p:column>
                     <p:column headerText="Opis"  style="width:300px; text-align: center;">
                         <h:outputText escape="false" value="#{imageVersionRevision.description}" />
+                    </p:column>
+                    <p:column headerText="Komentarz"  style="width:100px; text-align: center;">
+                        <h:outputText escape="false" value="#{imageVersionRevision.comment}" />
                     </p:column>
 
                     <p:column headerText="" style="width:40px; text-align: center;">
@@ -127,10 +130,16 @@
 
                         <p:commandLink styleClass=""
                                        title="Opis"
-                                       action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.id, productImageVersionEditController.selected.id, imageVersionRevision.imgPath,imageVersionRevision.description)}"
+                                       action="#{productImageVersionRevisionListController.showImage(imageVersionRevision.id, productImageVersionEditController.selected.id, imageVersionRevision.imgPath,imageVersionRevision.description,imageVersionRevision.comment)}"
                                        update="@([id$=dialogFormId])"
                                        oncomplete="PF('showImageDialogW').show();">
                             <h:graphicImage library="sh" name="img/edit.png" />
+                        </p:commandLink>
+                        <p:commandLink styleClass=""
+                                       title="Przetłumacz ponownie"
+                                       action="#{productImageVersionRevisionEditController.rerecognizeImageText(imageVersionRevision.id)}"
+                                       update="@([id$=imageVersionRevisionTable])">
+                            <h:graphicImage library="sh" name="img/ocr.png" />
                         </p:commandLink>
                     </p:column>
                 </p:dataTable>
@@ -173,19 +182,26 @@
                   appendTo="@(body)"
                   maxWidth="1000">
             <h:form id="dialogFormId">
+
+                <p:scrollPanel style="width:1200px;height:500px; border: 0px black solid;" >
                 <h:inputHidden value="#{productImageVersionEditController.selected.id}" id="revisionId" />
                 <h:panelGrid columns="2" id="displayImage" columnClasses="alignTop50,alignTop50"
                              style="display: block;max-width: 1000px; border: 0px black solid;">
                     <h:graphicImage  style="width: 100%"
                                      value="data:image/jpg;base64,#{productImageVersionRevisionListController.updateVersionDialog.selectedImage}" />
-
                     <p:inputTextarea
                             style="width: 100%"
                             value="#{productImageVersionRevisionListController.updateVersionDialog.selectedDescription}">
                     </p:inputTextarea>
 
-                </h:panelGrid>
+                    <h:outputLabel value="Komentarz" />
+                    <p:inputTextarea
+                            style="width: 100%"
+                            value="#{productImageVersionRevisionListController.updateVersionDialog.selectedComment}">
+                    </p:inputTextarea>
 
+                </h:panelGrid>
+                </p:scrollPanel>
                 <p:separator />
                 <p:commandButton value="Zapisz"
                                  action="#{productImageVersionRevisionListController.updateDescription()}"

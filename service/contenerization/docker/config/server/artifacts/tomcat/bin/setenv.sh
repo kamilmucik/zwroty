@@ -7,13 +7,19 @@ if [ "${DEBUG_APP}" != "true" ]; then
   echo "Uruchamiam Zwrot Paczek"
 else
   echo "Uruchamiam Zwrot Paczek w trybie debug JPDA"
-#CATALINA_OPTS="$CATALINA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"
+CATALINA_OPTS="$CATALINA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"
 fi
 
 #export CATALINA_OPTS
 
 # Setting umask so the group can write on the same files/folders by default
+#umask g=rwx
+echo "Using CATALINA_OPTS: $CATALINA_OPTS"
+echo "Using JAVA_ENDORSED_DIRS: $JAVA_ENDORSED_DIRS"
+
+# Setting umask so the group can write on the same files/folders by default
 UMASK="0002"
 export UMASK
 echo "Using CATALINA_OPTS: $CATALINA_OPTS"
+echo "Using umask $(umask)"
 

@@ -10,8 +10,10 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
       - MYSQL_ROOT_PASSWORD=root
+    expose:
+      - 3306
     ports:
-      - 3307:3306
+      - 3306:3306
     volumes:
       - ./mysql-dump/:/docker-entrypoint-initdb.d
       - rp-dbdata8_0_25:/var/lib/mysql
@@ -24,16 +26,26 @@ services:
       rp-network:
         aliases:
           - db.rp.e-strix.pl
-  rp-server:
-    image: "registry.hub.docker.com/kamilmucik/return-parcel-server:2.5.0"
-    container_name: rp-server
+  textextractor:
+    image: "registry.hub.docker.com/kamilmucik/textextractor:0.0.1-SNAPSHOT"
+    container_name: textextractor
     #   platform: linux/x86_64
 #    platform: linux/amd64
+    expose:
+      - 8004
+    ports:
+      - 8004:8004
+  rp-server:
+    image: "registry.hub.docker.com/kamilmucik/return-parcel-server:2.5.1"
+    container_name: rp-server
+    #   platform: linux/x86_64
+    platform: linux/amd64
     environment:
       DEBUG_APP: 'true'
     volumes:
       - ./config/server/artifacts/:/opt/artifacts/
       - ./logs/server/:/usr/local/tomcat/logs/
+      - ./data/server/:/opt/app/returnparcel/data/
     expose:
       - 8000
       - 8080

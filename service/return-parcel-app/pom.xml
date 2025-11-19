@@ -5,12 +5,12 @@
     <parent>
         <groupId>pl.estrix</groupId>
         <artifactId>return-parcel</artifactId>
-        <version>2.5.0</version>
+        <version>2.5.1</version>
     </parent>
 
     <artifactId>return-parcel-app</artifactId>
     <packaging>war</packaging>
-    <version>2.5.0</version>
+    <version>2.5.1</version>
     <name>Spring Boot App :: Return Parcel</name>
 
 	<properties>
@@ -602,6 +602,26 @@
             <artifactId>tess4j</artifactId>
             <version>5.14.0</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>textract</artifactId>
+            <version>2.27.5</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
     </dependencies>
 
 	<repositories>

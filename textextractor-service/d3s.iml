@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <sourceFolder url="file://$MODULE_DIR$/textextractor-service/textextractor-adapters/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/textextractor-service/textextractor-application/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/textextractor-service/textextractor-domain/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/textextractor-service/textextractor-entities/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/textextractor-service/textextractor-starter/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/textextractor-service/textextractor-starter/src/main/resources" type="java-resource" />
+    </content>
+  </component>
+</module>

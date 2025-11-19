@@ -8,9 +8,9 @@ cd deploy
 ```bash
 rm report_env_162.19.227.81_node1.txt
 rm rp-server.tar
-docker save -o ./rp-server.tar registry.hub.docker.com/kamilmucik/return-parcel-server:2.5.0
+docker save -o ./rp-server.tar registry.hub.docker.com/kamilmucik/return-parcel-server:2.5.1
 ```
 
 ```bash
-ansible-playbook rp_server_deploy.yml -i hosts.yml -e "version=2.5.0"  -e "module=return-parcel-server" -e "filename=rp-server.tar"
+ansible-playbook rp_server_deploy.yml -i hosts.yml -e "version=2.5.1"  -e "module=return-parcel-server" -e "filename=rp-server.tar"
 ```

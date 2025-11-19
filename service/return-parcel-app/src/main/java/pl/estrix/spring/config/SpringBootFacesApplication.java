@@ -60,15 +60,6 @@ public class SpringBootFacesApplication extends SpringBootServletInitializer {
         SpringApplication.run(SpringBootFacesApplication.class, args);
     }
 
-//    @RestController
-//    static class HomeController {
-//
-//        @RequestMapping("/")
-//        public String home() {
-//            return "Hello World";
-//        }
-//    }
-
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(SpringBootFacesApplication.class);

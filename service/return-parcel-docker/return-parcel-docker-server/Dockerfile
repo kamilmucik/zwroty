@@ -20,8 +20,8 @@ ENV APP_NAME="Zwrot Paczek Server"
 COPY --from=builder /usr/local/tomcat/build/ROOT.war /usr/local/tomcat/webapps/
 COPY --from=builder /usr/local/tomcat/build/ /opt/app/${APP_DIR}
 # Map writable temp folders to /tmp
-#RUN #umask 0002 &&  \
-#    cd /opt/app/${APP_DIR} && mkdir /tmp/${APP_DIR} && ln -s /tmp/${APP_DIR} tmp
+RUN umask 0002 &&  \
+    cd /opt/app/${APP_DIR} && mkdir /tmp/${APP_DIR} && ln -s /tmp/${APP_DIR} tmp
 
 ENV CATALINA_HOME /usr/local/tomcat
 #ENV PATH $PATH:$JAVA_HOME/bin

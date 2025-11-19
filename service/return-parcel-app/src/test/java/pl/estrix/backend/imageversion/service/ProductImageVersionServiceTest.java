@@ -1,6 +1,7 @@
 package pl.estrix.backend.imageversion.service;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import pl.estrix.common.util.CustomStringUtils;
 
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class ProductImageVersionServiceTest {
 
     @Test

@@ -15,4 +15,5 @@ public class UpdateVersionDialog {
     private Long revisionId;
     private String selectedImage;
     private String selectedDescription;
+    private String selectedComment;
 }

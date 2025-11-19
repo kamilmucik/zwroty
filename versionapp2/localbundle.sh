@@ -19,6 +19,9 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.16.1.jdk/Contents/Ho
 # v16.20.2
 # 8.19.4
 
+# nvm --version
+# nvm install 18
+# nvm use 16
 
 
 # generujemy klucz
@@ -53,10 +56,10 @@ $SCRIPT_DIR/android/gradlew bundleRelease
 
 # scp /Users/kamilmuc/ws/lkequiz/mobileapp/android/app/build/outputs/apk/release/app-release.apk
 # cd $SCRIPT_DIR
-echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/version-release.apk'
+echo 'scp '$SCRIPT_DIR'/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.1/version-release.apk'
 
-sshpass -p 'xxx' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/version-mega.apk
-# sshpass -p 'xxx' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/version-rc.apk
+# sshpass -p 'xxx' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.0/version-mega.apk
+# sshpass -p 'syjAkywapy1' scp $SCRIPT_DIR/android/app/build/outputs/apk/release/app-release.apk ubuntu@e-strix.pl:/home/ubuntu/wp/releases/megapack/2.5.1/version-rc.apk
 
 
 echo "Wrzutka zakończona"

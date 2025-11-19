@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>pl.estrix.zwroty</groupId>
+	<artifactId>textextractor</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>textextractor</name>
+	<description>Zwroty - ekstraktor tekstu OCR</description>
+    <modules>
+        <module>textextractor-common</module>
+        <module>textextractor-service</module>
+        <module>textextractor-docker</module>
+    </modules>
+
+	<properties>
+		<java.version>21</java.version>
+		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <com.fasterxml.jackson.core-version>2.13.3</com.fasterxml.jackson.core-version>
+        <hibernate-types-60.version>2.21.1</hibernate-types-60.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+            <dependency>
+                <groupId>pl.estrix.zwroty</groupId>
+                <artifactId>textextractor-common-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.estrix.zwroty</groupId>
+                <artifactId>textextractor-common-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.estrix.zwroty</groupId>
+                <artifactId>textextractor-common-entities</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.estrix.zwroty</groupId>
+                <artifactId>textextractor-common-adapters</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+			<dependency>
+				<groupId>pl.estrix.zwroty</groupId>
+				<artifactId>textextractor-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>pl.estrix.zwroty</groupId>
+				<artifactId>textextractor-application</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>pl.estrix.zwroty</groupId>
+				<artifactId>textextractor-adapters</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>pl.estrix.zwroty</groupId>
+				<artifactId>textextractor-entities</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>3.3.5</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-annotations</artifactId>
+				<version>2.2.16</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+				<version>2.5.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openapitools</groupId>
+				<artifactId>jackson-databind-nullable</artifactId>
+				<version>0.2.6</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>2.7.1</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.5.14</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-xml</artifactId>
+				<version>2.17.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.17.0</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.18.0</version>
+			</dependency>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>textract</artifactId>
+                <version>2.27.5</version>
+            </dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.36</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</dependency>
+	</dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <release>${java.version}</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+	<scm>
+		<connection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/tags/return-parcel-2.2.0</connection>
+		<developerConnection>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/tags/return-parcel-2.2.0</developerConnection>
+		<url>scm:svn:http://svn.e-strix.net.pl/svn/estrix-javafx/008-zwroty-przesylek/service/tags/return-parcel-2.2.0</url>
+	</scm>
+
+</project>

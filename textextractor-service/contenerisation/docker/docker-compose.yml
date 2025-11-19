@@ -1,0 +1,15 @@
+
+services:
+  textextractor:
+    image: "registry.hub.docker.com/kamilmucik/textextractor:0.0.1-SNAPSHOT"
+    container_name: textextractor
+    #   platform: linux/x86_64
+#    platform: linux/amd64
+    expose:
+      - 8004
+    ports:
+      - 8004:8004
+
+networks:
+  rp-network:
+    driver: bridge

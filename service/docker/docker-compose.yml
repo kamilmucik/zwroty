@@ -44,7 +44,7 @@ services:
         aliases:
           - rp.e-strix.pl
   parcel-server:
-    image: "registry.hub.docker.com/kamilmucik/return-parcel-server:2.3.0-SNAPSHOT"
+    image: "registry.hub.docker.com/kamilmucik/return-parcel-server:2.5.1"
     container_name: parcel-server
     #   platform: linux/x86_64
     platform: linux/amd64

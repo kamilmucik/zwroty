@@ -20,13 +20,13 @@
       copy: src={{filename}} dest=/tmp/rp mode=0755
       tags: lsout
       register: myshell_output
-    - name: Execute the script
-      command: timeout 240 sh /tmp/rp/rp_server_deploy.sh {{filename}} {{module}} {{version}}
-      become: yes
-      become_method: sudo
-      become_user: root
-      tags: lsout
-      register: myshell_output
+#    - name: Execute the script
+#      command: timeout 240 sh /tmp/rp/rp_server_deploy.sh {{filename}} {{module}} {{version}}
+#      become: yes
+#      become_method: sudo
+#      become_user: root
+#      tags: lsout
+#      register: myshell_output
     - name: Copy the output to a local file
       copy:
         content: "{{ myshell_output.stdout }}"

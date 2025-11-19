@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import pl.estrix.backend.base.PagingCriteria;
 import pl.estrix.backend.imageversion.dao.ProductImageVersionRevision;
 import pl.estrix.backend.imageversion.executor.*;
+import pl.estrix.backend.ocr.service.TextExtractorService;
 import pl.estrix.backend.settings.executor.ReadSettingCommandExecutor;
 import pl.estrix.common.base.ListResponseDto;
 import pl.estrix.common.dto.*;
@@ -67,6 +68,10 @@ public class ProductImageVersionService {
     @Autowired
     private ReadSettingCommandExecutor readSettingCommandExecutor;
     private String filePath;
+
+
+    @Autowired
+    private TextExtractorService textExtractorService;
 
     @Getter
     private Map<String, List<ProductImageVersionRevisionDto>> concatenateMap = new HashMap<>();
@@ -159,6 +164,7 @@ public class ProductImageVersionService {
     @Transactional
     public ProductImageVersionRevisionDto saveOrUpdate(ProductImageVersionRevisionDto dto){
         ProductImageVersionRevisionDto temp = null;
+        LOG.debug("saveOrUpdate[{}]: {}", dto.getVersionId(), dto.getComment());
         if (dto.getId() != null){
             temp = updateRevisionExecutor.update(dto);
         } else {
@@ -299,24 +305,20 @@ public class ProductImageVersionService {
         dto.setHashGroup(dto.getHashGroup() != null? dto.getHashGroup() : UUID.randomUUID().toString());
         ProductImageVersionRevisionDto selected = mapWithBas64Img(createRevisionExecutor.create(dto));
         selected.setChangesDetected(changesDetected);
+        selected.setComment(dto.getComment());
 
 
         if (!StringUtils.isEmpty(dto.getHashGroup())) {
-            ProductImageVersionRevisionDto lastVersion = readRevisionExecutor.findByHash(dto.getHashGroup());
-
-//            String prevNoHTML = CustomStringUtils.prepareStringToCompare(lastVersion.getDescription());
-            String currNoHTML = CustomStringUtils.prepareStringToCompare(dto.getDescription());
-//            String currDicValidatio = CustomStringUtils.checkWordsInDictionary(dto.getDescription(), true);
-
-//            changesDetected = CustomStringUtils.isTextIsSame(prevNoHTML, currNoHTML);
-
-            dto.setDescription(currNoHTML);
-            selected.setDescription(currNoHTML);
-//            dto.setDescription(
-//                    CustomStringUtils.markDifferencesInText(lastVersion.getDescription(), dto.getDescription())
-//                            .stream()
-//                            .collect(Collectors.joining(" "))
-//            );
+//            ProductImageVersionRevisionDto lastVersion = readRevisionExecutor.findByHash(dto.getHashGroup());
+            if (dto.isExternalOCRCheck()){
+                String responseId = textExtractorService.extractTextFromImage(file.toString());
+                String responseText = textExtractorService.getExtractedText(responseId);
+                selected.setDescription(responseText);
+            }else {
+                String currNoHTML = CustomStringUtils.prepareStringToCompare(dto.getDescription());
+                dto.setDescription(currNoHTML);
+                selected.setDescription(currNoHTML);
+            }
         }
 
 
@@ -344,6 +346,7 @@ public class ProductImageVersionService {
         selected.setLastUpdate(LocalDateTime.now());
         selected.setVersionId(dto.getVersionId());
         selected.setDescription(dto.getDescription());
+        selected.setComment(dto.getComment());
         saveOrUpdate(selected);
 
         return RestProductImageVersionRevisionDto
@@ -353,9 +356,9 @@ public class ProductImageVersionService {
                 .build();
     }
 
-    public void updateProductImageVersionRevisionDescription(Long id, String description){
+    public void updateProductImageVersionRevisionDescription(Long id, String description, String comment){
 
-        updateRevisionExecutor.updateDescription(id, description);
+        updateRevisionExecutor.updateDescription(id, description, comment);
     }
 
     public InputStream getLastImage(String imageHash) throws IOException {

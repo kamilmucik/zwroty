@@ -79,15 +79,6 @@ public class ExcelReportService {
             e.printStackTrace();
         }
 
-//        try(FileOutputStream fileOut = new FileOutputStream(excelFileName)) {
-//            wb.write(fileOut);
-//            fileOut.flush();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
         return excelFileName;
     }
 
@@ -112,34 +103,33 @@ public class ExcelReportService {
             style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
             XSSFRow row = sheet.createRow(0);
-            Cell h1 = row.createCell(0);
-            h1.setCellValue("Nr art");
-            h1.setCellStyle(style1);
-
-            Cell h2 = row.createCell(1);
-            h2.setCellValue("Ilość");
-            h2.setCellStyle(style1);
-            Cell h3 = row.createCell(2);
-            h3.setCellValue("MP");
-            h3.setCellStyle(style1);
-            Cell h4 = row.createCell(3);
-            h4.setCellValue("uszk.");
-            h4.setCellStyle(style1);
-            Cell h5 = row.createCell(4);
-            h5.setCellValue("razem");
-            h5.setCellStyle(style1);
-            Cell h6 = row.createCell(5);
-            h6.setCellValue("z ceną");
-            h6.setCellStyle(style1);
-            Cell h7 = row.createCell(6);
-            h7.setCellValue("utylizacja");
-            h7.setCellStyle(style1);
-            Cell h8 = row.createCell(7);
-            h8.setCellValue("Nazwa");
-            h8.setCellStyle(style1);
-            Cell h9 = row.createCell(8);
-            h9.setCellValue("EAN");
-            h9.setCellStyle(style1);
+            Cell h_A = row.createCell(0);
+            h_A.setCellValue("Nr art");
+            h_A.setCellStyle(style1);
+            Cell h_B = row.createCell(1);
+            h_B.setCellValue("Ilość");
+            h_B.setCellStyle(style1);
+            Cell h_C = row.createCell(2);
+            h_C.setCellValue("MP");
+            h_C.setCellStyle(style1);
+            Cell h_D = row.createCell(3);
+            h_D.setCellValue("razem");
+            h_D.setCellStyle(style1);
+            Cell h_E = row.createCell(4);
+            h_E.setCellValue("z ceną");
+            h_E.setCellStyle(style1);
+            Cell h_F = row.createCell(5);
+            h_F.setCellValue("utylizacja");
+            h_F.setCellStyle(style1);
+            Cell h_G = row.createCell(6);
+            h_G.setCellValue("uszk.");
+            h_G.setCellStyle(style1);
+            Cell h_H = row.createCell(7);
+            h_H.setCellValue("Nazwa");
+            h_H.setCellStyle(style1);
+            Cell h_I = row.createCell(8);
+            h_I.setCellValue("EAN");
+            h_I.setCellStyle(style1);
 
 
             int rowIndex = 1;
@@ -151,64 +141,66 @@ public class ExcelReportService {
                     row = sheet.createRow(rowIndex);
 
                     if (artRow == 0) {
-                        XSSFCell cell0 = row.createCell(0);
-                        cell0.setCellValue(shipmentProductDto.getArtNumber());
-                        cell0.setCellStyle(style2);
-                        XSSFCell cell1 = row.createCell(1);
-                        cell1.setCellValue(shipmentProductDto.getCounter());
-                        cell1.setCellStyle(style2);
-                        XSSFCell cell2 = row.createCell(2);
-                        cell2.setCellValue(shipmentProductDto.getScanCorrect());
-                        cell2.setCellStyle(style2);
-                        XSSFCell cell3 = row.createCell(3);
-                        cell3.setCellValue(shipmentProductDto.getScanError());
-                        cell3.setCellStyle(style2);
+                        XSSFCell cell_A = row.createCell(0);
+                        cell_A.setCellValue(shipmentProductDto.getArtNumber());
+                        cell_A.setCellStyle(style2);
+                        XSSFCell cell_B = row.createCell(1);
+                        cell_B.setCellValue(shipmentProductDto.getCounter());
+                        cell_B.setCellStyle(style2);
+                        XSSFCell cell_C = row.createCell(2);
+                        cell_C.setCellValue(shipmentProductDto.getScanCorrect());
+                        cell_C.setCellStyle(style2);
+                        XSSFCell cell_D = row.createCell(3);
+//                        String strFormula = "SUM(C" + (rowIndex + 1) + ":G" + (rowIndex + 1) + ")";
+//                        cell_D.setCellType(HSSFCell.CELL_TYPE_FORMULA);
+//                        cell_D.setCellFormula(strFormula);
+                        cell_D.setCellValue(shipmentProductDto.getScanCorrect()+shipmentProductDto.getScanError());
+                        cell_D.setCellStyle(style2);
 
-                        XSSFCell cell4 = row.createCell(4);
-                        String strFormula = "SUM(C" + (rowIndex + 1) + ":D" + (rowIndex + 1) + ")";
-                        cell4.setCellType(HSSFCell.CELL_TYPE_FORMULA);
-                        cell4.setCellFormula(strFormula);
-                        cell4.setCellStyle(style2);
+                        XSSFCell cell_E = row.createCell(4);
+                        cell_E.setCellValue((shipmentProductDto.getScanLabel()==null)? 0L :shipmentProductDto.getScanLabel());
+                        cell_E.setCellStyle(style2);
 
-                        XSSFCell cell5 = row.createCell(5);
-                        cell5.setCellValue((shipmentProductDto.getScanLabel()==null)? 0L :shipmentProductDto.getScanLabel());
-                        cell5.setCellStyle(style2);
-                        XSSFCell cell6 = row.createCell(6);
-                        cell6.setCellValue(shipmentProductDto.getScanUtilization());
-                        cell6.setCellStyle(style2);
+                        XSSFCell cell_F = row.createCell(5);
+                        cell_F.setCellValue(shipmentProductDto.getScanUtilization());
+                        cell_F.setCellStyle(style2);
+                        XSSFCell cell_G = row.createCell(6);
+                        cell_G.setCellValue(shipmentProductDto.getScanError());
+                        cell_G.setCellStyle(style2);
+
                     } else {
-                        XSSFCell cell0 = row.createCell(0);
-                        cell0.setCellValue("");
-                        cell0.setCellStyle(style2);
-                        XSSFCell cell1 = row.createCell(1);
-                        cell1.setCellValue("");
-                        cell1.setCellStyle(style2);
-                        XSSFCell cell2 = row.createCell(2);
-                        cell2.setCellValue("");
-                        cell2.setCellStyle(style2);
-                        XSSFCell cell3 = row.createCell(3);
-                        cell3.setCellValue("");
-                        cell3.setCellStyle(style2);
+                        XSSFCell cell_A = row.createCell(0);
+                        cell_A.setCellValue("");
+                        cell_A.setCellStyle(style2);
+                        XSSFCell cell_B = row.createCell(1);
+                        cell_B.setCellValue("");
+                        cell_B.setCellStyle(style2);
+                        XSSFCell cell_C = row.createCell(2);
+                        cell_C.setCellValue("");
+                        cell_C.setCellStyle(style2);
+                        XSSFCell cell_D = row.createCell(3);
+                        cell_D.setCellValue("");
+                        cell_D.setCellStyle(style2);
 
-                        XSSFCell cell4 = row.createCell(4);
-                        cell4.setCellValue("");
-                        cell4.setCellStyle(style2);
+                        XSSFCell cell_E = row.createCell(4);
+                        cell_E.setCellValue("");
+                        cell_E.setCellStyle(style2);
 
-                        XSSFCell cell5 = row.createCell(5);
-                        cell5.setCellValue("");
-                        cell5.setCellStyle(style2);
-                        XSSFCell cell6 = row.createCell(6);
-                        cell6.setCellValue("");
-                        cell6.setCellStyle(style2);
+                        XSSFCell cell_F = row.createCell(5);
+                        cell_F.setCellValue("");
+                        cell_F.setCellStyle(style2);
+                        XSSFCell cell_G = row.createCell(6);
+                        cell_G.setCellValue("");
+                        cell_G.setCellStyle(style2);
                     }
 
-                    XSSFCell cell7 = row.createCell(7);
-                    cell7.setCellValue(shipmentProductDto.getName());
-                    cell7.setCellStyle(style2);
+                    XSSFCell cell_H = row.createCell(7);
+                    cell_H.setCellValue(shipmentProductDto.getName());
+                    cell_H.setCellStyle(style2);
 
-                    XSSFCell cell8 = row.createCell(8);
-                    cell8.setCellValue(ean);
-                    cell8.setCellStyle(style2);
+                    XSSFCell cell_I = row.createCell(8);
+                    cell_I.setCellValue(ean);
+                    cell_I.setCellStyle(style2);
 
                     rowIndex++;
                     artRow++;
@@ -218,15 +210,15 @@ public class ExcelReportService {
             String sheetName2 = "Dane logistyczne";
             XSSFSheet sheet2 = wb.createSheet(sheetName2);
             XSSFRow row2 = sheet2.createRow(0);
-            h1 = row2.createCell(0);
-            h1.setCellValue("Nr art");
-            h1.setCellStyle(style1);
-            h2 = row2.createCell(1);
-            h2.setCellValue("Nazwa");
-            h2.setCellStyle(style1);
-            h3 = row2.createCell(2);
-            h3.setCellValue("EAN");
-            h3.setCellStyle(style1);
+            h_A = row2.createCell(0);
+            h_A.setCellValue("Nr art");
+            h_A.setCellStyle(style1);
+            h_B = row2.createCell(1);
+            h_B.setCellValue("Nazwa");
+            h_B.setCellStyle(style1);
+            h_C = row2.createCell(2);
+            h_C.setCellValue("EAN");
+            h_C.setCellStyle(style1);
 
             rowIndex = 1;
             for (ShipmentProductDto shipmentProductDto : shipmentProductDtoList) {

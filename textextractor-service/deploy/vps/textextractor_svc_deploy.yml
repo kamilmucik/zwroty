@@ -1,0 +1,34 @@
+---
+- name: Deploy service package
+  hosts: webserver
+  become_user: root
+  tasks:
+    - name: Delete content & directory
+      ansible.builtin.file:
+        state: absent
+        path: /tmp/zwroty/
+    - name: Creates directory
+      file:
+        path: /tmp/zwroty
+        state: directory
+        mode: 0775
+    - name: Transfer the script
+      copy: src=textextractor_svc_deploy.sh dest=/tmp/zwroty/ mode=0777
+      tags: lsout
+      register: myshell_output
+    - name: Copy Docker image
+      copy: src={{filename}} dest=/tmp/zwroty mode=0755
+      tags: lsout
+      register: myshell_output
+    - name: Execute the script
+      command: timeout 240 sh /tmp/zwroty/textextractor_svc_deploy.sh {{filename}} {{module}} {{version}}
+      become: yes
+      become_method: sudo
+      become_user: root
+      tags: lsout
+      register: myshell_output
+    - name: Copy the output to a local file
+      copy:
+        content: "{{ myshell_output.stdout }}"
+        dest: "/tmp/env_{{ ansible_host }}_{{ inventory_hostname }}.txt"
+      delegate_to: localhost

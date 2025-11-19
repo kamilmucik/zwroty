@@ -1,0 +1,16 @@
+server:
+  port: 8004
+
+logging:
+  level:
+    pl.estrix.zwroty: DEBUG
+
+spring:
+  application:
+    name: textextractor-service
+
+aws:
+  access:
+    key: "xxx"
+  secret:
+    key: "xxx"

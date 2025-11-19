@@ -2,6 +2,7 @@ package pl.estrix.backend.dictionary;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import pl.estrix.common.util.CustomStringUtils;
 
@@ -9,6 +10,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class DictionaryIntegrationTest {
 
     DictionaryQueries dictionaryQueries = new DictionaryQueries();

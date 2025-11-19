@@ -11,6 +11,10 @@ if [ -d "/opt/artifacts" ]; then
   cp -ar /opt/artifacts/tomcat/bin/setenv.sh /usr/local/tomcat/bin/
 fi
 
+UMASK="0002"
+export UMASK
+#umask g=rwx
+#umask g=rwx
 
 
 log INFO "Finish Return Parcel Server"

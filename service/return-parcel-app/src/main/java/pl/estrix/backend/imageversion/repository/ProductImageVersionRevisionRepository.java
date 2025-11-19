@@ -37,8 +37,8 @@ public interface ProductImageVersionRevisionRepository extends ProductImageVersi
 
     @Transactional
     @Modifying
-    @Query("UPDATE ProductImageVersionRevision pivr SET pivr.description = :description WHERE pivr.id = :id")
-    void updateDescription(@Param("id") Long id, @Param("description") String description);
+    @Query("UPDATE ProductImageVersionRevision pivr SET pivr.description = :description, pivr.comment = :comment  WHERE pivr.id = :id")
+    void updateDescription(@Param("id") Long id, @Param("description") String description, @Param("comment") String comment);
 
 
     @Query("SELECT pivr FROM ProductImageVersionRevision pivr WHERE pivr.hashGroup = :hashGroup ORDER BY pivr.id DESC")

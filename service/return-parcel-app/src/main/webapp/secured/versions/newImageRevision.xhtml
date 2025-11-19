@@ -62,7 +62,7 @@
                         <p:column headerText="Aktualizacja"  style="width:100px; text-align: center;">
                             <h:outputText value="#{imageVersionRevision.lastUpdate}" />
                         </p:column>
-                        <p:column headerText="Obrazek"  style="width:200px; text-align: center;">
+                        <p:column headerText="Obrazek"  style="width:150px; text-align: center;">
                             <h:graphicImage
                                     rendered="#{imageVersionRevision.imgPath ne null}"
                                     style="max-height: 300px;"
@@ -70,6 +70,9 @@
                         </p:column>
                         <p:column headerText="Opis"  style="width:300px; text-align: center;">
                             <h:outputText escape="false"  value="#{imageVersionRevision.description}" />
+                        </p:column>
+                        <p:column headerText="Komentarz"  style="width:100px; text-align: center;">
+                            <h:outputText escape="false"  value="#{imageVersionRevision.comment}" />
                         </p:column>
                         <p:column headerText="" style="width:140px; text-align: center;">
 
@@ -93,6 +96,13 @@
                                            update="@([id$=displayDelete])"
                                            oncomplete="PF('deleteDialogW').show();">
                                 <h:graphicImage library="sh" name="img/delete.png" />
+                            </p:commandLink>
+
+                            <p:commandLink styleClass=""
+                                           title="Przetłumacz ponownie"
+                                           action="#{productImageVersionRevisionEditController.rerecognizeImageText(imageVersionRevision.id)}"
+                                           update="@([id$=imageVersionRevisionTable])">
+                                <h:graphicImage library="sh" name="img/ocr.png" />
                             </p:commandLink>
                         </p:column>
                     </p:dataTable>
@@ -192,7 +202,7 @@
                   maxWidth="1000">
 
             <h:form id="dialogEditId">
-            <p:scrollPanel style="width:800px;height:500px; border: 0px black solid;" >
+            <p:scrollPanel style="width:1200px;height:500px; border: 0px black solid;" >
                 <h:panelGrid columns="2" id="displayEdit" columnClasses="alignTop50,alignTop50"
                              style="display: block;max-width: 800px; border: 0px black solid;">
                     <h:graphicImage  style="width: 100%"
@@ -201,6 +211,12 @@
                     <p:inputTextarea
                             style="width: 100%"
                             value="#{productImageVersionRevisionEditController.updateVersionDialog.selectedDescription}">
+                    </p:inputTextarea>
+
+                    <h:outputLabel value="Komentarz" />
+                    <p:inputTextarea
+                            style="width: 100%"
+                            value="#{productImageVersionRevisionEditController.updateVersionDialog.selectedComment}">
                     </p:inputTextarea>
 
                 </h:panelGrid>

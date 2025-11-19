@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import pl.estrix.backend.base.PagingCriteria;
 import pl.estrix.backend.imageversion.service.ProductImageVersionService;
 import pl.estrix.backend.imageversion.service.TesseractOCRService;
+import pl.estrix.backend.ocr.service.TextExtractorService;
 import pl.estrix.common.base.ListResponseDto;
 import pl.estrix.common.dto.ProductImageVersionRevisionSearchCriteriaDto;
 import pl.estrix.common.dto.model.ProductImageVersionDto;
@@ -37,10 +38,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -69,6 +68,8 @@ public class ProductImageVersionRevisionEditController extends MainController im
 
     @Autowired
     private ProductImageVersionService releaseService;
+    @Autowired
+    private TextExtractorService textExtractorService;
 
     private ProductImageVersionRevisionDto selectedItem;
 
@@ -90,6 +91,23 @@ public class ProductImageVersionRevisionEditController extends MainController im
         }
     }
 
+    public void rerecognizeImageText(Long id) {
+            if (id == null || id == 0) {
+            } else {
+                ProductImageVersionRevisionDto selectedItem = releaseService.getRevisionItem(id);
+                selectedItem.setId(null);
+                selectedItem.setLastUpdate(LocalDateTime.now());
+                selectedItem.setOrderTimestamp(new Date().getTime());
+
+                String responseId = textExtractorService.extractTextFromImage(selectedItem.getImgPath());
+                String responseText = textExtractorService.getExtractedText(responseId);
+
+                selectedItem.setDescription(responseText);
+
+                ProductImageVersionRevisionDto result = releaseService.saveOrUpdate(selectedItem);
+            }
+    }
+
     public void edit(Long id) {
         renderCompareForm=false;
         if (id == null || id == 0) {
@@ -104,13 +122,13 @@ public class ProductImageVersionRevisionEditController extends MainController im
         if (id == null || id == 0) {
         } else {
             selectedItem = releaseService.getRevisionItem(id);
-            updateVersionDialog = new UpdateVersionDialog(id, id, selectedItem.getImgPath(), CustomStringUtils.prepareStringToCompare(selectedItem.getDescription()));
+            updateVersionDialog = new UpdateVersionDialog(id, id, selectedItem.getImgPath(), CustomStringUtils.prepareStringToCompare(selectedItem.getDescription()), selectedItem.getComment());
         }
     }
 
     public void updateDescription() {
         renderCompareForm=false;
-        releaseService.updateProductImageVersionRevisionDescription(updateVersionDialog.getId(), CustomStringUtils.prepareStringToCompare(updateVersionDialog.getSelectedDescription()));
+        releaseService.updateProductImageVersionRevisionDescription(updateVersionDialog.getId(), CustomStringUtils.prepareStringToCompare(updateVersionDialog.getSelectedDescription()), updateVersionDialog.getSelectedComment());
     }
 
     public void delete() {

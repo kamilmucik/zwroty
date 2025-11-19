@@ -21,15 +21,19 @@ public class ProductImageVersionRevisionDto extends BaseEntityDto<Long> {
     private String imgPath;
     private boolean main;
     private boolean merge;
+    private boolean externalOCRCheck;
     private String imgBas64;
     private String hashGroup;
     private LocalDateTime lastUpdate;
     private Long orderTimestamp;
+    private String comment;
     @Setter
     private boolean changesDetected;
 
     @Builder
-    public ProductImageVersionRevisionDto(Long id, String artNumber, String ean, Long versionId, Long parentId, String description, String imgPath, boolean main, String imgBas64, String hashGroup, LocalDateTime lastUpdate, boolean changesDetected, Long orderTimestamp) {
+    public ProductImageVersionRevisionDto(Long id, String artNumber, String ean, Long versionId, Long parentId, String description,
+                                          String imgPath, boolean main, String imgBas64, String hashGroup, LocalDateTime lastUpdate,
+                                          boolean changesDetected,boolean externalOCRCheck, Long orderTimestamp, String comment) {
         super(id);
         this.artNumber = artNumber;
         this.ean = ean;
@@ -43,5 +47,7 @@ public class ProductImageVersionRevisionDto extends BaseEntityDto<Long> {
         this.lastUpdate = lastUpdate;
         this.changesDetected = changesDetected;
         this.orderTimestamp = orderTimestamp;
+        this.comment = comment;
+        this.externalOCRCheck = externalOCRCheck;
     }
 }

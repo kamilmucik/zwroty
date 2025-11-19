@@ -24,7 +24,7 @@ public class UpdateProductImageVersionRevisionCommandExecutor extends BaseProduc
         repository.setTopOrder(hashGroup, new Date().getTime());
     }
 
-    public void updateDescription (Long id, String description){
-        repository.updateDescription(id, description);
+    public void updateDescription (Long id, String description, String comment){
+        repository.updateDescription(id, description, comment);
     }
 }

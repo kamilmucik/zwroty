@@ -66,10 +66,10 @@ public class ProductImageVersionRevisionListController extends MainController im
         }
     }
 
-    public void showImage(Long id, Long revisionId, String filePath, String description) throws IOException{
+    public void showImage(Long id, Long revisionId, String filePath, String description, String comment) throws IOException{
         String selectedImage = showImage3(filePath);
 
-        updateVersionDialog = new UpdateVersionDialog(id, revisionId, selectedImage, description.replaceAll("<[^>]*>", "").trim());
+        updateVersionDialog = new UpdateVersionDialog(id, revisionId, selectedImage, description.replaceAll("<[^>]*>", "").trim(), comment);
 
     }
 
@@ -82,6 +82,7 @@ public class ProductImageVersionRevisionListController extends MainController im
         dto.setId(updateVersionDialog.getId());
         dto.setVersionId(updateVersionDialog.getRevisionId());
         dto.setDescription(updateVersionDialog.getSelectedDescription());
+        dto.setComment(updateVersionDialog.getSelectedComment());
         releaseService.updateVersion(dto);
     }
 
