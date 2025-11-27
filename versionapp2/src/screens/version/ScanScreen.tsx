@@ -256,6 +256,7 @@ const ScanScreen = ({navigation, route}) => {
                   hashGroup={d.hashGroup} 
                   hash={d.imgPath} 
                   id={d.id} 
+                  comment={d.comment}
                   refreshTs={shouldRefresh}
                   onPressZoom={onPressZoom}
                   onPressPosUp={onPressPosUp}
@@ -265,6 +266,7 @@ const ScanScreen = ({navigation, route}) => {
                       hash: d.hashGroup,
                       versionId: singleResult?.id,
                       ean: singleResult?.ean,
+                      comment: d?.comment,
                       imgPath: d.imgPath,
                       artNumber: singleResult?.artNumber
                     })

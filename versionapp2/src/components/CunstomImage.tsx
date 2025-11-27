@@ -15,6 +15,7 @@ interface CustomImageProps {
     hashGroup: string;
     label: string;
     refreshTs: string;
+    comment: string;
     onPress: any;
     onPressDelete: any;
     onPressPosUp: any;
@@ -108,6 +109,11 @@ const CustomImage = (props : RowViewProps) => {
                   </View >
                 </View>
                 
+                <View style={styles.rowContainer}>
+                  <Text>
+                    {props.comment}
+                  </Text>
+                </View> 
                 <View style={styles.rowContainer}>
                   <View style={styles.pressableIcon}>
                     <TouchableOpacity onPress={props.onPress}  >
