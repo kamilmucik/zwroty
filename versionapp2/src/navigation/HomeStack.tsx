@@ -16,7 +16,7 @@ const HomeStackNavigator = () => {
                         title: '' ,
                         
                       })}
-                      initialParams={{ itemId: 422 }}
+                      initialParams={{ itemId: 422, ean: "00000000000" }}
 
                       />
     <HomeStack.Screen name="ScanImage" component={ScanImageScreen}

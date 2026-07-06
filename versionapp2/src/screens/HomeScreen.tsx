@@ -2,23 +2,23 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native";
 import GlobalStyle from "../utils/GlobalStyle";
 import CustomList from '../components/CustomList';
+import { showMessage } from "react-native-flash-message";
 
 const HomeScreen = ({ navigation }) => {
 
-  async function loadProperties() {
-    const value = await AsyncStorage.getItem('@storage_lkequiz3');
-    let parsed = JSON.parse(value);
-    console.log("load.destinationURL: " + JSON.stringify(parsed));
-    if(value !== null && parsed !==null) {
-      appCtx.setSettingsDestinationURL("http://10.17.0.4:8080");
-    }
-  }
+//   async function loadProperties() {
+//     const value = await AsyncStorage.getItem('@storage_versions2');
+//     let parsed = JSON.parse(value);
+//     console.log("loadProperties: " + JSON.stringify(parsed));
+//     // if(value !== null && parsed !==null) {
+//     //   appCtx.setSettingsDestinationURL("http://10.17.0.4:8080");
+//     // }
+//   }
 
-useEffect(() => {
-    loadProperties();
-  }, []);
+// useEffect(() => {
+//     loadProperties();
+//   }, []);
   
-
   return (
     <CustomList
       data={data}

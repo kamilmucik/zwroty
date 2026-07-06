@@ -33,11 +33,9 @@ const CustomImage = (props : RowViewProps) => {
   const [imagePlace, setImagePlace] = useState<String>();
   const [resCode, setResCode] = useState<String>();
   const [isLoadImage, setLoadImage] = useState(false);
-  const [imageView, setImageView] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const handleZoomClick = () => {
-    props.onPressZoom(BASE_API_URL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+Date.now());
+    props.onPressZoom(appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+Date.now());
   };
   const handlePosUpClick = () => {
     props.onPressPosUp(props.hashGroup);
@@ -56,16 +54,24 @@ const CustomImage = (props : RowViewProps) => {
 
   useEffect(() => {
     setLoadImage(true);
-    loadImage(BASE_API_URL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+props.refreshTs);
+    loadImage(appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+props.hash+'&ts='+Date.now());
   }, [props.hash, props.refreshTs]);
 
 
   const loadImage = async (photo_reference) => {
+    let attempt = 0;
+
       try {
-        let response = await fetch(`${photo_reference}`, {method: 'GET'})
-        setResCode(response?.status)
-        setImagePlace(response?.url);
-        
+        for (attempt; attempt < 3; attempt++){
+          let response = await fetch(`${photo_reference}`, {method: 'GET'})
+          if (response?.status === 200){
+            setResCode(response?.status)
+            setImagePlace(response?.url);
+            break;
+          // } else {
+          //   console.log('attempt: ' + attempt );
+          }
+        }
       } catch (error) {
         console.error(error);
       } 
@@ -84,28 +90,29 @@ const CustomImage = (props : RowViewProps) => {
       <View>
         <Text>res: {resCode}</Text>
         <Text>url: {imagePlace}</Text>
-        <Text>url: {props.refreshTs}</Text>
+        <Text>refres: {props.refreshTs}</Text>
       </View>
       :<View></View>}
       </View>
         
 
         <View style={styles.rowContainer}>
-          {isLoadImage && 
-          <View>
-            <ActivityIndicator size='large'/>
-          </View>}
           {!isLoadImage ? (
             <View>
               <View style={styles.rowContainer}>
                 <View style={styles.columnContainer}>
 
+                {imagePlace ? (
                   <TouchableOpacity
                       onPress={handleZoomClick} 
                       style={styles.touchable} >
                       <ImageBackground source={{ uri: imagePlace }}  resizeMode="contain" style={styles.image}>
                       </ImageBackground>
                     </TouchableOpacity>
+                ) : (<View><Text>Nie mogę pobrać obrazka.</Text></View>)}
+
+
+
                   </View >
                 </View>
                 
@@ -133,7 +140,7 @@ const CustomImage = (props : RowViewProps) => {
                 </View> 
               </View>
             ) : (
-              <View></View>
+              <View><ActivityIndicator size='large'/></View>
             )} 
           </View>
 </>
@@ -150,20 +157,18 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'center',
-    width: moderateScale(400), 
-    height: moderateScale(500), 
+    width: moderateScale(600), 
+    height: moderateScale(700), 
   },
   view: {
     position: 'absolute',
     backgroundColor: 'transparent'
   },
   rowContainer: {
+
     marginBottom: moderateScale(30),
     flexDirection: 'row',
-    justifyContent: 'center',
-    // borderBottomColor: '#e1f5fe',
-    // borderBottomWidth: 1,
-    // backgroundColor: '#e1f5fe',
+    justifyContent: 'center'
   },
   text: {
     ctintColor: Colors.redThemeColor,

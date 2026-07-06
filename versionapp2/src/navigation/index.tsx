@@ -6,13 +6,10 @@ import AppProvider from '../store/AppProvider';
 import FlashMessage from "react-native-flash-message";
 
 const RootNavigator = () => {
-
-
   return (
     <AppProvider>
       <NavigationContainer>
         <TabNavigator />
-
       </NavigationContainer>
       <FlashMessage position="bottom" /> 
     </AppProvider>

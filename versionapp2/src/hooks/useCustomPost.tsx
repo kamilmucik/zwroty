@@ -10,12 +10,14 @@ export const useCustomPost = (query: string, formData: any, method: any, actionT
     const appCtx = useContext(AppContext);
 
     useEffect(() => {
+        // console.log('sending: ' + appCtx.settingsDestinationURL + '/' + query);
         // console.log("sending: " + JSON.stringify(formData));
 		if (!formData || formData === null) return;
         dispach({type: ACTION_TYPE.FETCH_START, loading: true, moreLoading: true });
 
         const postData = () => {
-            fetch(BASE_API_URL+"/"+query, {
+
+            fetch(appCtx.settingsDestinationURL+"/"+query, {
                 method: method,
                 headers: {
                     Accept: 'application/json',
@@ -28,7 +30,7 @@ export const useCustomPost = (query: string, formData: any, method: any, actionT
                 return response.json();
             })
             .then( (data) => {
-                // console.log("data: " + JSON.stringify(data?.dto));
+                console.log("data: " + JSON.stringify(data?.dto));
                 if (actionType == "FETCH_SINGLE_SUCCESS"){
                     dispach({type: ACTION_TYPE.FETCH_SINGLE_SUCCESS, payload: data });
                 }
@@ -40,13 +42,19 @@ export const useCustomPost = (query: string, formData: any, method: any, actionT
                 if (actionType == "FETCH_POSUP_SUCCESS"){
                     dispach({type: ACTION_TYPE.FETCH_POSUP_SUCCESS, payload: data });
                 }
+                if (actionType == 'POST_LOGIN_SUCCESS') {
+                  dispach({
+                    type: ACTION_TYPE.POST_LOGIN_SUCCESS,
+                    payload: data,
+                  });
+                }
             })
             .catch( (error) => {
                 console.error(error);
                 dispach({type: ACTION_TYPE.FETCH_ERROR, error: error});
             });
         }
-        
+
         postData();
 	}, [formData]);
 

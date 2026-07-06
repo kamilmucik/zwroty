@@ -13,11 +13,7 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(20),
   },
   buttonWrapper: {
-    // flex: 1,
-    
     flexDirection: 'row',
-    // paddingBottom: Platform.OS === 'ios' ? verticalScale(30) : 0,
-    // alignItems: 'flex-end',
     justifyContent: 'center',
   },
   button: {
@@ -31,16 +27,16 @@ const styles = StyleSheet.create({
     height: moderateScale(100),
   },
 
+  viewTest: {
+    flex: 1,
+  },
   resultWrapper: {
-    marginTop: moderateScale(20),
     flexDirection: 'row',
     justifyContent: 'center',
-    // backgroundColor: '#e1f5fe',
   },
   imageBig: {
-    // backgroundColor: '#fff',
-    width: moderateScale(500), 
-    height: moderateScale(500), 
+    width: moderateScale(600), 
+    height: moderateScale(700), 
   },
   image: {
     flex: 0.8,

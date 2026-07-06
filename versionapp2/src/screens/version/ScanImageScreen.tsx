@@ -5,7 +5,6 @@ import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Mod
 import { Button, InputTextArea , InputSwitch }  from '../../components/Form.tsx';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppContext from "../../store/AppContext";
-import { useNavigation } from '@react-navigation/native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 
@@ -16,7 +15,6 @@ let launchImageLibrary = _launchImageLibrary;
 let launchCamera = _launchCamera;
 
 const ScanImageScreen = ({navigation, route}) => {
-    // const navigation = useNavigation();
     const { versionId, hash, ean, artNumber, imgPath, comment } = route.params;
     const [isLoading, setIsLoading] = useState(true);
     const [changesDetected, setChangesDetected] = useState(false);
@@ -36,7 +34,7 @@ const ScanImageScreen = ({navigation, route}) => {
 
     useEffect(()=>{
         navigation.addListener("blur",()=>{
-            navigation.navigate("Scan", {itemId: (new Date()).getTime()});
+            navigation.navigate("Scan", {itemId: (new Date()).getTime(), ean: ean});
         })
     },[])
 
@@ -53,7 +51,6 @@ const ScanImageScreen = ({navigation, route}) => {
                 const result = await recognizeImage(url);
                 setIsLoading(false);
                 if (result?.blocks?.length > 0) {
-                    // setResponse(result?.blocks);
                     var str = '';
                     for(var i=0; i< result?.blocks.length - 1; i++){
                         str += result?.blocks[i].text + " ";
@@ -113,7 +110,7 @@ const ScanImageScreen = ({navigation, route}) => {
             let imageB64 = response.uri || response.assets?.[0]?.base64;
             setFileBase64Front(imageB64);
             setURI(imageUri);
-            console.log('imageB64: ' + imageB64 );
+            // console.log('imageB64: ' + imageB64 );
         }
     };
 
@@ -136,6 +133,7 @@ const ScanImageScreen = ({navigation, route}) => {
             imgBas64: fileBase64Front,
             merge: mergeVerImages,
             comment: ownComment,
+            author: appCtx.settingsAuthor,
             externalOCRCheck: aiOCR
         });
         showMessage({
@@ -145,20 +143,14 @@ const ScanImageScreen = ({navigation, route}) => {
     };
 
     useEffect(() => {
-        // console.log("singleResult: " + JSON.stringify(singleResult));
-        // if (singleResult?.changesDetected !== undefined){
         setChangesDetected(singleResult?.changesDetected);
         setMergeResponse(singleResult?.description);
-        // setOwnComment(singleResult?.comment);
-        // }
-
     }, [singleResult]);
 
-    const onPressZoom= (url) =>{
+    const onPressZoom= (url: string) =>{
         setSelectedImage([{url: url,}]);
         setModalVisible(true);
     }
-
 
     return (
         <ScrollView  >
@@ -184,12 +176,6 @@ const ScanImageScreen = ({navigation, route}) => {
                 </View>
                 {loading && <ActivityIndicator size='large'/>}
                 {changesDetected && <Text style={styles.textStyleWarn}>Uwaga, zmiany w treści!</Text>}
-
-                {/*<InputSwitch*/}
-                {/*  description="Połącz"*/}
-                {/*  onChange={handleMergeVerImages}*/}
-                {/*  value={mergeVerImages}*/}
-                {/*  />*/}
                 <InputSwitch
                     description="AI OCR"
                     onChange={handleAIOCR}
@@ -198,7 +184,7 @@ const ScanImageScreen = ({navigation, route}) => {
 
                 <View style={styles.resultWrapper}>
                     {fileBase64Front?.length === 0 ? (
-                        <ScrollView horizontal={true} style={styles.viewTest1}>
+                        <ScrollView horizontal={true} style={styles.viewTest}>
                             <TouchableOpacity
                                 onPress={ () => onPressZoom(appCtx.settingsDestinationURL+'/productimageversion/get-image?imageHash='+imgPath)}
                             >
@@ -225,9 +211,10 @@ const ScanImageScreen = ({navigation, route}) => {
                 </View>
                 <View >
                     <InputTextArea
-                        label="Komentarz" 
+                        label="Komentarz"
                         onChange={text => setOwnComment(text)}
                         value={ownComment}
+                        description='Komentarz'
                     />
                 </View>
 
@@ -248,7 +235,6 @@ const ScanImageScreen = ({navigation, route}) => {
                     text="Zapisz"
                     onPress={handleImageVersion}
                 />
-
             </View>
         </ScrollView>
     );

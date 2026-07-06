@@ -43,13 +43,14 @@ export const InputText = ({ label, description}) => {
 }
 
 
-export const InputTextField = ({ label, description, value, onChange}) => {
+export const InputTextField = ({ label, description, keyboardType, value, onChange}) => {
   const child = (value, onChange) =>{
     return (
       <TextInput
         placeholder={description}
         value={value}
         onChangeText={onChange}
+        keyboardType={keyboardType}
       />
     );
   }
